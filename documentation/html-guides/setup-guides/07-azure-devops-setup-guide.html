@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure DevOps - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html" class="active">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: 07-azure-devops/setup-guide.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Azure DevOps Setup Guide</h1>
+<p>
+Complete guide for CI/CD pipelines and ALM with Azure DevOps.
+</p>
+<hr>
+<h2>Access Azure DevOps</h2>
+<h3>URL</h3>
+<pre><code class="language-text">https://dev.azure.com/[organization]
+</code></pre>
+<h3>Create Organization</h3>
+1. Go to https://dev.azure.com
+2. Click <strong>Start free</strong>
+3. Sign in with Microsoft account
+4. Create organization name
+</p>
+<hr>
+<h2>Project Setup</h2>
+<h3>Create Project</h3>
+1. Click <strong>+ New project</strong>
+2. Configure:
+   - Project name
+   - Description
+   - Visibility (Private/Public)
+   - Version control (Git)
+3. Click <strong>Create</strong>
+</p>
+<h3>Project Structure</h3>
+<pre><code class="language-text">Project
+├── Repos (Git repositories)
+├── Pipelines (CI/CD)
+├── Boards (Work items)
+├── Test Plans
+└── Artifacts
+</code></pre>
+<hr>
+<h2>Repository Setup</h2>
+<h3>Create Repo</h3>
+1. Click <strong>Repos</strong> > <strong>Files</strong>
+2. Click <strong>+ New repository</strong>
+3. Enter name
+4. Add README/gitignore
+5. Click <strong>Create</strong>
+</p>
+<h3>Clone Repo</h3>
+<pre><code class="language-bash">git clone https://dev.azure.com/[org]/[project]/_git/[repo]
+</code></pre>
+<h3>Push Existing Code</h3>
+<pre><code class="language-bash">git remote add origin https://dev.azure.com/[org]/[project]/_git/[repo]
+git push -u origin main
+</code></pre>
+<hr>
+<h2>Power Platform ALM Pipeline</h2>
+<h3>Pipeline for Solution Export/Import</h3>
+<pre><code class="language-yaml"># azure-pipelines.yml
+trigger:
+  - main
+</p>
+<p>
+pool:
+  vmImage: 'windows-latest'
+</p>
+<p>
+variables:
+  SolutionName: 'SharePointPermissionScanner'
+  SourceEnvironment: 'https://[org]-dev.crm.dynamics.com'
+  TargetEnvironment: 'https://[org]-prod.crm.dynamics.com'
+</p>
+<p>
+stages:
+  - stage: Export
+    displayName: 'Export Solution'
+    jobs:
+      - job: ExportSolution
+        steps:
+          - task: PowerPlatformToolInstaller@2
+            displayName: 'Install Power Platform CLI'
+</p>
+<p>
+          - task: PowerPlatformExportSolution@2
+            displayName: 'Export Solution'
+            inputs:
+              authenticationType: 'PowerPlatformSPN'
+              PowerPlatformSPN: 'DevEnvironment'
+              SolutionName: '$(SolutionName)'
+              SolutionOutputFile: '$(Build.ArtifactStagingDirectory)/$(SolutionName).zip'
+</p>
+<p>
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact'
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'solution'
+</p>
+<p>
+  - stage: Deploy
+    displayName: 'Deploy to Production'
+    dependsOn: Export
+    condition: succeeded()
+    jobs:
+      - deployment: DeploySolution
+        environment: 'Production'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: PowerPlatformToolInstaller@2
+                  displayName: 'Install Power Platform CLI'
+</p>
+<p>
+                - task: PowerPlatformImportSolution@2
+                  displayName: 'Import Solution'
+                  inputs:
+                    authenticationType: 'PowerPlatformSPN'
+                    PowerPlatformSPN: 'ProdEnvironment'
+                    SolutionInputFile: '$(Pipeline.Workspace)/solution/$(SolutionName).zip'
+</code></pre>
+<hr>
+<h2>Service Connections</h2>
+<h3>Create Power Platform Connection</h3>
+1. Go to <strong>Project Settings</strong> > <strong>Service connections</strong>
+2. Click <strong>New service connection</strong>
+3. Select <strong>Power Platform</strong>
+4. Configure:
+   - Server URL: <code>https://[org].crm.dynamics.com</code>
+   - Tenant ID
+   - Application ID
+   - Client Secret
+5. Click <strong>Save</strong>
+</p>
+<h3>Required App Permissions</h3>
+<pre><code class="language-text">Dynamics CRM:
+└── user_impersonation (Delegated)
+</code></pre>
+<hr>
+<h2>CLI Commands</h2>
+<h3>Install Extension</h3>
+<pre><code class="language-bash">az extension add --name azure-devops
+</code></pre>
+<h3>Configure Defaults</h3>
+<pre><code class="language-bash">az devops configure --defaults organization=https://dev.azure.com/myorg project=MyProject
+</code></pre>
+<h3>Login</h3>
+<pre><code class="language-bash">az devops login
+<h1>Or use PAT</h1>
+echo $PAT | az devops login --organization https://dev.azure.com/myorg
+</code></pre>
+<h3>Pipelines</h3>
+<pre><code class="language-bash"># List pipelines
+az pipelines list --output table
+</p>
+<h1>Run pipeline</h1>
+az pipelines run --name "Pipeline Name"
+</p>
+<h1>Get run details</h1>
+az pipelines runs show --id RUN_ID
+</p>
+<h1>List runs</h1>
+az pipelines runs list --pipeline-id PIPELINE_ID
+</code></pre>
+<h3>Repos</h3>
+<pre><code class="language-bash"># List repos
+az repos list --output table
+</p>
+<h1>Create repo</h1>
+az repos create --name "RepoName"
+</p>
+<h1>Create PR</h1>
+az repos pr create --title "PR Title" --source-branch feature --target-branch main
+</code></pre>
+<hr>
+<h2>Environment Strategy</h2>
+<pre><code class="language-text">┌─────────────────────────────────────────────────────────┐
+│                    Development                           │
+│  - Unmanaged solutions                                  │
+│  - Developer testing                                    │
+├─────────────────────────────────────────────────────────┤
+│                    Build/Test                            │
+│  - Automated testing                                    │
+│  - Solution validation                                  │
+├─────────────────────────────────────────────────────────┤
+│                    UAT/Staging                           │
+│  - User acceptance testing                              │
+│  - Managed solutions                                    │
+├─────────────────────────────────────────────────────────┤
+│                    Production                            │
+│  - Managed solutions only                               │
+│  - Approval gates                                       │
+└─────────────────────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2>Branch Strategy</h2>
+<pre><code class="language-text">main (production)
+├── release/v1.0
+├── develop
+│   ├── feature/add-permission-scan
+│   ├── feature/improve-reporting
+│   └── bugfix/fix-column-name
+</code></pre>
+<h3>Branch Policies</h3>
+1. Go to <strong>Repos</strong> > <strong>Branches</strong>
+2. Click <strong>...</strong> on branch > <strong>Branch policies</strong>
+3. Configure:
+   - Require PR
+   - Require reviewers
+   - Build validation
+   - Comment resolution
+</p>
+<hr>
+<h2>Best Practices</h2>
+<h3>Pipelines</h3>
+<ul><li>Use YAML pipelines (version controlled)</li>
+<li>Implement approval gates</li>
+<li>Use variable groups for secrets</li>
+<li>Run solution checker before deploy</li>
+</ul>
+<h3>Solutions</h3>
+<ul><li>Use managed solutions in production</li>
+<li>Version solutions properly</li>
+<li>Document dependencies</li>
+<li>Test in lower environments first</li>
+</ul>
+<h3>Security</h3>
+<ul><li>Use service principals (not user accounts)</li>
+<li>Rotate secrets regularly</li>
+<li>Limit pipeline permissions</li>
+<li>Audit deployments</li>
+</ul>
+<hr>
+<h2>Related Documentation</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/azure/devops/" target="_blank">Azure DevOps Documentation</a></li>
+<li><a href="https://learn.microsoft.com/en-us/power-platform/alm/devops-build-tools" target="_blank">Power Platform Build Tools</a></li>
+<li><a href="https://learn.microsoft.com/en-us/power-platform/alm/" target="_blank">ALM for Power Platform</a></li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-09</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

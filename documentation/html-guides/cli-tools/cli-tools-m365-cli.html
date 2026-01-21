@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>m365 CLI - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html" class="active">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: cli-tools/m365-cli.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>m365 CLI (CLI for Microsoft 365)</h1>
+<p>
+CLI for Microsoft 365 - manage SharePoint, Power Automate flows, Teams, and more.
+</p>
+<hr>
+<h2>Installation</h2>
+<h3>Using npm</h3>
+<pre><code class="language-bash">npm install -g @pnp/cli-microsoft365
+</code></pre>
+<h3>Verify Installation</h3>
+<pre><code class="language-bash">m365 version
+</code></pre>
+<hr>
+<h2>Authentication</h2>
+<p>
+The m365 CLI requires an Azure AD (Entra ID) app registration for authentication.
+</p>
+<h3>Option 1: Setup Wizard (Recommended)</h3>
+<pre><code class="language-bash">m365 setup
+</code></pre>
+<p>
+This wizard:
+1. Creates an Azure AD app registration
+2. Configures required permissions
+3. Stores credentials locally
+</p>
+<h3>Option 2: Manual App Registration</h3>
+<p>
+If the wizard fails or you need custom permissions:
+</p>
+<h4>Step 1: Create App Registration</h4>
+<p>
+1. Go to <strong>Azure Portal</strong> > <strong>Microsoft Entra ID</strong> > <strong>App registrations</strong>
+2. Click <strong>New registration</strong>
+3. Configure:
+   - <strong>Name:</strong> <code>m365-cli</code> (or custom name)
+   - <strong>Supported account types:</strong> Accounts in this organizational directory only
+   - <strong>Redirect URI:</strong> Public client/native > <code>http://localhost</code>
+4. Click <strong>Register</strong>
+5. Copy the <strong>Application (client) ID</strong>
+</p>
+<h4>Step 2: Configure API Permissions</h4>
+<p>
+In the app registration, go to <strong>API permissions</strong> > <strong>Add a permission</strong>:
+</p>
+<table>
+<thead><tr><th>API</th><th>Permission</th><th>Type</th><th>Required For</th></tr></thead>
+<tbody><tr><td>Microsoft Graph</td><td>User.Read</td><td>Delegated</td><td>Basic login</td></tr>
+<tr><td>Microsoft Graph</td><td>Directory.Read.All</td><td>Delegated</td><td>User/group queries</td></tr>
+<tr><td>Power Automate</td><td>Flows.Read.All</td><td>Delegated</td><td>Flow monitoring</td></tr>
+<tr><td>Power Automate</td><td>Flows.Manage.All</td><td>Delegated</td><td>Flow management</td></tr>
+<tr><td>SharePoint</td><td>Sites.Read.All</td><td>Delegated</td><td>SharePoint queries</td></tr>
+<tr><td>SharePoint</td><td>Sites.FullControl.All</td><td>Delegated</td><td>SharePoint management</td></tr>
+</tbody></table>
+<p>
+Click <strong>Grant admin consent</strong> after adding permissions.
+</p>
+<h4>Step 3: Enable Public Client</h4>
+<p>
+1. Go to <strong>Authentication</strong>
+2. Under <strong>Advanced settings</strong>, set <strong>Allow public client flows</strong> to <strong>Yes</strong>
+3. Save
+</p>
+<h3>Login Commands</h3>
+<pre><code class="language-bash"># Device code flow (recommended)
+m365 login --authType deviceCode --appId YOUR_APP_ID
+</p>
+<h1>Interactive browser</h1>
+m365 login --appId YOUR_APP_ID
+</p>
+<h1>Using default PnP app (limited permissions)</h1>
+m365 login
+</p>
+<h1>Check login status</h1>
+m365 status
+</code></pre>
+<h3>Logout</h3>
+<pre><code class="language-bash">m365 logout
+</code></pre>
+<hr>
+<h2>Power Automate Commands</h2>
+<h3>List Flows</h3>
+<pre><code class="language-bash"># List all flows in environment
+m365 flow list --environmentName ENV_ID
+</p>
+<h1>With output format</h1>
+m365 flow list --environmentName ENV_ID --output json
+</code></pre>
+<h3>Get Flow Details</h3>
+<pre><code class="language-bash">m365 flow get --environmentName ENV_ID --name FLOW_ID
+</code></pre>
+<h3>List Flow Runs</h3>
+<pre><code class="language-bash">m365 flow run list --environmentName ENV_ID --flowName FLOW_ID
+</code></pre>
+<h3>Get Flow Run Details</h3>
+<pre><code class="language-bash">m365 flow run get --environmentName ENV_ID --flowName FLOW_ID --name RUN_ID
+</code></pre>
+<h3>Cancel Flow Run</h3>
+<pre><code class="language-bash">m365 flow run cancel --environmentName ENV_ID --flowName FLOW_ID --name RUN_ID
+</code></pre>
+<h3>Resubmit Flow Run</h3>
+<pre><code class="language-bash">m365 flow run resubmit --environmentName ENV_ID --flowName FLOW_ID --name RUN_ID
+</code></pre>
+<hr>
+<h2>SharePoint Commands</h2>
+<h3>Sites</h3>
+<pre><code class="language-bash"># List all sites
+m365 spo site list
+</p>
+<h1>Get specific site</h1>
+m365 spo site get --url https://tenant.sharepoint.com/sites/sitename
+</p>
+<h1>Create site</h1>
+m365 spo site add --type TeamSite --title "Site Title" --alias sitealias
+</code></pre>
+<h3>Lists/Libraries</h3>
+<pre><code class="language-bash"># List all lists in site
+m365 spo list list --webUrl https://tenant.sharepoint.com/sites/sitename
+</p>
+<h1>Get specific list</h1>
+m365 spo list get --webUrl https://tenant.sharepoint.com/sites/sitename --title "Documents"
+</code></pre>
+<h3>Folders</h3>
+<pre><code class="language-bash"># List folder contents
+m365 spo folder list --webUrl https://tenant.sharepoint.com/sites/sitename --folderUrl "/Shared Documents"
+</p>
+<h1>Create folder</h1>
+m365 spo folder add --webUrl https://tenant.sharepoint.com/sites/sitename --folderUrl "/Shared Documents/NewFolder"
+</code></pre>
+<h3>Files</h3>
+<pre><code class="language-bash"># List files
+m365 spo file list --webUrl https://tenant.sharepoint.com/sites/sitename --folderUrl "/Shared Documents"
+</p>
+<h1>Download file</h1>
+m365 spo file get --webUrl https://tenant.sharepoint.com/sites/sitename --url "/Shared Documents/file.docx" --asFile --path ./file.docx
+</p>
+<h1>Upload file</h1>
+m365 spo file add --webUrl https://tenant.sharepoint.com/sites/sitename --folder "/Shared Documents" --path ./localfile.docx
+</code></pre>
+<hr>
+<h2>Project-Specific Commands</h2>
+<h3>Environment Details</h3>
+<pre><code class="language-text">Tenant:         ABCTest179
+Site URL:       https://abctest179.sharepoint.com/sites/Permission-Scanner-Test
+Environment ID: 1a81be40-03fb-e3fe-8964-ac88c74859cc
+Flow ID:        17c3f8fe-0fec-f011-8407-000d3ae1ff22
+</code></pre>
+<h3>Common Operations</h3>
+<pre><code class="language-bash"># Check flow status
+m365 flow get --environmentName 1a81be40-03fb-e3fe-8964-ac88c74859cc --name 17c3f8fe-0fec-f011-8407-000d3ae1ff22
+</p>
+<h1>List recent flow runs</h1>
+m365 flow run list --environmentName 1a81be40-03fb-e3fe-8964-ac88c74859cc --flowName 17c3f8fe-0fec-f011-8407-000d3ae1ff22
+</p>
+<h1>Get site info</h1>
+m365 spo site get --url https://abctest179.sharepoint.com/sites/Permission-Scanner-Test
+</code></pre>
+<hr>
+<h2>Output Formats</h2>
+<pre><code class="language-bash"># JSON output
+m365 flow list --environmentName ENV_ID --output json
+</p>
+<h1>CSV output</h1>
+m365 flow list --environmentName ENV_ID --output csv
+</p>
+<h1>Text (default)</h1>
+m365 flow list --environmentName ENV_ID --output text
+</p>
+<h1>Markdown</h1>
+m365 flow list --environmentName ENV_ID --output md
+</code></pre>
+<hr>
+<h2>Scripting Examples</h2>
+<h3>Check Flow Run Status (PowerShell)</h3>
+<pre><code class="language-powershell">$envId = "1a81be40-03fb-e3fe-8964-ac88c74859cc"
+$flowId = "17c3f8fe-0fec-f011-8407-000d3ae1ff22"
+</p>
+<p>
+$runs = m365 flow run list --environmentName $envId --flowName $flowId --output json | ConvertFrom-Json
+</p>
+<p>
+foreach ($run in $runs) {
+    Write-Host "$($run.name): $($run.status)"
+}
+</code></pre>
+<h3>Export Site Structure (Bash)</h3>
+<pre><code class="language-bash">ENV_ID="1a81be40-03fb-e3fe-8964-ac88c74859cc"
+SITE_URL="https://abctest179.sharepoint.com/sites/Permission-Scanner-Test"
+</p>
+<p>
+m365 spo folder list --webUrl $SITE_URL --folderUrl "/" --output json
+</code></pre>
+<hr>
+<h2>Troubleshooting</h2>
+<table>
+<thead><tr><th>Error</th><th>Solution</th></tr></thead>
+<tbody><tr><td>"Not logged in"</td><td>Run <code>m365 login</code></td></tr>
+<tr><td>"Access denied"</td><td>Check API permissions in Azure AD app</td></tr>
+<tr><td>"App ID not recognized"</td><td>Verify app registration exists</td></tr>
+<tr><td>"Consent required"</td><td>Admin must grant consent in Azure portal</td></tr>
+<tr><td>"Invalid environment"</td><td>Check environment ID with Power Platform admin</td></tr>
+</tbody></table>
+<h3>Check Login Status</h3>
+<pre><code class="language-bash">m365 status
+</code></pre>
+<h3>Re-authenticate</h3>
+<pre><code class="language-bash">m365 logout
+m365 login --authType deviceCode --appId YOUR_APP_ID
+</code></pre>
+<h3>Debug Mode</h3>
+<pre><code class="language-bash"># Enable verbose logging
+m365 --debug flow list --environmentName ENV_ID
+</code></pre>
+<hr>
+<h2>Related Documentation</h2>
+<ul><li><a href="https://pnp.github.io/cli-microsoft365/" target="_blank">m365 CLI Documentation</a></li>
+<li><a href="https://pnp.github.io/cli-microsoft365/cmd/flow/" target="_blank">m365 Flow Commands</a></li>
+<li><a href="https://pnp.github.io/cli-microsoft365/cmd/spo/" target="_blank">m365 SharePoint Commands</a></li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-08</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

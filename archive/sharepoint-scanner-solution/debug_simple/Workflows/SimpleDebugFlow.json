@@ -1,0 +1,129 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sharepointonline": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "sp_sharedsharepointonline_e7162"
+        },
+        "api": {
+          "name": "shared_sharepointonline"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "simple-debug-trigger"
+          },
+          "type": "Request",
+          "kind": "Button",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {},
+              "required": []
+            }
+          }
+        }
+      },
+      "actions": {
+        "TEST_1_GetWebInfo": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "test-1-web-info"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "HttpRequest",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "https://abctest179.sharepoint.com/sites/Permission-Scanner-Test",
+              "parameters/method": "GET",
+              "parameters/uri": "_api/web",
+              "parameters/headers": {
+                "Accept": "application/json;odata=nometadata"
+              }
+            },
+            "authentication": {
+              "type": "Raw",
+              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+            }
+          }
+        },
+        "DEBUG_WebInfo": {
+          "runAfter": {
+            "TEST_1_GetWebInfo": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": {
+            "Step": "1. Web Info Retrieved",
+            "Response": "@body('TEST_1_GetWebInfo')"
+          }
+        },
+        "TEST_2_GetRootFolders": {
+          "runAfter": {
+            "DEBUG_WebInfo": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "test-2-root-folders"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "HttpRequest",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "https://abctest179.sharepoint.com/sites/Permission-Scanner-Test",
+              "parameters/method": "GET",
+              "parameters/uri": "_api/web/GetFolderByServerRelativeUrl('/sites/Permission-Scanner-Test/Shared Documents')/Folders",
+              "parameters/headers": {
+                "Accept": "application/json;odata=nometadata"
+              }
+            },
+            "authentication": {
+              "type": "Raw",
+              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+            }
+          }
+        },
+        "DEBUG_RootFolders": {
+          "runAfter": {
+            "TEST_2_GetRootFolders": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": {
+            "Step": "2. Root Folders Retrieved",
+            "Folders": "@body('TEST_2_GetRootFolders')?['value']"
+          }
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

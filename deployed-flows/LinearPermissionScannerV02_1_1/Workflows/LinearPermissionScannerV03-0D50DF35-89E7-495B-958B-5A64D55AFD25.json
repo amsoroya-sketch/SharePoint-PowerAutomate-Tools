@@ -1,0 +1,305 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sharepointonline": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "sp_sharedsharepointonline_e7162"
+        },
+        "api": {
+          "name": "shared_sharepointonline"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "trigger-linear-v02-batch"
+          },
+          "type": "Request",
+          "kind": "Button",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "SiteUrl",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "SharePoint site URL (e.g., https://tenant.sharepoint.com/sites/MySite)",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_1": {
+                  "title": "LibraryName",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Document library name (e.g., Shared Documents)",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_2": {
+                  "title": "RootFolderPath",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Server-relative folder path to scan below (e.g., /sites/MySite/Shared Documents/Projects)",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "text",
+                "text_1",
+                "text_2"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Initialize_BatchId": {
+          "runAfter": {},
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "BatchId",
+                "type": "string",
+                "value": "@{guid()}"
+              }
+            ]
+          }
+        },
+        "Initialize_ChangesetId": {
+          "runAfter": {
+            "Initialize_BatchId": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ChangesetId",
+                "type": "string",
+                "value": "@{guid()}"
+              }
+            ]
+          }
+        },
+        "Initialize_HasError": {
+          "runAfter": {
+            "Initialize_ChangesetId": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "HasError",
+                "type": "boolean",
+                "value": false
+              }
+            ]
+          }
+        },
+        "Try_Scope": {
+          "actions": {
+            "Get_All_Folders": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "dataset": "@triggerBody()['text']",
+                  "parameters/method": "GET",
+                  "parameters/uri": "_api/web/lists/getbytitle('@{triggerBody()['text_1']}')/items?$filter=FSObjType eq 1 and startswith(FileRef,'@{triggerBody()['text_2']}')&$select=FileRef,FileLeafRef,Id,HasUniqueRoleAssignments&$top=5000",
+                  "parameters/headers": {
+                    "Accept": "application/json;odata=nometadata"
+                  }
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                  "operationId": "HttpRequest",
+                  "connectionName": "shared_sharepointonline"
+                }
+              }
+            },
+            "Filter_Broken_Permissions": {
+              "runAfter": {
+                "Get_All_Folders": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('Get_All_Folders')?['value']",
+                "where": "@equals(item()?['HasUniqueRoleAssignments'], true)"
+              }
+            },
+            "Condition_Has_Broken_Folders": {
+              "actions": {
+                "Select_Changeset_Parts": {
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@body('Filter_Broken_Permissions')",
+                    "select": "@concat('--changeset_', variables('ChangesetId'), decodeUriComponent('%0D%0A'), 'Content-Type: application/http', decodeUriComponent('%0D%0A'), 'Content-Transfer-Encoding: binary', decodeUriComponent('%0D%0A'), decodeUriComponent('%0D%0A'), 'POST ', triggerBody()['text'], '/_api/web/GetFolderByServerRelativeUrl(''', replace(item()?['FileRef'], '''', ''''''), ''')/ListItemAllFields/ResetRoleInheritance() HTTP/1.1', decodeUriComponent('%0D%0A'), 'Accept: application/json;odata=nometadata', decodeUriComponent('%0D%0A'), decodeUriComponent('%0D%0A'))"
+                  }
+                },
+                "Build_Batch_Body": {
+                  "runAfter": {
+                    "Select_Changeset_Parts": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@concat('--batch_', variables('BatchId'), decodeUriComponent('%0D%0A'), 'Content-Type: multipart/mixed; boundary=changeset_', variables('ChangesetId'), decodeUriComponent('%0D%0A'), decodeUriComponent('%0D%0A'), join(body('Select_Changeset_Parts'), ''), '--changeset_', variables('ChangesetId'), '--', decodeUriComponent('%0D%0A'), '--batch_', variables('BatchId'), '--')"
+                },
+                "Send_Batch_Request": {
+                  "runAfter": {
+                    "Build_Batch_Body": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "dataset": "@triggerBody()['text']",
+                      "parameters/method": "POST",
+                      "parameters/uri": "_api/$batch",
+                      "parameters/headers": {
+                        "Content-Type": "multipart/mixed; boundary=batch_@{variables('BatchId')}",
+                        "Accept": "application/json"
+                      },
+                      "parameters/body": "@outputs('Build_Batch_Body')"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                      "operationId": "HttpRequest",
+                      "connectionName": "shared_sharepointonline"
+                    }
+                  }
+                },
+                "Batch_Result": {
+                  "runAfter": {
+                    "Send_Batch_Request": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": {
+                    "Status": "Batch request completed",
+                    "FoldersReset": "@length(body('Filter_Broken_Permissions'))",
+                    "Response": "@body('Send_Batch_Request')"
+                  }
+                }
+              },
+              "runAfter": {
+                "Filter_Broken_Permissions": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "No_Broken_Permissions": {
+                    "type": "Compose",
+                    "inputs": {
+                      "Status": "No folders with broken permissions found",
+                      "TotalFoldersScanned": "@length(body('Get_All_Folders')?['value'])"
+                    }
+                  }
+                }
+              },
+              "expression": {
+                "greater": [
+                  "@length(body('Filter_Broken_Permissions'))",
+                  0
+                ]
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "Initialize_HasError": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "Catch_Scope": {
+          "actions": {
+            "Set_HasError_True": {
+              "type": "SetVariable",
+              "inputs": {
+                "name": "HasError",
+                "value": true
+              }
+            },
+            "Error_Details": {
+              "runAfter": {
+                "Set_HasError_True": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": {
+                "Error": "Flow execution failed",
+                "Details": "@result('Try_Scope')"
+              }
+            }
+          },
+          "runAfter": {
+            "Try_Scope": [
+              "Failed",
+              "TimedOut"
+            ]
+          },
+          "type": "Scope"
+        },
+        "Finally_Scope": {
+          "actions": {
+            "Flow_Summary": {
+              "type": "Compose",
+              "inputs": {
+                "FlowName": "LinearPermissionScannerV02",
+                "SiteUrl": "@triggerBody()['text']",
+                "LibraryName": "@triggerBody()['text_1']",
+                "RootFolderPath": "@triggerBody()['text_2']",
+                "TotalFolders": "@if(equals(variables('HasError'), true), 'Error during execution', length(coalesce(body('Get_All_Folders')?['value'], createArray())))",
+                "BrokenPermissions": "@if(equals(variables('HasError'), true), 'Error during execution', length(coalesce(body('Filter_Broken_Permissions'), createArray())))",
+                "HasError": "@variables('HasError')",
+                "CompletedAt": "@utcNow()"
+              }
+            }
+          },
+          "runAfter": {
+            "Try_Scope": [
+              "Succeeded",
+              "Failed",
+              "Skipped",
+              "TimedOut"
+            ],
+            "Catch_Scope": [
+              "Succeeded",
+              "Failed",
+              "Skipped",
+              "TimedOut"
+            ]
+          },
+          "type": "Scope"
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

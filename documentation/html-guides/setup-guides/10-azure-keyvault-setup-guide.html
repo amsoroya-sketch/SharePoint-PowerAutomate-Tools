@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Vault - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html" class="active">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: 10-azure-keyvault/setup-guide.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Azure Key Vault Setup Guide</h1>
+<p>
+Complete guide for secrets management with Azure Key Vault.
+</p>
+<hr>
+<h2>Overview</h2>
+<p>
+Azure Key Vault securely stores:
+<ul><li><strong>Secrets</strong>: Connection strings, API keys, passwords</li>
+<li><strong>Keys</strong>: Encryption keys</li>
+<li><strong>Certificates</strong>: SSL/TLS certificates</li>
+</ul>
+<hr>
+<h2>Create Key Vault</h2>
+<h3>Azure Portal</h3>
+1. Go to <strong>Azure Portal</strong> > <strong>Create a resource</strong>
+2. Search <strong>Key Vault</strong>
+3. Configure:
+   - Subscription
+   - Resource Group
+   - Key vault name (globally unique)
+   - Region
+   - Pricing tier (Standard/Premium)
+4. Click <strong>Create</strong>
+</p>
+<h3>Azure CLI</h3>
+<pre><code class="language-bash"># Create resource group
+az group create --name MyResourceGroup --location eastus
+</p>
+<h1>Create key vault</h1>
+az keyvault create --name MyKeyVault --resource-group MyResourceGroup --location eastus
+</p>
+<h1>Enable soft delete (recommended)</h1>
+az keyvault update --name MyKeyVault --resource-group MyResourceGroup --enable-soft-delete true
+</code></pre>
+<hr>
+<h2>Manage Secrets</h2>
+<h3>Azure CLI</h3>
+<pre><code class="language-bash"># Set secret
+az keyvault secret set --vault-name MyKeyVault --name "SharePointClientSecret" --value "your-secret-value"
+</p>
+<h1>Get secret</h1>
+az keyvault secret show --vault-name MyKeyVault --name "SharePointClientSecret" --query value -o tsv
+</p>
+<h1>List secrets</h1>
+az keyvault secret list --vault-name MyKeyVault --output table
+</p>
+<h1>Delete secret</h1>
+az keyvault secret delete --vault-name MyKeyVault --name "OldSecret"
+</code></pre>
+<h3>Azure Portal</h3>
+1. Open Key Vault
+2. Click <strong>Secrets</strong>
+3. Click <strong>+ Generate/Import</strong>
+4. Enter name and value
+5. Click <strong>Create</strong>
+</p>
+<hr>
+<h2>Access Policies</h2>
+<h3>Grant Access</h3>
+<pre><code class="language-bash"># Grant secret permissions to user
+az keyvault set-policy --name MyKeyVault --upn user@domain.com --secret-permissions get list
+</p>
+<h1>Grant to service principal</h1>
+az keyvault set-policy --name MyKeyVault --spn APP_ID --secret-permissions get list
+</p>
+<h1>Grant to managed identity</h1>
+az keyvault set-policy --name MyKeyVault --object-id IDENTITY_OBJECT_ID --secret-permissions get list
+</code></pre>
+<h3>Permission Types</h3>
+<table>
+<thead><tr><th>Permission</th><th>Description</th></tr></thead>
+<tbody><tr><td>get</td><td>Read secret value</td></tr>
+<tr><td>list</td><td>List secret names</td></tr>
+<tr><td>set</td><td>Create/update secrets</td></tr>
+<tr><td>delete</td><td>Delete secrets</td></tr>
+<tr><td>recover</td><td>Recover deleted secrets</td></tr>
+<tr><td>backup</td><td>Backup secrets</td></tr>
+<tr><td>restore</td><td>Restore secrets</td></tr>
+</tbody></table>
+<hr>
+<h2>Power Platform Integration</h2>
+<h3>Reference in Azure Function</h3>
+<pre><code class="language-csharp">// App setting referencing Key Vault
+// In Azure Portal: Configuration &gt; Application settings
+// Name: SharePointSecret
+// Value: @Microsoft.KeyVault(SecretUri=https://myvault.vault.azure.net/secrets/SharePointClientSecret/)
+</p>
+<p>
+// In code
+var secret = Environment.GetEnvironmentVariable("SharePointSecret");
+</code></pre>
+<h3>Enable Managed Identity for Function App</h3>
+<pre><code class="language-bash"># Enable system-assigned identity
+az functionapp identity assign --name MyFunctionApp --resource-group MyResourceGroup
+</p>
+<h1>Get identity object ID</h1>
+az functionapp identity show --name MyFunctionApp --resource-group MyResourceGroup --query principalId -o tsv
+</p>
+<h1>Grant Key Vault access</h1>
+az keyvault set-policy --name MyKeyVault --object-id PRINCIPAL_ID --secret-permissions get list
+</code></pre>
+<h3>Power Automate with Key Vault</h3>
+1. Add <strong>Azure Key Vault</strong> connector
+2. Authenticate with service account
+3. Use <strong>Get secret</strong> action
+4. Reference secret value in flow
+</p>
+<pre><code class="language-yaml">Action: Get secret (Azure Key Vault)
+Vault name: MyKeyVault
+Secret name: SharePointClientSecret
+</code></pre>
+<hr>
+<h2>Project Secrets</h2>
+<h3>Recommended Secrets</h3>
+<pre><code class="language-text">SharePointClientId       - App registration client ID
+SharePointClientSecret   - App registration secret
+SharePointTenantId       - Azure AD tenant ID
+DataverseConnectionString - Dataverse connection
+</code></pre>
+<h3>Store Project Secrets</h3>
+<pre><code class="language-bash"># SharePoint app credentials
+az keyvault secret set --vault-name MyKeyVault --name "SharePointClientId" --value "your-client-id"
+az keyvault secret set --vault-name MyKeyVault --name "SharePointClientSecret" --value "your-secret"
+az keyvault secret set --vault-name MyKeyVault --name "SharePointTenantId" --value "your-tenant-id"
+</code></pre>
+<hr>
+<h2>Secret Rotation</h2>
+<h3>Manual Rotation</h3>
+1. Generate new secret/key
+2. Update Key Vault secret
+3. Verify applications work
+4. Disable old secret
+</p>
+<h3>Automated Rotation</h3>
+<pre><code class="language-bash"># Set secret with expiration
+az keyvault secret set --vault-name MyKeyVault --name "RotatingSecret" --value "value" --expires "2026-12-31T23:59:59Z"
+</p>
+<h1>List expiring secrets</h1>
+az keyvault secret list --vault-name MyKeyVault --query "[?attributes.expires &lt; '2026-06-01']" --output table
+</code></pre>
+<hr>
+<h2>Monitoring</h2>
+<h3>Enable Logging</h3>
+<pre><code class="language-bash"># Create storage account for logs
+az storage account create --name kvlogs --resource-group MyResourceGroup --location eastus
+</p>
+<h1>Enable diagnostic logging</h1>
+az monitor diagnostic-settings create --name KVLogs --resource "/subscriptions/SUB_ID/resourceGroups/MyResourceGroup/providers/Microsoft.KeyVault/vaults/MyKeyVault" --storage-account kvlogs --logs '[{"category":"AuditEvent","enabled":true}]'
+</code></pre>
+<h3>View Access Logs</h3>
+1. Open Key Vault
+2. Click <strong>Monitoring</strong> > <strong>Logs</strong>
+3. Query audit events
+</p>
+<hr>
+<h2>Best Practices</h2>
+<h3>Security</h3>
+<ul><li>Use managed identities (no credentials in code)</li>
+<li>Enable soft delete and purge protection</li>
+<li>Use RBAC instead of access policies (preview)</li>
+<li>Rotate secrets regularly</li>
+<li>Monitor access logs</li>
+</ul>
+<h3>Architecture</h3>
+<ul><li>One vault per environment (dev/prod)</li>
+<li>Use naming conventions</li>
+<li>Document secret purposes</li>
+<li>Limit access to minimum required</li>
+</ul>
+<h3>Operations</h3>
+<ul><li>Automate secret rotation</li>
+<li>Set expiration dates</li>
+<li>Back up critical secrets</li>
+<li>Test disaster recovery</li>
+</ul>
+<hr>
+<h2>CLI Reference</h2>
+<pre><code class="language-bash"># Vault management
+az keyvault create --name NAME --resource-group RG
+az keyvault delete --name NAME
+az keyvault list --resource-group RG
+</p>
+<h1>Secret management</h1>
+az keyvault secret set --vault-name VAULT --name NAME --value VALUE
+az keyvault secret show --vault-name VAULT --name NAME
+az keyvault secret list --vault-name VAULT
+az keyvault secret delete --vault-name VAULT --name NAME
+</p>
+<h1>Access policies</h1>
+az keyvault set-policy --name VAULT --upn USER --secret-permissions get list
+az keyvault delete-policy --name VAULT --upn USER
+</code></pre>
+<hr>
+<h2>Related Documentation</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/azure/key-vault/" target="_blank">Azure Key Vault Documentation</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/key-vault/general/best-practices" target="_blank">Key Vault Best Practices</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/" target="_blank">Managed Identities</a></li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-09</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

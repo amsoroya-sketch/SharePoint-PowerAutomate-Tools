@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure CLI - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html" class="active">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: cli-tools/az-cli.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Azure CLI</h1>
+<p>
+Azure CLI for managing Azure resources, Entra ID, and Azure DevOps.
+</p>
+<hr>
+<h2>Installation</h2>
+<h3>Windows (winget)</h3>
+<pre><code class="language-powershell">winget install Microsoft.AzureCLI
+</code></pre>
+<h3>Windows (MSI)</h3>
+Download from: https://aka.ms/installazurecliwindows
+</p>
+<h3>macOS</h3>
+<pre><code class="language-bash">brew install azure-cli
+</code></pre>
+<h3>Linux</h3>
+<pre><code class="language-bash">curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+</code></pre>
+<h3>Verify Installation</h3>
+<pre><code class="language-bash">az version
+</code></pre>
+<hr>
+<h2>Authentication</h2>
+<h3>Interactive Login</h3>
+<pre><code class="language-bash"># Opens browser for authentication
+az login
+</p>
+<h1>Specify tenant</h1>
+az login --tenant TENANT_ID
+</code></pre>
+<h3>Device Code Login</h3>
+<pre><code class="language-bash">az login --use-device-code
+</code></pre>
+<h3>Service Principal Login</h3>
+<pre><code class="language-bash">az login --service-principal --username APP_ID --password CLIENT_SECRET --tenant TENANT_ID
+</code></pre>
+<h3>Check Current Account</h3>
+<pre><code class="language-bash">az account show
+</code></pre>
+<h3>List Subscriptions</h3>
+<pre><code class="language-bash">az account list --output table
+</code></pre>
+<h3>Set Active Subscription</h3>
+<pre><code class="language-bash">az account set --subscription "Subscription Name"
+</code></pre>
+<h3>Logout</h3>
+<pre><code class="language-bash">az logout
+</code></pre>
+<hr>
+<h2>App Registration Commands</h2>
+<h3>List App Registrations</h3>
+<pre><code class="language-bash">az ad app list --output table
+</code></pre>
+<h3>Create App Registration</h3>
+<pre><code class="language-bash">az ad app create --display-name "App Name" --sign-in-audience AzureADMyOrg
+</code></pre>
+<h3>Get App Details</h3>
+<pre><code class="language-bash">az ad app show --id APP_ID
+</code></pre>
+<h3>Add API Permission</h3>
+<pre><code class="language-bash"># Add Microsoft Graph User.Read
+az ad app permission add --id APP_ID --api 00000003-0000-0000-c000-000000000000 --api-permissions e1fe6dd8-ba31-4d61-89e7-88639da4683d=Scope
+</code></pre>
+<h3>Grant Admin Consent</h3>
+<pre><code class="language-bash">az ad app permission admin-consent --id APP_ID
+</code></pre>
+<h3>Create Client Secret</h3>
+<pre><code class="language-bash">az ad app credential reset --id APP_ID --append
+</code></pre>
+<hr>
+<h2>Entra ID (Azure AD) Commands</h2>
+<h3>Users</h3>
+<pre><code class="language-bash"># List users
+az ad user list --output table
+</p>
+<h1>Get user</h1>
+az ad user show --id user@domain.com
+</p>
+<h1>Create user</h1>
+az ad user create --display-name "User Name" --user-principal-name user@domain.com --password "Password123!"
+</code></pre>
+<h3>Groups</h3>
+<pre><code class="language-bash"># List groups
+az ad group list --output table
+</p>
+<h1>Get group</h1>
+az ad group show --group "Group Name"
+</p>
+<h1>List group members</h1>
+az ad group member list --group "Group Name" --output table
+</p>
+<h1>Add member to group</h1>
+az ad group member add --group "Group Name" --member-id USER_ID
+</code></pre>
+<h3>Service Principals</h3>
+<pre><code class="language-bash"># List service principals
+az ad sp list --output table
+</p>
+<h1>Get service principal</h1>
+az ad sp show --id APP_ID
+</p>
+<h1>Create service principal for app</h1>
+az ad sp create --id APP_ID
+</code></pre>
+<hr>
+<h2>Azure DevOps Extension</h2>
+<h3>Install Extension</h3>
+<pre><code class="language-bash">az extension add --name azure-devops
+</code></pre>
+<h3>Configure Defaults</h3>
+<pre><code class="language-bash">az devops configure --defaults organization=https://dev.azure.com/myorg project=MyProject
+</code></pre>
+<h3>Login to DevOps</h3>
+<pre><code class="language-bash">az devops login
+</code></pre>
+<h3>Pipelines</h3>
+<pre><code class="language-bash"># List pipelines
+az pipelines list --output table
+</p>
+<h1>Run pipeline</h1>
+az pipelines run --name "Pipeline Name"
+</p>
+<h1>Get pipeline run</h1>
+az pipelines runs show --id RUN_ID
+</code></pre>
+<h3>Repos</h3>
+<pre><code class="language-bash"># List repos
+az repos list --output table
+</p>
+<h1>Create repo</h1>
+az repos create --name "RepoName"
+</code></pre>
+<hr>
+<h2>Resource Group Commands</h2>
+<pre><code class="language-bash"># List resource groups
+az group list --output table
+</p>
+<h1>Create resource group</h1>
+az group create --name MyResourceGroup --location eastus
+</p>
+<h1>Delete resource group</h1>
+az group delete --name MyResourceGroup
+</code></pre>
+<hr>
+<h2>Key Vault Commands</h2>
+<pre><code class="language-bash"># List key vaults
+az keyvault list --output table
+</p>
+<h1>Create key vault</h1>
+az keyvault create --name MyKeyVault --resource-group MyResourceGroup --location eastus
+</p>
+<h1>Set secret</h1>
+az keyvault secret set --vault-name MyKeyVault --name SecretName --value "SecretValue"
+</p>
+<h1>Get secret</h1>
+az keyvault secret show --vault-name MyKeyVault --name SecretName
+</code></pre>
+<hr>
+<h2>Output Formats</h2>
+<pre><code class="language-bash"># Table (default)
+az account list --output table
+</p>
+<h1>JSON</h1>
+az account list --output json
+</p>
+<h1>YAML</h1>
+az account list --output yaml
+</p>
+<h1>TSV (tab-separated)</h1>
+az account list --output tsv
+</p>
+<h1>JSONC (colored JSON)</h1>
+az account list --output jsonc
+</code></pre>
+<hr>
+<h2>Query with JMESPath</h2>
+<pre><code class="language-bash"># Get specific property
+az account show --query name
+</p>
+<h1>Get multiple properties</h1>
+az account show --query "[name, id]"
+</p>
+<h1>Filter list</h1>
+az ad user list --query "[?displayName=='John Doe']"
+</p>
+<h1>Formatted output</h1>
+az account show --query "{Name:name, ID:id}" --output table
+</code></pre>
+<hr>
+<h2>Configuration</h2>
+<h3>View Config</h3>
+<pre><code class="language-bash">az config get
+</code></pre>
+<h3>Set Defaults</h3>
+<pre><code class="language-bash"># Default resource group
+az config set defaults.group=MyResourceGroup
+</p>
+<h1>Default location</h1>
+az config set defaults.location=eastus
+</code></pre>
+<h3>Enable Auto-Upgrade</h3>
+<pre><code class="language-bash">az config set auto-upgrade.enable=yes
+</code></pre>
+<hr>
+<h2>Useful Commands</h2>
+<h3>Get Access Token</h3>
+<pre><code class="language-bash"># For Microsoft Graph
+az account get-access-token --resource https://graph.microsoft.com
+</p>
+<h1>For Power Platform</h1>
+az account get-access-token --resource https://api.powerplatform.com
+</code></pre>
+<h3>Find Resources</h3>
+<pre><code class="language-bash"># Find all resources
+az resource list --output table
+</p>
+<h1>Find by type</h1>
+az resource list --resource-type Microsoft.Web/sites --output table
+</code></pre>
+<hr>
+<h2>Troubleshooting</h2>
+<table>
+<thead><tr><th>Error</th><th>Solution</th></tr></thead>
+<tbody><tr><td>"Not logged in"</td><td>Run <code>az login</code></td></tr>
+<tr><td>"Subscription not found"</td><td>Run <code>az account list</code> and <code>az account set</code></td></tr>
+<tr><td>"Permission denied"</td><td>Check Azure role assignments</td></tr>
+<tr><td>"Extension not found"</td><td>Run <code>az extension add --name EXTENSION_NAME</code></td></tr>
+</tbody></table>
+<h3>Clear Cached Credentials</h3>
+<pre><code class="language-bash">az account clear
+az login
+</code></pre>
+<h3>Update Azure CLI</h3>
+<pre><code class="language-bash">az upgrade
+</code></pre>
+<h3>Check Extensions</h3>
+<pre><code class="language-bash">az extension list --output table
+az extension update --name azure-devops
+</code></pre>
+<hr>
+<h2>Related Documentation</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/cli/azure/" target="_blank">Azure CLI Reference</a></li>
+<li><a href="https://learn.microsoft.com/en-us/cli/azure/query-azure-cli" target="_blank">Azure CLI Query</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/devops/cli/" target="_blank">Azure DevOps CLI</a></li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-08</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

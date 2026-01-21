@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation Script - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html" class="active">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: cli-tools/install-all.ps1</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Installation Script</h1>
+<pre><code class="language-powershell"># Power Platform CLI Tools Installation Script
+# Run with: .\install-all.ps1
+# Requires: Administrator privileges for some installations
+
+param(
+    [switch]$SkipWinget,
+    [switch]$SkipNpm,
+    [switch]$SkipPowerShellModules,
+    [switch]$Force
+)
+
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host " Power Platform CLI Tools Installer" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+
+# Check if running as admin
+$isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+if (-not $isAdmin) {
+    Write-Host "Note: Some installations may require administrator privileges." -ForegroundColor Yellow
+    Write-Host "Run as Administrator if you encounter permission errors." -ForegroundColor Yellow
+    Write-Host ""
+}
+
+# Function to check if command exists
+function Test-CommandExists {
+    param($Command)
+    $null -ne (Get-Command $Command -ErrorAction SilentlyContinue)
+}
+
+# Function to install via winget
+function Install-WithWinget {
+    param($PackageId, $Name)
+
+    if (-not (Test-CommandExists "winget")) {
+        Write-Host "  [SKIP] winget not available" -ForegroundColor Yellow
+        return $false
+    }
+
+    Write-Host "  Installing $Name..." -ForegroundColor Gray
+    try {
+        winget install $PackageId --accept-source-agreements --accept-package-agreements -h
+        return $true
+    } catch {
+        Write-Host "  [ERROR] Failed to install $Name" -ForegroundColor Red
+        return $false
+    }
+}
+
+# Function to install via npm
+function Install-WithNpm {
+    param($PackageName, $Name)
+
+    if (-not (Test-CommandExists "npm")) {
+        Write-Host "  [SKIP] npm not available - install Node.js first" -ForegroundColor Yellow
+        return $false
+    }
+
+    Write-Host "  Installing $Name..." -ForegroundColor Gray
+    try {
+        npm install -g $PackageName 2&gt;$null
+        return $true
+    } catch {
+        Write-Host "  [ERROR] Failed to install $Name" -ForegroundColor Red
+        return $false
+    }
+}
+
+$results = @{}
+
+# ============================================
+# 1. Prerequisites
+# ============================================
+Write-Host "1. Checking Prerequisites" -ForegroundColor Green
+Write-Host "--------------------------"
+
+# Check Node.js
+if (Test-CommandExists "node") {
+    $nodeVersion = node --version
+    Write-Host "  [OK] Node.js $nodeVersion" -ForegroundColor Green
+    $results["Node.js"] = $nodeVersion
+} else {
+    Write-Host "  [MISSING] Node.js" -ForegroundColor Red
+    if (-not $SkipWinget) {
+        Install-WithWinget "OpenJS.NodeJS.LTS" "Node.js LTS"
+    }
+}
+
+# Check npm
+if (Test-CommandExists "npm") {
+    $npmVersion = npm --version
+    Write-Host "  [OK] npm $npmVersion" -ForegroundColor Green
+    $results["npm"] = $npmVersion
+} else {
+    Write-Host "  [MISSING] npm (comes with Node.js)" -ForegroundColor Yellow
+}
+
+# Check Git
+if (Test-CommandExists "git") {
+    $gitVersion = git --version
+    Write-Host "  [OK] $gitVersion" -ForegroundColor Green
+    $results["Git"] = $gitVersion
+} else {
+    Write-Host "  [MISSING] Git" -ForegroundColor Red
+    if (-not $SkipWinget) {
+        Install-WithWinget "Git.Git" "Git"
+    }
+}
+
+Write-Host ""
+
+# ============================================
+# 2. Power Platform CLI (PAC)
+# ============================================
+Write-Host "2. Power Platform CLI (PAC)" -ForegroundColor Green
+Write-Host "----------------------------"
+
+if (Test-CommandExists "pac") {
+    $pacVersion = pac --version 2&gt;$null
+    Write-Host "  [OK] PAC CLI installed" -ForegroundColor Green
+    Write-Host "       Version: $pacVersion" -ForegroundColor Gray
+    $results["PAC CLI"] = $pacVersion
+} else {
+    Write-Host "  [MISSING] PAC CLI" -ForegroundColor Red
+    if (-not $SkipWinget) {
+        if (Install-WithWinget "Microsoft.PowerPlatformCLI" "Power Platform CLI") {
+            Write-Host "  [DONE] PAC CLI installed - restart terminal to use" -ForegroundColor Green
+        }
+    }
+}
+
+Write-Host ""
+
+# ============================================
+# 3. Microsoft 365 CLI (m365)
+# ============================================
+Write-Host "3. Microsoft 365 CLI (m365)" -ForegroundColor Green
+Write-Host "----------------------------"
+
+if (Test-CommandExists "m365") {
+    $m365Version = m365 version 2&gt;$null
+    Write-Host "  [OK] m365 CLI installed" -ForegroundColor Green
+    Write-Host "       Version: $m365Version" -ForegroundColor Gray
+    $results["m365 CLI"] = $m365Version
+} else {
+    Write-Host "  [MISSING] m365 CLI" -ForegroundColor Red
+    if (-not $SkipNpm) {
+        if (Install-WithNpm "@pnp/cli-microsoft365" "m365 CLI") {
+            Write-Host "  [DONE] m365 CLI installed" -ForegroundColor Green
+            Write-Host "  [NOTE] Run 'm365 setup' to configure authentication" -ForegroundColor Yellow
+        }
+    }
+}
+
+Write-Host ""
+
+# ============================================
+# 4. Azure CLI
+# ============================================
+Write-Host "4. Azure CLI" -ForegroundColor Green
+Write-Host "-------------"
+
+if (Test-CommandExists "az") {
+    $azVersion = (az version --output json 2&gt;$null | ConvertFrom-Json).'azure-cli'
+    Write-Host "  [OK] Azure CLI installed" -ForegroundColor Green
+    Write-Host "       Version: $azVersion" -ForegroundColor Gray
+    $results["Azure CLI"] = $azVersion
+} else {
+    Write-Host "  [MISSING] Azure CLI" -ForegroundColor Red
+    if (-not $SkipWinget) {
+        if (Install-WithWinget "Microsoft.AzureCLI" "Azure CLI") {
+            Write-Host "  [DONE] Azure CLI installed - restart terminal to use" -ForegroundColor Green
+        }
+    }
+}
+
+Write-Host ""
+
+# ============================================
+# 5. Azure Functions Core Tools
+# ============================================
+Write-Host "5. Azure Functions Core Tools" -ForegroundColor Green
+Write-Host "------------------------------"
+
+if (Test-CommandExists "func") {
+    $funcVersion = func --version 2&gt;$null
+    Write-Host "  [OK] Azure Functions CLI installed" -ForegroundColor Green
+    Write-Host "       Version: $funcVersion" -ForegroundColor Gray
+    $results["Functions CLI"] = $funcVersion
+} else {
+    Write-Host "  [MISSING] Azure Functions CLI" -ForegroundColor Yellow
+    if (-not $SkipNpm) {
+        if (Install-WithNpm "azure-functions-core-tools@4" "Azure Functions CLI") {
+            Write-Host "  [DONE] Azure Functions CLI installed" -ForegroundColor Green
+        }
+    }
+}
+
+Write-Host ""
+
+# ============================================
+# 6. PnP PowerShell
+# ============================================
+Write-Host "6. PnP PowerShell Module" -ForegroundColor Green
+Write-Host "-------------------------"
+
+$pnpModule = Get-Module -Name PnP.PowerShell -ListAvailable
+if ($pnpModule) {
+    $pnpVersion = $pnpModule.Version.ToString()
+    Write-Host "  [OK] PnP.PowerShell installed" -ForegroundColor Green
+    Write-Host "       Version: $pnpVersion" -ForegroundColor Gray
+    $results["PnP PowerShell"] = $pnpVersion
+} else {
+    Write-Host "  [MISSING] PnP.PowerShell" -ForegroundColor Yellow
+    if (-not $SkipPowerShellModules) {
+        Write-Host "  Installing PnP.PowerShell..." -ForegroundColor Gray
+        try {
+            Install-Module -Name PnP.PowerShell -Scope CurrentUser -Force -AllowClobber
+            Write-Host "  [DONE] PnP.PowerShell installed" -ForegroundColor Green
+        } catch {
+            Write-Host "  [ERROR] Failed to install PnP.PowerShell" -ForegroundColor Red
+            Write-Host "  Try: Install-Module -Name PnP.PowerShell -Scope CurrentUser" -ForegroundColor Yellow
+        }
+    }
+}
+
+Write-Host ""
+
+# ============================================
+# 7. Azure DevOps Extension
+# ============================================
+Write-Host "7. Azure DevOps CLI Extension" -ForegroundColor Green
+Write-Host "------------------------------"
+
+if (Test-CommandExists "az") {
+    $devopsExt = az extension list --query "[?name=='azure-devops']" 2&gt;$null | ConvertFrom-Json
+    if ($devopsExt) {
+        Write-Host "  [OK] Azure DevOps extension installed" -ForegroundColor Green
+        $results["DevOps Extension"] = "Installed"
+    } else {
+        Write-Host "  [MISSING] Azure DevOps extension" -ForegroundColor Yellow
+        Write-Host "  Installing Azure DevOps extension..." -ForegroundColor Gray
+        try {
+            az extension add --name azure-devops
+            Write-Host "  [DONE] Azure DevOps extension installed" -ForegroundColor Green
+        } catch {
+            Write-Host "  [ERROR] Failed to install Azure DevOps extension" -ForegroundColor Red
+        }
+    }
+} else {
+    Write-Host "  [SKIP] Azure CLI not installed" -ForegroundColor Yellow
+}
+
+Write-Host ""
+
+# ============================================
+# Summary
+# ============================================
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host " Installation Summary" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+
+foreach ($tool in $results.Keys) {
+    Write-Host "  $tool : $($results[$tool])" -ForegroundColor Green
+}
+
+Write-Host ""
+Write-Host "Next Steps:" -ForegroundColor Yellow
+Write-Host "  1. Restart terminal for PATH updates" -ForegroundColor Gray
+Write-Host "  2. Run verify-installation.ps1 to check status" -ForegroundColor Gray
+Write-Host "  3. Authenticate each CLI:" -ForegroundColor Gray
+Write-Host "     - pac auth create" -ForegroundColor Gray
+Write-Host "     - m365 login" -ForegroundColor Gray
+Write-Host "     - az login" -ForegroundColor Gray
+Write-Host ""
+</code></pre>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

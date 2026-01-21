@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SharePoint - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html" class="active">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: 04-sharepoint/setup-guide.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>SharePoint Online Setup Guide</h1>
+<p>
+Complete guide for SharePoint Online development and administration.
+</p>
+<hr>
+<h2>Access SharePoint</h2>
+<h3>Direct URL</h3>
+<pre><code class="language-text">https://[tenant].sharepoint.com
+</code></pre>
+<h3>Project Site</h3>
+<pre><code class="language-text">https://abctest179.sharepoint.com/sites/Permission-Scanner-Test
+</code></pre>
+<h3>Through Microsoft 365</h3>
+1. Go to <code>https://office.com</code>
+2. Click App Launcher (9 dots)
+3. Select <strong>SharePoint</strong>
+</p>
+<hr>
+<h2>URL Structure</h2>
+<pre><code class="language-text">https://[tenant].sharepoint.com/sites/[sitename]/[library]/[folder]
+</p>
+<p>
+Components:
+├── tenant: Your organization (abctest179)
+├── /sites/: Site collection path
+├── sitename: Site name (Permission-Scanner-Test)
+├── library: Document library (TestLibrary_Basic)
+└── folder: Folder path
+</code></pre>
+<hr>
+<h2>Site Management</h2>
+<h3>Create Team Site</h3>
+1. Click <strong>+ Create site</strong>
+2. Select <strong>Team site</strong>
+3. Configure:
+   - Site name
+   - Privacy settings
+   - Members
+4. Click <strong>Create</strong>
+</p>
+<h3>Create Communication Site</h3>
+1. Click <strong>+ Create site</strong>
+2. Select <strong>Communication site</strong>
+3. Choose design
+4. Configure settings
+5. Click <strong>Create</strong>
+</p>
+<hr>
+<h2>Document Libraries</h2>
+<h3>Create Library</h3>
+1. Go to site
+2. Click <strong>+ New</strong> > <strong>Document library</strong>
+3. Enter name
+4. Click <strong>Create</strong>
+</p>
+<h3>Library Settings</h3>
+1. Click <strong>Settings</strong> (gear icon)
+2. Select <strong>Library settings</strong>
+3. Configure:
+   - Versioning
+   - Permissions
+   - Columns
+   - Views
+</p>
+<hr>
+<h2>Folders</h2>
+<h3>Create Folder</h3>
+1. Open document library
+2. Click <strong>+ New</strong> > <strong>Folder</strong>
+3. Enter folder name
+4. Click <strong>Create</strong>
+</p>
+<h3>Navigate Folders</h3>
+<ul><li>Click folder name to enter</li>
+<li>Use breadcrumb to navigate up</li>
+<li>Click library name to return to root</li>
+</ul>
+<hr>
+<h2>Permissions</h2>
+<h3>Permission Levels</h3>
+<table>
+<thead><tr><th>Level</th><th>Permissions</th></tr></thead>
+<tbody><tr><td>Full Control</td><td>All permissions</td></tr>
+<tr><td>Design</td><td>View, add, edit, delete, approve</td></tr>
+<tr><td>Edit</td><td>View, add, edit, delete</td></tr>
+<tr><td>Contribute</td><td>View, add, edit</td></tr>
+<tr><td>Read</td><td>View only</td></tr>
+<tr><td>View Only</td><td>View without download</td></tr>
+</tbody></table>
+<h3>Check Permissions</h3>
+1. Select item
+2. Click <strong>...</strong> > <strong>Manage access</strong>
+3. View current permissions
+</p>
+<h3>Break Inheritance</h3>
+1. Select folder
+2. Click <strong>Manage access</strong>
+3. Click <strong>Advanced</strong> (or ⚙️)
+4. Click <strong>Stop Inheriting Permissions</strong>
+5. Confirm action
+</p>
+<h3>Grant Permission</h3>
+1. Click <strong>Manage access</strong>
+2. Click <strong>Grant access</strong>
+3. Enter user/group
+4. Select permission level
+5. Click <strong>Grant</strong>
+</p>
+<h3>Remove Permission</h3>
+1. Click <strong>Manage access</strong>
+2. Find user/group
+3. Click <strong>Remove</strong>
+</p>
+<h3>Reset Inheritance</h3>
+1. Go to folder permissions
+2. Click <strong>Delete unique permissions</strong>
+3. Confirm to inherit from parent
+</p>
+<hr>
+<h2>REST API</h2>
+<h3>Base URL</h3>
+<pre><code class="language-text">https://[tenant].sharepoint.com/sites/[sitename]/_api/
+</code></pre>
+<h3>Common Endpoints</h3>
+<h4>Get Web Info</h4>
+<pre><code class="language-text">GET _api/web
+</code></pre>
+<h4>Get Lists</h4>
+<pre><code class="language-text">GET _api/web/lists
+</code></pre>
+<h4>Get Folder Contents</h4>
+<pre><code class="language-text">GET _api/web/GetFolderByServerRelativeUrl('/sites/sitename/Shared Documents')/Folders
+</code></pre>
+<h4>Get Folder Permissions</h4>
+<pre><code class="language-text">GET _api/web/GetFolderByServerRelativeUrl('/path')/ListItemAllFields/RoleAssignments
+</code></pre>
+<h4>Check Unique Permissions</h4>
+<pre><code class="language-text">GET _api/web/GetFolderByServerRelativeUrl('/path')/ListItemAllFields/HasUniqueRoleAssignments
+</code></pre>
+<h3>Headers</h3>
+<pre><code class="language-json">{
+  "Accept": "application/json;odata=nometadata",
+  "Content-Type": "application/json;odata=verbose"
+}
+</code></pre>
+<hr>
+<h2>Power Automate Integration</h2>
+<h3>Send HTTP Request to SharePoint</h3>
+<pre><code class="language-yaml">Action: Send an HTTP request to SharePoint
+Site Address: https://tenant.sharepoint.com/sites/sitename
+Method: GET
+Uri: _api/web/GetFolderByServerRelativeUrl('/sites/sitename/Shared Documents')/Folders
+Headers:
+  Accept: application/json;odata=nometadata
+</code></pre>
+<h3>Parse Response</h3>
+<pre><code class="language-text">@body('Send_HTTP_request_to_SharePoint')?['d']?['results']
+</code></pre>
+<hr>
+<h2>CLI Commands</h2>
+<h3>m365 CLI</h3>
+<pre><code class="language-bash"># Get site info
+m365 spo site get --url https://tenant.sharepoint.com/sites/sitename
+</p>
+<h1>List document libraries</h1>
+m365 spo list list --webUrl https://tenant.sharepoint.com/sites/sitename
+</p>
+<h1>List folder contents</h1>
+m365 spo folder list --webUrl https://tenant.sharepoint.com/sites/sitename --folderUrl "/Shared Documents"
+</code></pre>
+<h3>PnP PowerShell</h3>
+<pre><code class="language-powershell"># Connect
+Connect-PnPOnline -Url "https://tenant.sharepoint.com/sites/sitename" -Interactive
+</p>
+<h1>Get folders</h1>
+Get-PnPFolderItem -FolderSiteRelativeUrl "Shared Documents"
+</p>
+<h1>Check permissions</h1>
+Get-PnPListItemPermission -List "Documents" -Identity 1
+</code></pre>
+<hr>
+<h2>Project Configuration</h2>
+<h3>Test Environment</h3>
+<pre><code class="language-text">Tenant:        ABCTest179
+Site URL:      https://abctest179.sharepoint.com/sites/Permission-Scanner-Test
+Library:       TestLibrary_Basic
+</code></pre>
+<h3>Folder Structure for Testing</h3>
+<pre><code class="language-text">TestLibrary_Basic/
+├── Folder1
+├── Folder2
+├── Folder3
+├── Department1/
+│   ├── SubFolder1
+│   └── SubFolder2
+├── Department2/
+│   └── SubFolder3
+├── Projects/
+│   ├── ProjectA
+│   ├── ProjectB
+│   └── ProjectC
+├── Confidential/       ← Break inheritance here
+├── Restricted/
+│   └── TopSecret/
+│       └── Documents/
+└── Level1/
+    └── Level2/
+        └── Level3/
+            └── Level4/
+                └── Level5/
+                    └── Level6/
+</code></pre>
+<hr>
+<h2>Troubleshooting</h2>
+<table>
+<thead><tr><th>Issue</th><th>Solution</th></tr></thead>
+<tbody><tr><td>"Access denied"</td><td>Check permissions</td></tr>
+<tr><td>"Site not found"</td><td>Verify URL</td></tr>
+<tr><td>"List not found"</td><td>Check library name</td></tr>
+<tr><td>"Folder not found"</td><td>Check path is correct</td></tr>
+</tbody></table>
+<h3>Verify Permissions</h3>
+1. Go to site settings
+2. Click <strong>Site permissions</strong>
+3. Check user access level
+</p>
+<h3>Check API Response</h3>
+1. Navigate to <code>_api/web</code> in browser
+2. Review JSON response
+3. Look for error messages
+</p>
+<hr>
+<h2>Best Practices</h2>
+<h3>Permissions</h3>
+<ul><li>Use groups, not individuals</li>
+<li>Minimize custom permissions</li>
+<li>Document permission changes</li>
+<li>Audit regularly</li>
+</ul>
+<h3>Libraries</h3>
+<ul><li>Use meaningful names</li>
+<li>Set up versioning</li>
+<li>Configure content types</li>
+<li>Create useful views</li>
+</ul>
+<h3>Performance</h3>
+<ul><li>Avoid deeply nested folders (>5 levels)</li>
+<li>Use indexed columns for large libraries</li>
+<li>Limit items per view</li>
+</ul>
+<hr>
+<h2>Related Documentation</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/get-to-know-the-sharepoint-rest-service" target="_blank">SharePoint REST API</a></li>
+<li><a href="https://learn.microsoft.com/en-us/sharepoint/understanding-permission-levels" target="_blank">SharePoint Permissions</a></li>
+<li><a href="https://pnp.github.io/powershell/" target="_blank">PnP PowerShell</a></li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-08</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

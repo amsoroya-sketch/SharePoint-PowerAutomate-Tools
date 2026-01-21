@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLI Reference - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html" class="active">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: 01-power-automate/cli-reference.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Power Automate CLI Reference</h1>
+<p>
+Commands for managing Power Automate flows via CLI.
+</p>
+<hr>
+<h2>m365 CLI Commands</h2>
+<h3>Authentication</h3>
+<pre><code class="language-bash"># Login
+m365 login --authType deviceCode --appId YOUR_APP_ID
+</p>
+<h1>Check status</h1>
+m365 status
+</p>
+<h1>Logout</h1>
+m365 logout
+</code></pre>
+<h3>List Flows</h3>
+<pre><code class="language-bash"># List all flows in environment
+m365 flow list --environmentName ENV_ID
+</p>
+<h1>Output as JSON</h1>
+m365 flow list --environmentName ENV_ID --output json
+</p>
+<h1>Output as table</h1>
+m365 flow list --environmentName ENV_ID --output text
+</code></pre>
+<h3>Get Flow Details</h3>
+<pre><code class="language-bash">m365 flow get --environmentName ENV_ID --name FLOW_ID
+</code></pre>
+<h3>Flow Runs</h3>
+<pre><code class="language-bash"># List runs
+m365 flow run list --environmentName ENV_ID --flowName FLOW_ID
+</p>
+<h1>Get specific run</h1>
+m365 flow run get --environmentName ENV_ID --flowName FLOW_ID --name RUN_ID
+</p>
+<h1>Cancel run</h1>
+m365 flow run cancel --environmentName ENV_ID --flowName FLOW_ID --name RUN_ID
+</p>
+<h1>Resubmit failed run</h1>
+m365 flow run resubmit --environmentName ENV_ID --flowName FLOW_ID --name RUN_ID
+</code></pre>
+<h3>Enable/Disable Flow</h3>
+<pre><code class="language-bash"># Disable flow
+m365 flow disable --environmentName ENV_ID --name FLOW_ID
+</p>
+<h1>Enable flow</h1>
+m365 flow enable --environmentName ENV_ID --name FLOW_ID
+</code></pre>
+<h3>Export Flow</h3>
+<pre><code class="language-bash">m365 flow export --environmentName ENV_ID --name FLOW_ID --path flow.zip
+</code></pre>
+<hr>
+<h2>PAC CLI Commands</h2>
+<h3>Solution-Based Flow Management</h3>
+<pre><code class="language-bash"># List solutions containing flows
+pac solution list
+</p>
+<h1>Export solution with flows</h1>
+pac solution export --name SolutionName --path solution.zip --overwrite
+</p>
+<h1>Import solution with flows</h1>
+pac solution import --path solution.zip
+</code></pre>
+<hr>
+<h2>Project Commands</h2>
+<h3>Environment</h3>
+<pre><code class="language-text">Environment ID: 1a81be40-03fb-e3fe-8964-ac88c74859cc
+Flow ID:        17c3f8fe-0fec-f011-8407-000d3ae1ff22
+</code></pre>
+<h3>Common Operations</h3>
+<pre><code class="language-bash"># Check flow status
+m365 flow get --environmentName 1a81be40-03fb-e3fe-8964-ac88c74859cc --name 17c3f8fe-0fec-f011-8407-000d3ae1ff22
+</p>
+<h1>List recent runs</h1>
+m365 flow run list --environmentName 1a81be40-03fb-e3fe-8964-ac88c74859cc --flowName 17c3f8fe-0fec-f011-8407-000d3ae1ff22
+</p>
+<h1>Export solution</h1>
+pac solution export --name SharePointPermissionScanner --path SharePointPermissionScanner.zip --overwrite
+</p>
+<h1>Import solution</h1>
+pac solution import --path SharePointPermissionScanner.zip
+</code></pre>
+<hr>
+<h2>Scripting Examples</h2>
+<h3>PowerShell: Monitor Flow Runs</h3>
+<pre><code class="language-powershell">$envId = "1a81be40-03fb-e3fe-8964-ac88c74859cc"
+$flowId = "17c3f8fe-0fec-f011-8407-000d3ae1ff22"
+</p>
+<p>
+$runs = m365 flow run list --environmentName $envId --flowName $flowId --output json | ConvertFrom-Json
+</p>
+<p>
+foreach ($run in $runs) {
+    $status = switch ($run.status) {
+        "Succeeded" { "✓" }
+        "Failed" { "✗" }
+        "Running" { "◷" }
+        default { "?" }
+    }
+    Write-Host "$status $($run.startTime) - $($run.status)"
+}
+</code></pre>
+<h3>Bash: Get Latest Run Status</h3>
+<pre><code class="language-bash">ENV_ID="1a81be40-03fb-e3fe-8964-ac88c74859cc"
+FLOW_ID="17c3f8fe-0fec-f011-8407-000d3ae1ff22"
+</p>
+<p>
+m365 flow run list --environmentName $ENV_ID --flowName $FLOW_ID --output json | jq '.[0]'
+</code></pre>
+<hr>
+<h2>Output Formats</h2>
+<table>
+<thead><tr><th>Format</th><th>Flag</th><th>Use Case</th></tr></thead>
+<tbody><tr><td>JSON</td><td><code>--output json</code></td><td>Scripting</td></tr>
+<tr><td>Text</td><td><code>--output text</code></td><td>Terminal</td></tr>
+<tr><td>CSV</td><td><code>--output csv</code></td><td>Excel</td></tr>
+<tr><td>Markdown</td><td><code>--output md</code></td><td>Documentation</td></tr>
+</tbody></table>
+<hr>
+<p>
+<em>Last Updated: 2026-01-09</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

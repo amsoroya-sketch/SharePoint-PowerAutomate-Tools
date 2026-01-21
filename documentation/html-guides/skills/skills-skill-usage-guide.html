@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usage Guide - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html" class="active">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: skills/skill-usage-guide.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Skill Usage Guide</h1>
+<p>
+How to effectively use Claude skills for Power Platform development.
+</p>
+<hr>
+<h2>Quick Reference</h2>
+<table>
+<thead><tr><th>Task</th><th>Skill Command</th></tr></thead>
+<tbody><tr><td>Multi-domain project</td><td><code>/orchestration</code></td></tr>
+<tr><td>Design architecture</td><td><code>/software-architect</code></td></tr>
+<tr><td>Build canvas app</td><td><code>/powerapps</code></td></tr>
+<tr><td>Create flow</td><td><code>/power-automate</code></td></tr>
+<tr><td>Design tables</td><td><code>/dataverse</code></td></tr>
+<tr><td>Set up pipeline</td><td><code>/alm-devops</code></td></tr>
+<tr><td>Azure integration</td><td><code>/azure-integration</code></td></tr>
+</tbody></table>
+<hr>
+<h2>When Skills Auto-Invoke</h2>
+<p>
+Skills automatically activate based on keywords:
+</p>
+<h3>Power Apps</h3>
+<ul><li>"create an app"</li>
+<li>"build a canvas app"</li>
+<li>"model-driven app"</li>
+<li>"PCF component"</li>
+<li>"responsive design"</li>
+</ul>
+<h3>Power Automate</h3>
+<ul><li>"create a flow"</li>
+<li>"automate"</li>
+<li>"trigger"</li>
+<li>"SharePoint integration"</li>
+<li>"HTTP connector"</li>
+</ul>
+<h3>Dataverse</h3>
+<ul><li>"create a table"</li>
+<li>"plugin"</li>
+<li>"custom API"</li>
+<li>"business logic"</li>
+</ul>
+<h3>Architecture</h3>
+<ul><li>"design the architecture"</li>
+<li>"solution design"</li>
+<li>"how should we structure"</li>
+</ul>
+<hr>
+<h2>Skill Interactions</h2>
+<h3>Example: SharePoint Permission Scanner</h3>
+<pre><code class="language-text">User: "I need to build a SharePoint permission scanner"
+</p>
+<p>
+Claude activates: /orchestration
+  ├── Analyzes requirements
+  ├── Creates plan
+  └── Delegates to domain skills:
+      ├── /dataverse (table design)
+      ├── /power-automate (scanning flow)
+      ├── /powerapps (reporting UI)
+      └── /alm-devops (deployment)
+</code></pre>
+<h3>Example: Fix Flow Error</h3>
+<pre><code class="language-text">User: "My flow has an InvalidTemplate error"
+</p>
+<p>
+Claude activates: /power-automate
+  └── /power-automate/error-handling (sub-skill)
+      ├── Analyzes error
+      ├── References troubleshooting.md
+      └── Provides fix
+</code></pre>
+<hr>
+<h2>Skill Capabilities</h2>
+<h3>/orchestration</h3>
+<pre><code class="language-text">Capabilities:
+✓ Coordinate multi-domain tasks
+✓ Create implementation plans
+✓ Delegate to specialized skills
+✓ Track project progress
+</p>
+<p>
+When to use:
+<ul><li>Complex projects spanning multiple domains</li>
+<li>Initial project planning</li>
+<li>Cross-cutting concerns</li>
+</ul></code></pre>
+<h3>/software-architect</h3>
+<pre><code class="language-text">Capabilities:
+✓ Design enterprise architecture
+✓ Generate diagrams (Python/Graphviz)
+✓ Create documentation
+✓ Review existing architecture
+✓ Strategic planning
+</p>
+<p>
+When to use:
+<ul><li>System design decisions</li>
+<li>Architecture reviews</li>
+<li>Technology selection</li>
+<li>Documentation generation</li>
+</ul></code></pre>
+<h3>/powerapps</h3>
+<pre><code class="language-text">Capabilities:
+✓ Canvas app development
+✓ Model-driven app configuration
+✓ PCF components
+✓ Accessibility guidance
+✓ Responsive design
+</p>
+<p>
+Sub-skills:
+<ul><li>/powerapps/canvas</li>
+<li>/powerapps/model-driven</li>
+<li>/powerapps/pcf</li>
+</ul></code></pre>
+<h3>/power-automate</h3>
+<pre><code class="language-text">Capabilities:
+✓ Cloud flow development
+✓ Expression guidance
+✓ Error handling patterns
+✓ SharePoint integration
+✓ HTTP connectors
+</p>
+<p>
+Sub-skills:
+<ul><li>/power-automate/sharepoint</li>
+<li>/power-automate/http-connector</li>
+<li>/power-automate/expressions</li>
+<li>/power-automate/error-handling</li>
+</ul></code></pre>
+<h3>/dataverse</h3>
+<pre><code class="language-text">Capabilities:
+✓ Table/column design
+✓ Plugin development (C#)
+✓ Custom API creation
+✓ Business rules
+✓ Security roles
+</p>
+<p>
+Sub-skills:
+<ul><li>/dataverse/plugins</li>
+<li>/dataverse/custom-apis</li>
+<li>/dataverse/table-design</li>
+</ul></code></pre>
+<h3>/azure-integration</h3>
+<pre><code class="language-text">Capabilities:
+✓ Azure Functions
+✓ Service Bus integration
+✓ API Management
+✓ Key Vault
+✓ Logic Apps
+</p>
+<p>
+Sub-skills:
+<ul><li>/azure-integration/functions</li>
+<li>/azure-integration/service-bus</li>
+<li>/azure-integration/apim</li>
+</ul></code></pre>
+<h3>/alm-devops</h3>
+<pre><code class="language-text">Capabilities:
+✓ Solution management
+✓ CI/CD pipelines
+✓ Environment strategy
+✓ Deployment automation
+</p>
+<p>
+Sub-skills:
+<ul><li>/alm-devops/pipelines</li>
+<li>/alm-devops/solutions</li>
+</ul></code></pre>
+<hr>
+<h2>Best Practices</h2>
+<h3>1. Be Specific</h3>
+<pre><code class="language-text">❌ "Help me with Power Platform"
+✓ "Create a canvas app to display scan results from Dataverse"
+</code></pre>
+<h3>2. Provide Context</h3>
+<pre><code class="language-text">❌ "Fix this error"
+✓ "My flow has InvalidTemplate error on the Get_Root_Folder_Path action.
+   The expression is trigger()['text']"
+</code></pre>
+<h3>3. Use Domain Terms</h3>
+<pre><code class="language-text">❌ "Make a button that saves stuff"
+✓ "Create a submit button that patches the record to Dataverse"
+</code></pre>
+<h3>4. Reference Existing Work</h3>
+<pre><code class="language-text">"Update the SharePoint Permission Scanner flow to add error logging"
+"Modify the sp_scansession table to add a new column"
+</code></pre>
+<hr>
+<h2>Skill Outputs</h2>
+<h3>Code Generation</h3>
+Skills can generate:
+<ul><li>Power Fx formulas</li>
+<li>Flow expressions</li>
+<li>C# plugins</li>
+<li>PowerShell scripts</li>
+<li>YAML pipelines</li>
+<li>JSON configurations</li>
+</ul>
+<h3>Documentation</h3>
+Skills can create:
+<ul><li>Architecture diagrams</li>
+<li>Setup guides</li>
+<li>API documentation</li>
+<li>Troubleshooting guides</li>
+</ul>
+<h3>Analysis</h3>
+Skills can provide:
+<ul><li>Error diagnosis</li>
+<li>Performance recommendations</li>
+<li>Security reviews</li>
+<li>Best practice guidance</li>
+</ul>
+<hr>
+<h2>Troubleshooting Skills</h2>
+<h3>Skill Not Activating</h3>
+1. Use explicit slash command: <code>/power-automate</code>
+2. Include domain keywords in request
+3. Check skill is defined in <code>.claude/skills/</code>
+</p>
+<h3>Wrong Skill Activated</h3>
+1. Be more specific about the domain
+2. Use explicit skill command
+3. Clarify the technology stack
+</p>
+<h3>Skill Missing Information</h3>
+1. Provide more context
+2. Reference specific files
+3. Include error messages/screenshots
+</p>
+<hr>
+<h2>Project-Specific Skills</h2>
+<h3>SharePoint Permission Scanner</h3>
+<pre><code class="language-text">Primary skills used:
+├── /dataverse - Table design (sp_scansession, etc.)
+├── /power-automate - Scanning flow
+├── /power-automate/sharepoint - SP REST API calls
+├── /power-automate/error-handling - Try-Catch pattern
+├── /alm-devops - Solution deployment
+└── /software-architect - Overall design
+</code></pre>
+<h3>Common Tasks</h3>
+<table>
+<thead><tr><th>Task</th><th>Skill</th><th>Sub-skill</th></tr></thead>
+<tbody><tr><td>Fix flow expression</td><td>/power-automate</td><td>/expressions</td></tr>
+<tr><td>Add Dataverse column</td><td>/dataverse</td><td>/table-design</td></tr>
+<tr><td>Deploy solution</td><td>/alm-devops</td><td>/solutions</td></tr>
+<tr><td>Create pipeline</td><td>/alm-devops</td><td>/pipelines</td></tr>
+<tr><td>Generate diagram</td><td>/software-architect</td><td>-</td></tr>
+</tbody></table>
+<hr>
+<p>
+<em>Last Updated: 2026-01-09</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

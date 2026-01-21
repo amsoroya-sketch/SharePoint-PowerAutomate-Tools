@@ -1,0 +1,662 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "sp_sharedcommondataserviceforapps_c8a4c"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_sharepointonline": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "sp_sharedsharepointonline_e7162"
+        },
+        "api": {
+          "name": "shared_sharepointonline"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "40024b84-ec45-4604-8064-07821b1de631"
+          },
+          "type": "Request",
+          "kind": "Button",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "SiteUrl",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Enter siteurl",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_1": {
+                  "title": "LibraryName",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Enter LibraryName",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "text",
+                "text_1"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Initialize_variable": {
+          "runAfter": {
+            "Initialize_variable_6": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "b4a775b7-bd51-4665-9f8a-8cd769224afd"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "FoldersToProcess",
+                "type": "array"
+              }
+            ]
+          }
+        },
+        "Initialize_variable_2": {
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "de0aaac9-40e2-4d61-8195-74252e9a381e"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "CurrentDepth",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "Initialize_variable_3": {
+          "runAfter": {
+            "Initialize_variable_2": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "72067199-8f29-432d-a206-bdc14dd92b23"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "TotalFolders",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "Initialize_variable_5": {
+          "runAfter": {
+            "Initialize_variable_3": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "dc050a4a-ee64-4d68-98e8-30d422fda5b7"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ScanSessionId",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "Initialize_variable_4": {
+          "runAfter": {
+            "Initialize_variable_5": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "65207c1f-ebb1-46cb-bff0-abca6245c20d"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "HasError",
+                "type": "boolean",
+                "value": false
+              }
+            ]
+          }
+        },
+        "Add_a_new_row": {
+          "runAfter": {
+            "Initialize_variable_4": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "507009df-e911-4d8a-a863-6e50bb1c9277"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "CreateRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "sp_scansessions",
+              "item/sp_name": "Scan - @{utcNow()}",
+              "item/sp_libraryname": "@triggerBody()['text_1']",
+              "item/sp_siteurl": "@triggerBody()['text']",
+              "item/sp_startedon": "@utcNow()",
+              "item/sp_status": 100000001
+            },
+            "authentication": {
+              "type": "Raw",
+              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+            }
+          }
+        },
+        "Set_variable": {
+          "runAfter": {
+            "Add_a_new_row": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "5b688912-ddca-49f0-9639-af95efe6ae51"
+          },
+          "type": "SetVariable",
+          "inputs": {
+            "name": "ScanSessionId",
+            "value": "@outputs('Add_a_new_row')?['body/sp_scansessionid']"
+          }
+        },
+        "Initialize_variable_6": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "63a02318-4f0c-4b3a-a771-318741f36a0c"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "FoldersWithUniquePerms",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "Try_Scope": {
+          "actions": {
+            "Get_Root_Folder_Path": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "0a70898c-ce8f-466e-ab28-4273618f2d7e"
+              },
+              "type": "Compose",
+              "inputs": "/sites/@{split(triggerBody()['text'], '/sites/')[1]}/@{triggerBody()['text_1']}"
+            },
+            "Append_to_array_variable": {
+              "runAfter": {
+                "Get_Root_Folder_Path": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "1b020ccb-5f90-442f-ab9c-852d6ca4aacc"
+              },
+              "type": "AppendToArrayVariable",
+              "inputs": {
+                "name": "FoldersToProcess",
+                "value": "@outputs('Get_Root_Folder_Path')"
+              }
+            },
+            "Do_until": {
+              "actions": {
+                "Get_current_Folder": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "7a973081-e8cd-4834-8c04-9f99b9e70908"
+                  },
+                  "type": "Compose",
+                  "inputs": "@first(variables('FoldersToProcess'))"
+                },
+                "check_Inheritence": {
+                  "runAfter": {
+                    "Get_current_Folder": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "0e358819-da2e-4810-b54f-62030486d18f"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_sharepointonline",
+                      "operationId": "HttpRequest",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                    },
+                    "parameters": {
+                      "dataset": "https://abctest179.sharepoint.com/sites/Permission-Scanner-Test",
+                      "parameters/method": "GET",
+                      "parameters/uri": "_api/web/GetFolderByServerRelativeUrl('@{outputs('Get_current_Folder')}')/ListItemAllFields/HasUniqueRoleAssignments",
+                      "parameters/headers": {
+                        "Accept": " application/json;odata=nometadata"
+                      }
+                    },
+                    "authentication": {
+                      "type": "Raw",
+                      "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                    }
+                  }
+                },
+                "Increment_variable": {
+                  "runAfter": {
+                    "check_Inheritence": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "2b5da02e-0106-44ed-ad54-96d63ed8616a"
+                  },
+                  "type": "IncrementVariable",
+                  "inputs": {
+                    "name": "TotalFolders",
+                    "value": 1
+                  }
+                },
+                "Condition": {
+                  "actions": {
+                    "Increment_variable_2": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "1c02c371-0050-4cee-99f1-3af6c1502d23"
+                      },
+                      "type": "IncrementVariable",
+                      "inputs": {
+                        "name": "FoldersWithUniquePerms",
+                        "value": 1
+                      }
+                    },
+                    "Get_Role_Assignments": {
+                      "runAfter": {
+                        "Increment_variable_2": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "83a56624-d205-4a72-9136-83ad7a18aa1b"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_sharepointonline",
+                          "operationId": "HttpRequest",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                        },
+                        "parameters": {
+                          "dataset": "https://abctest179.sharepoint.com/sites/Permission-Scanner-Test",
+                          "parameters/method": "GET",
+                          "parameters/uri": "_api/web/GetFolderByServerRelativeUrl('@{outputs('Get_current_Folder')}')/ListItemAllFields/RoleAssignments?$expand=Member,RoleDefinitionBindings\n",
+                          "parameters/headers": {
+                            "Accept": "application/json;odata=nometadata"
+                          }
+                        },
+                        "authentication": {
+                          "type": "Raw",
+                          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                        }
+                      }
+                    },
+                    "Add_a_new_row_for_folder": {
+                      "runAfter": {
+                        "Get_Role_Assignments": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "a5c2edfa-8a72-42de-b36f-b2c30bbdbf60"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "sp_folderrecords",
+                          "item/sp_name": "@last(split(outputs('Get_current_Folder'), '/'))",
+                          "item/sp_folderpath": "@outputs('Get_current_Folder')",
+                          "item/sp_hasuniqueperms": true,
+                          "item/sp_scansession@odata.bind": "@concat('/sp_scansessions(', variables('ScanSessionId'), ')')"
+                        },
+                        "authentication": {
+                          "type": "Raw",
+                          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                        }
+                      }
+                    },
+                    "Apply_to_each": {
+                      "foreach": "@body('Get_Role_Assignments')?['value']",
+                      "actions": {
+                        "AddPermissionEntry": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "02a76679-d1d6-41c1-9437-e0aff1c4fef1"
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps",
+                              "operationId": "CreateRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "sp_permissionentries",
+                              "item/sp_name": "@guid()",
+                              "item/sp_folderrecord@odata.bind": "@concat('/sp_folderrecords(', outputs('Add_a_new_row_for_folder')?['body/sp_folderrecordid'], ')')",
+                              "item/sp_permissionlevel": "@first(items('Apply_to_each')?['RoleDefinitionBindings'])?['Name']",
+                              "item/sp_principalemail": "@items('Apply_to_each')?['Member']?['Email']",
+                              "item/sp_principalid": "@items('Apply_to_each')?['Member']?['Id']",
+                              "item/sp_principalname": "@items('Apply_to_each')?['Member']?['Title']"
+                            },
+                            "authentication": {
+                              "type": "Raw",
+                              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                            }
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Add_a_new_row_for_folder": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "fa5f0715-1863-4421-bf39-fa3473a25c68"
+                      },
+                      "type": "Foreach"
+                    }
+                  },
+                  "runAfter": {
+                    "Increment_variable": [
+                      "Succeeded"
+                    ]
+                  },
+                  "expression": {
+                    "equals": [
+                      "@body('check_Inheritence')?['value']",
+                      true
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "4aa91e38-a287-4dec-8c2e-73ce067382d1"
+                  },
+                  "type": "If"
+                },
+                "Get_Child_Folders": {
+                  "runAfter": {
+                    "Condition": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "9579b55c-e3c6-44f0-8d09-c100389e657c"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_sharepointonline",
+                      "operationId": "HttpRequest",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                    },
+                    "parameters": {
+                      "dataset": "https://abctest179.sharepoint.com/sites/Permission-Scanner-Test",
+                      "parameters/method": "GET",
+                      "parameters/uri": "_api/web/GetFolderByServerRelativeUrl('@{outputs('Get_current_Folder')}')/Folders?$select=ServerRelativeUrl"
+                    },
+                    "authentication": {
+                      "type": "Raw",
+                      "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                    }
+                  }
+                },
+                "Apply_to_each_2": {
+                  "foreach": "@body('Get_Child_Folders')?['value']",
+                  "actions": {
+                    "Append_to_array_variable_2": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "feac06f6-84d4-4388-b499-b6354bb96893"
+                      },
+                      "type": "AppendToArrayVariable",
+                      "inputs": {
+                        "name": "FoldersToProcess",
+                        "value": "@items('Apply_to_each_2')?['ServerRelativeUrl']"
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Get_Child_Folders": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "390ae44f-4f63-4d0e-a6a9-2198fc71e34e"
+                  },
+                  "type": "Foreach"
+                },
+                "RemoveProcessedFolder": {
+                  "runAfter": {
+                    "Apply_to_each_2": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "5821622b-b782-4b67-a0f7-9f3b6ca8ec83"
+                  },
+                  "type": "Compose",
+                  "inputs": "@skip(variables('FoldersToProcess'), 1)"
+                },
+                "Set_variable_3": {
+                  "runAfter": {
+                    "RemoveProcessedFolder": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "c33aea55-db48-4325-aa3d-1c5f5c14ea5f"
+                  },
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "FoldersToProcess",
+                    "value": "@outputs('RemoveProcessedFolder')"
+                  }
+                }
+              },
+              "runAfter": {
+                "Append_to_array_variable": [
+                  "Succeeded"
+                ]
+              },
+              "expression": "@equals(length(variables('FoldersToProcess')), 0)",
+              "limit": {
+                "count": 5000,
+                "timeout": "PT2H"
+              },
+              "metadata": {
+                "operationMetadataId": "e7e28df0-1acc-4e1a-b957-112a8b2385a4"
+              },
+              "type": "Until"
+            }
+          },
+          "runAfter": {
+            "Set_variable": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "da080bba-415a-45af-8091-a48abbc7e5c1"
+          },
+          "type": "Scope"
+        },
+        "Catch_Scope": {
+          "actions": {
+            "Set_variable_2": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "2d93ebed-cc47-4ab2-a059-00bec0f356de"
+              },
+              "type": "SetVariable",
+              "inputs": {
+                "name": "HasError",
+                "value": true
+              }
+            }
+          },
+          "runAfter": {
+            "Try_Scope": [
+              "Failed",
+              "TimedOut"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "0c95f757-1ca9-407d-b2f1-bb6b87744f2d"
+          },
+          "type": "Scope"
+        },
+        "Finally_Scope": {
+          "actions": {
+            "Condition_Check_Error": {
+              "actions": {
+                "Update_Session_Failed": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "update-session-failed-001"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "UpdateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "sp_scansessions",
+                      "recordId": "@variables('ScanSessionId')",
+                      "item/sp_status": 100000002,
+                      "item/sp_completedon": "@utcNow()",
+                      "item/sp_totalfolders": "@variables('TotalFolders')",
+                      "item/sp_folderswithuniquepermissions": "@variables('FoldersWithUniquePerms')"
+                    },
+                    "authentication": {
+                      "type": "Raw",
+                      "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                    }
+                  }
+                }
+              },
+              "runAfter": {},
+              "else": {
+                "actions": {
+                  "Update_Session_Success": {
+                    "runAfter": {},
+                    "metadata": {
+                      "operationMetadataId": "update-session-success-001"
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "shared_commondataserviceforapps",
+                        "operationId": "UpdateRecord",
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                      },
+                      "parameters": {
+                        "entityName": "sp_scansessions",
+                        "recordId": "@variables('ScanSessionId')",
+                        "item/sp_status": 100000000,
+                        "item/sp_completedon": "@utcNow()",
+                        "item/sp_totalfolders": "@variables('TotalFolders')",
+                        "item/sp_folderswithuniquepermissions": "@variables('FoldersWithUniquePerms')"
+                      },
+                      "authentication": {
+                        "type": "Raw",
+                        "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                      }
+                    }
+                  }
+                }
+              },
+              "expression": {
+                "equals": [
+                  "@variables('HasError')",
+                  true
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "condition-check-error-001"
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "Catch_Scope": [
+              "Succeeded",
+              "Failed",
+              "Skipped"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "finally-scope-001"
+          },
+          "type": "Scope"
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

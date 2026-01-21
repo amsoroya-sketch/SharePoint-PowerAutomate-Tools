@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLI Tools Setup - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html" class="active">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: CLI-TOOLS-SETUP.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>CLI Tools Setup Guide</h1>
+<p>
+Complete setup guide for all CLI tools used in the SharePoint Permission Scanner project.
+</p>
+<hr>
+<h2>Tools Overview</h2>
+<table>
+<thead><tr><th>Tool</th><th>Purpose</th><th>Status</th></tr></thead>
+<tbody><tr><td><strong>PAC CLI</strong></td><td>Power Platform solution management</td><td>✅ Installed</td></tr>
+<tr><td><strong>m365 CLI</strong></td><td>Flow run monitoring, SharePoint management</td><td>⚠️ Needs Auth Setup</td></tr>
+<tr><td><strong>Node.js</strong></td><td>Running fix scripts, zip manipulation</td><td>✅ Installed</td></tr>
+<tr><td><strong>PowerShell</strong></td><td>Zip file operations, scripting</td><td>✅ Installed</td></tr>
+<tr><td><strong>Git</strong></td><td>Version control</td><td>✅ Installed</td></tr>
+<tr><td><strong>PnP PowerShell</strong></td><td>SharePoint administration (optional)</td><td>❌ Not Installed</td></tr>
+</tbody></table>
+<hr>
+<h2>1. PAC CLI (Power Platform CLI)</h2>
+<h3>Purpose</h3>
+<ul><li>Export/import Power Platform solutions</li>
+<li>Manage environments</li>
+<li>Deploy flows and apps</li>
+</ul>
+<h3>Installation</h3>
+<pre><code class="language-bash"># Option 1: Using winget (Windows)
+winget install Microsoft.PowerPlatformCLI
+</p>
+<h1>Option 2: Using dotnet</h1>
+dotnet tool install --global Microsoft.PowerApps.CLI.Tool
+</p>
+<h1>Option 3: Download from Microsoft</h1>
+<h1>https://aka.ms/PowerAppsCLI</h1>
+</code></pre>
+<h3>Verify Installation</h3>
+<pre><code class="language-bash">pac help
+</code></pre>
+<h3>Authentication Setup</h3>
+<pre><code class="language-bash"># Create new auth profile (opens browser for login)
+pac auth create
+</p>
+<h1>List auth profiles</h1>
+pac auth list
+</p>
+<h1>Select auth profile</h1>
+pac auth select --index 1
+</p>
+<h1>Check current connection</h1>
+pac env who
+</code></pre>
+<h3>Common Commands</h3>
+<pre><code class="language-bash"># List solutions
+pac solution list
+</p>
+<h1>Export solution</h1>
+pac solution export --name SolutionName --path output.zip --overwrite
+</p>
+<h1>Import solution</h1>
+pac solution import --path solution.zip
+</p>
+<h1>List environments</h1>
+pac env list
+</p>
+<h1>Select environment</h1>
+pac env select --environment "Dev"
+</code></pre>
+<h3>Troubleshooting</h3>
+<table>
+<thead><tr><th>Issue</th><th>Solution</th></tr></thead>
+<tbody><tr><td>"Not authenticated"</td><td>Run <code>pac auth create</code></td></tr>
+<tr><td>"Solution not found"</td><td>Use <code>pac solution list</code> to get exact name</td></tr>
+<tr><td>"Access denied"</td><td>Check your permissions in Power Platform admin</td></tr>
+</tbody></table>
+<hr>
+<h2>2. m365 CLI (CLI for Microsoft 365)</h2>
+<h3>Purpose</h3>
+<ul><li>Monitor Power Automate flow runs</li>
+<li>Manage SharePoint sites and files</li>
+<li>Query Microsoft 365 resources</li>
+</ul>
+<h3>Installation</h3>
+<pre><code class="language-bash"># Using npm (requires Node.js)
+npm install -g @pnp/cli-microsoft365
+</p>
+<h1>Verify installation</h1>
+m365 version
+</code></pre>
+<h3>Authentication Setup</h3>
+<h4>Step 1: Run Setup Wizard</h4>
+<pre><code class="language-bash">m365 setup
+</code></pre>
+<p>
+This will:
+1. Create a Microsoft Entra (Azure AD) app registration
+2. Configure permissions
+3. Store credentials locally
+</p>
+<h4>Step 2: Manual App Registration (if setup fails)</h4>
+<p>
+1. Go to <strong>Azure Portal</strong> > <strong>Microsoft Entra ID</strong> > <strong>App registrations</strong>
+2. Click <strong>New registration</strong>
+3. Name: <code>m365-cli</code>
+4. Supported account types: <strong>Accounts in this organizational directory only</strong>
+5. Redirect URI: <strong>Public client/native</strong> > <code>http://localhost</code>
+6. Click <strong>Register</strong>
+7. Copy the <strong>Application (client) ID</strong>
+</p>
+<h4>Step 3: Configure API Permissions</h4>
+<p>
+In the app registration:
+1. Click <strong>API permissions</strong> > <strong>Add a permission</strong>
+2. Add these permissions:
+</p>
+<table>
+<thead><tr><th>API</th><th>Permission</th><th>Type</th></tr></thead>
+<tbody><tr><td>Microsoft Graph</td><td>User.Read</td><td>Delegated</td></tr>
+<tr><td>Microsoft Graph</td><td>Directory.Read.All</td><td>Delegated</td></tr>
+<tr><td>Power Automate</td><td>Flows.Read.All</td><td>Delegated</td></tr>
+<tr><td>SharePoint</td><td>Sites.Read.All</td><td>Delegated</td></tr>
+</tbody></table>
+<p>
+3. Click <strong>Grant admin consent</strong>
+</p>
+<h4>Step 4: Login</h4>
+<pre><code class="language-bash"># Login with device code (recommended)
+m365 login --authType deviceCode --appId YOUR_APP_ID
+</p>
+<h1>Or interactive login</h1>
+m365 login --appId YOUR_APP_ID
+</code></pre>
+<h3>Common Commands</h3>
+<pre><code class="language-bash"># Check login status
+m365 status
+</p>
+<h1>List flows in environment</h1>
+m365 flow list --environmentName YOUR_ENV_ID
+</p>
+<h1>Get flow run details</h1>
+m365 flow run get --environmentName ENV_ID --flowName FLOW_ID --name RUN_ID
+</p>
+<h1>List flow runs</h1>
+m365 flow run list --environmentName ENV_ID --flowName FLOW_ID
+</p>
+<h1>Get SharePoint site</h1>
+m365 spo site get --url https://tenant.sharepoint.com/sites/sitename
+</code></pre>
+<h3>Environment ID</h3>
+<p>
+Your environment ID: <code>1a81be40-03fb-e3fe-8964-ac88c74859cc</code>
+</p>
+<h3>Flow ID</h3>
+<p>
+Your flow ID: <code>17c3f8fe-0fec-f011-8407-000d3ae1ff22</code>
+</p>
+<hr>
+<h2>3. Node.js</h2>
+<h3>Purpose</h3>
+<ul><li>Run JavaScript fix scripts</li>
+<li>JSON manipulation</li>
+<li>Zip file operations</li>
+</ul>
+<h3>Installation</h3>
+<pre><code class="language-bash"># Using winget (Windows)
+winget install OpenJS.NodeJS.LTS
+</p>
+<h1>Verify installation</h1>
+node --version
+npm --version
+</code></pre>
+<h3>Required for This Project</h3>
+<p>
+Node.js is used to run:
+<ul><li><code>fix_flow.js</code> - Modify flow JSON structure</li>
+<li><code>create_zip.js</code> - Create solution zip with correct paths</li>
+</ul>
+<hr>
+<h2>4. PowerShell</h2>
+<h3>Purpose</h3>
+<ul><li>Zip file manipulation</li>
+<li>System scripting</li>
+<li>Alternative to bash commands</li>
+</ul>
+<h3>Installation</h3>
+<p>
+PowerShell comes pre-installed on Windows. For cross-platform:
+</p>
+<pre><code class="language-bash"># Using winget (Windows)
+winget install Microsoft.PowerShell
+</p>
+<h1>Verify installation</h1>
+pwsh --version
+</code></pre>
+<h3>Common Commands Used</h3>
+<pre><code class="language-powershell"># Extract zip
+Expand-Archive -Path 'file.zip' -DestinationPath 'folder' -Force
+</p>
+<h1>Create zip (with .NET for correct paths)</h1>
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+[System.IO.Compression.ZipFile]::CreateFromDirectory('folder', 'output.zip')
+</p>
+<h1>Check zip contents</h1>
+$zip = [System.IO.Compression.ZipFile]::OpenRead('file.zip')
+$zip.Entries | Select-Object FullName
+$zip.Dispose()
+</code></pre>
+<hr>
+<h2>5. Git</h2>
+<h3>Purpose</h3>
+<ul><li>Version control</li>
+<li>Code management</li>
+<li>Collaboration</li>
+</ul>
+<h3>Installation</h3>
+<pre><code class="language-bash"># Using winget (Windows)
+winget install Git.Git
+</p>
+<h1>Verify installation</h1>
+git --version
+</code></pre>
+<h3>Configuration</h3>
+<pre><code class="language-bash"># Set user info
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+</p>
+<h1>Check configuration</h1>
+git config --list
+</code></pre>
+<hr>
+<h2>6. PnP PowerShell (Optional)</h2>
+<h3>Purpose</h3>
+<ul><li>Advanced SharePoint administration</li>
+<li>Create folders, manage permissions</li>
+<li>Alternative to m365 CLI for SharePoint</li>
+</ul>
+<h3>Installation</h3>
+<pre><code class="language-powershell"># Install module
+Install-Module -Name PnP.PowerShell -Scope CurrentUser
+</p>
+<h1>Verify installation</h1>
+Get-Module -Name PnP.PowerShell -ListAvailable
+</code></pre>
+<h3>Authentication Setup</h3>
+<pre><code class="language-powershell"># Interactive login
+Connect-PnPOnline -Url "https://tenant.sharepoint.com/sites/sitename" -Interactive
+</p>
+<h1>Or with credentials</h1>
+Connect-PnPOnline -Url "https://tenant.sharepoint.com/sites/sitename" -Credentials (Get-Credential)
+</code></pre>
+<h3>Common Commands</h3>
+<pre><code class="language-powershell"># Create folder
+Add-PnPFolder -Name "NewFolder" -Folder "Shared Documents"
+</p>
+<h1>Get folders</h1>
+Get-PnPFolderItem -FolderSiteRelativeUrl "Shared Documents"
+</p>
+<h1>Break inheritance</h1>
+Set-PnPListItemPermission -List "Documents" -Identity 1 -InheritPermissions:$false
+</p>
+<h1>Add permissions</h1>
+Set-PnPListItemPermission -List "Documents" -Identity 1 -User "user@tenant.com" -AddRole "Edit"
+</code></pre>
+<hr>
+<h2>Quick Reference Card</h2>
+<table>
+<thead><tr><th>Task</th><th>Command</th></tr></thead>
+<tbody><tr><td><strong>PAC - Login</strong></td><td><code>pac auth create</code></td></tr>
+<tr><td><strong>PAC - Export solution</strong></td><td><code>pac solution export --name NAME --path file.zip</code></td></tr>
+<tr><td><strong>PAC - Import solution</strong></td><td><code>pac solution import --path file.zip</code></td></tr>
+<tr><td><strong>m365 - Login</strong></td><td><code>m365 login --authType deviceCode --appId APP_ID</code></td></tr>
+<tr><td><strong>m365 - Flow status</strong></td><td><code>m365 flow run get --environmentName ENV --flowName FLOW --name RUN</code></td></tr>
+<tr><td><strong>m365 - List flows</strong></td><td><code>m365 flow list --environmentName ENV</code></td></tr>
+<tr><td><strong>Node - Run script</strong></td><td><code>node script.js</code></td></tr>
+<tr><td><strong>PowerShell - Extract zip</strong></td><td><code>Expand-Archive -Path 'file.zip' -DestinationPath 'folder'</code></td></tr>
+</tbody></table>
+<hr>
+<h2>Project-Specific Values</h2>
+<pre><code class="language-text">Tenant:         ABCTest179
+Site URL:       https://abctest179.sharepoint.com/sites/Permission-Scanner-Test
+Environment ID: 1a81be40-03fb-e3fe-8964-ac88c74859cc
+Flow ID:        17c3f8fe-0fec-f011-8407-000d3ae1ff22
+Solution Name:  SharePointPermissionScanner
+</code></pre>
+<hr>
+<p>
+<em>Document Version: 1.0</em>
+<em>Last Updated: 2026-01-09</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

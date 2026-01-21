@@ -1,0 +1,238 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sharepointonline": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "sp_sharedsharepointonline_e7162"
+        },
+        "api": {
+          "name": "shared_sharepointonline"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "5fc962f3-d77a-4eb7-a9f2-c64c24805b45"
+          },
+          "type": "Request",
+          "kind": "Button",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "SiteURL",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input: https://yourtenant.sharepoint.com/sites/hr",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_1": {
+                  "title": "LibraryName",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "\nPlease enter your input: /sites/hr/Shared Documents",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_2": {
+                  "title": "BaseLibraryPath",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "\nPlease enter your input: /sites/hr/Shared Documents",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_3": {
+                  "title": "MinimumLevel",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "MinimumLevel  -1 = all levels , >= 0 , level number where folder with broken permission is found",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "text",
+                "text_1",
+                "text_2",
+                "text_3"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Initialize_variable": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "f1ec3c8b-0618-4a22-b7ad-71399db22361"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "varBaseDepth",
+                "type": "integer",
+                "value": "@length(split(triggerBody()['text_1'], '/'))"
+              }
+            ]
+          }
+        },
+        "HTTP_Get_Folders_With_Broken_Permissions": {
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "032e67a3-398c-4c20-bb5d-d7312bcc3759"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "HttpRequest",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "@triggerBody()['text']",
+              "parameters/method": "GET",
+              "parameters/uri": "@concat('_api/web/lists/getbytitle(''', triggerBody()['text_1'], ''')/items?$select=Id,Title,FileLeafRef,FileRef,FileDirRef,Created,Modified,AuthorId,EditorId,HasUniqueRoleAssignments,FileSystemObjectType,ItemChildCount,FolderChildCount&$filter=HasUniqueRoleAssignments eq true and FileSystemObjectType eq 1')",
+              "parameters/headers": {
+                "Accept": "application/json;odata=verbose",
+                "Content-Type": "application/json"
+              }
+            },
+            "authentication": {
+              "type": "Raw",
+              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+            }
+          }
+        },
+        "Parse_JSON_Folders_Data_Response": {
+          "runAfter": {
+            "HTTP_Get_Folders_With_Broken_Permissions": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "3a483e15-260d-49bd-b5a4-417823d5ecfc"
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": "body('HTTP_Get_Folders_With_Broken_Permissions')",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "d": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "__metadata": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "uri": {
+                                "type": "string"
+                              },
+                              "etag": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "FileSystemObjectType": {
+                            "type": "integer"
+                          },
+                          "Id": {
+                            "type": "integer"
+                          },
+                          "ContentTypeId": {
+                            "type": "string"
+                          },
+                          "Title": {
+                            "type": "string"
+                          },
+                          "FileLeafRef": {
+                            "type": "string"
+                          },
+                          "FileRef": {
+                            "type": "string"
+                          },
+                          "FileDirRef": {
+                            "type": "string"
+                          },
+                          "Created": {
+                            "type": "string"
+                          },
+                          "Modified": {
+                            "type": "string"
+                          },
+                          "AuthorId": {
+                            "type": "integer"
+                          },
+                          "EditorId": {
+                            "type": "integer"
+                          },
+                          "HasUniqueRoleAssignments": {
+                            "type": "boolean"
+                          },
+                          "ItemChildCount": {
+                            "type": "integer"
+                          },
+                          "FolderChildCount": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "__metadata",
+                          "FileSystemObjectType",
+                          "Id",
+                          "ContentTypeId",
+                          "Title",
+                          "FileLeafRef",
+                          "FileRef",
+                          "FileDirRef",
+                          "Created",
+                          "Modified",
+                          "AuthorId",
+                          "EditorId",
+                          "HasUniqueRoleAssignments",
+                          "ItemChildCount",
+                          "FolderChildCount"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

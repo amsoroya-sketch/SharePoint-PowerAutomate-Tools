@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Graph - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html" class="active">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: 11-microsoft-graph/setup-guide.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Microsoft Graph API Setup Guide</h1>
+<p>
+Complete guide for accessing Microsoft 365 data via Microsoft Graph.
+</p>
+<hr>
+<h2>Overview</h2>
+<p>
+Microsoft Graph is the unified API for accessing:
+<ul><li>Users and Groups (Azure AD)</li>
+<li>SharePoint sites and files</li>
+<li>OneDrive</li>
+<li>Teams</li>
+<li>Outlook mail and calendar</li>
+<li>Planner, To Do, and more</li>
+</ul>
+<h3>Base URL</h3>
+<pre><code class="language-text">https://graph.microsoft.com/v1.0/
+https://graph.microsoft.com/beta/
+</code></pre>
+<hr>
+<h2>Authentication</h2>
+<h3>App Registration</h3>
+1. Go to <strong>Azure Portal</strong> > <strong>Microsoft Entra ID</strong> > <strong>App registrations</strong>
+2. Create new registration (see <code>05-azure-portal/app-registration.md</code>)
+3. Add Microsoft Graph permissions
+4. Generate client secret or certificate
+</p>
+<h3>Required Permissions</h3>
+<table>
+<thead><tr><th>Endpoint</th><th>Permission</th><th>Type</th></tr></thead>
+<tbody><tr><td>/me</td><td>User.Read</td><td>Delegated</td></tr>
+<tr><td>/users</td><td>User.Read.All</td><td>Delegated/Application</td></tr>
+<tr><td>/groups</td><td>Group.Read.All</td><td>Delegated/Application</td></tr>
+<tr><td>/sites</td><td>Sites.Read.All</td><td>Delegated/Application</td></tr>
+<tr><td>/drives</td><td>Files.Read.All</td><td>Delegated/Application</td></tr>
+</tbody></table>
+<hr>
+<h2>Common Endpoints</h2>
+<h3>Users</h3>
+<pre><code class="language-bash"># Get current user
+GET /me
+</p>
+<h1>List all users</h1>
+GET /users
+</p>
+<h1>Get specific user</h1>
+GET /users/{id}
+</p>
+<h1>Search users</h1>
+GET /users?$filter=startswith(displayName,'John')
+</code></pre>
+<h3>Groups</h3>
+<pre><code class="language-bash"># List groups
+GET /groups
+</p>
+<h1>Get group members</h1>
+GET /groups/{id}/members
+</p>
+<h1>Get user's groups</h1>
+GET /me/memberOf
+</code></pre>
+<h3>SharePoint</h3>
+<pre><code class="language-bash"># List sites
+GET /sites?search=*
+</p>
+<h1>Get site by URL</h1>
+GET /sites/{hostname}:/sites/{site-path}
+</p>
+<h1>Get site drives (document libraries)</h1>
+GET /sites/{site-id}/drives
+</p>
+<h1>List items in drive</h1>
+GET /drives/{drive-id}/root/children
+</p>
+<h1>Get folder contents</h1>
+GET /drives/{drive-id}/root:/{folder-path}:/children
+</code></pre>
+<h3>Permissions (SharePoint)</h3>
+<pre><code class="language-bash"># Get item permissions
+GET /drives/{drive-id}/items/{item-id}/permissions
+</p>
+<h1>Grant permission</h1>
+POST /drives/{drive-id}/items/{item-id}/invite
+</p>
+<h1>Remove permission</h1>
+DELETE /drives/{drive-id}/items/{item-id}/permissions/{perm-id}
+</code></pre>
+<hr>
+<h2>Query Parameters</h2>
+<h3>$select - Choose fields</h3>
+<pre><code class="language-bash">GET /users?$select=displayName,mail,jobTitle
+</code></pre>
+<h3>$filter - Filter results</h3>
+<pre><code class="language-bash">GET /users?$filter=department eq 'IT'
+GET /users?$filter=startswith(displayName,'A')
+</code></pre>
+<h3>$orderby - Sort results</h3>
+<pre><code class="language-bash">GET /users?$orderby=displayName
+GET /users?$orderby=createdDateTime desc
+</code></pre>
+<h3>$top - Limit results</h3>
+<pre><code class="language-bash">GET /users?$top=10
+</code></pre>
+<h3>$expand - Include related data</h3>
+<pre><code class="language-bash">GET /groups?$expand=members
+GET /sites/{id}?$expand=drives
+</code></pre>
+<h3>Combine parameters</h3>
+<pre><code class="language-bash">GET /users?$select=displayName,mail&amp;$filter=department eq 'IT'&amp;$top=50&amp;$orderby=displayName
+</code></pre>
+<hr>
+<h2>CLI Access</h2>
+<h3>Azure CLI</h3>
+<pre><code class="language-bash"># Get access token
+az account get-access-token --resource https://graph.microsoft.com --query accessToken -o tsv
+</p>
+<h1>Call Graph API</h1>
+TOKEN=$(az account get-access-token --resource https://graph.microsoft.com --query accessToken -o tsv)
+</p>
+<p>
+curl -X GET "https://graph.microsoft.com/v1.0/me" \
+  -H "Authorization: Bearer $TOKEN"
+</code></pre>
+<h3>m365 CLI</h3>
+<pre><code class="language-bash"># Get current user
+m365 aad user get --id "@meId"
+</p>
+<h1>List users</h1>
+m365 aad user list
+</p>
+<h1>Get SharePoint site</h1>
+m365 spo site get --url https://tenant.sharepoint.com/sites/sitename
+</code></pre>
+<h3>PowerShell (Microsoft.Graph)</h3>
+<pre><code class="language-powershell"># Install module
+Install-Module Microsoft.Graph -Scope CurrentUser
+</p>
+<h1>Connect</h1>
+Connect-MgGraph -Scopes "User.Read.All","Group.Read.All"
+</p>
+<h1>Get users</h1>
+Get-MgUser -All
+</p>
+<h1>Get groups</h1>
+Get-MgGroup -All
+</p>
+<h1>Disconnect</h1>
+Disconnect-MgGraph
+</code></pre>
+<hr>
+<h2>Power Automate Integration</h2>
+<h3>HTTP with Azure AD</h3>
+<pre><code class="language-yaml">Action: HTTP with Azure AD
+Base Resource URL: https://graph.microsoft.com
+Azure AD Resource URI: https://graph.microsoft.com
+Method: GET
+Url of the request: /v1.0/users
+</code></pre>
+<h3>Get User's Manager</h3>
+<pre><code class="language-yaml">Action: HTTP with Azure AD
+Method: GET
+Url: /v1.0/users/{userId}/manager
+</code></pre>
+<h3>Search SharePoint</h3>
+<pre><code class="language-yaml">Action: HTTP with Azure AD
+Method: POST
+Url: /v1.0/search/query
+Body: {
+  "requests": [{
+    "entityTypes": ["driveItem"],
+    "query": { "queryString": "permissions" }
+  }]
+}
+</code></pre>
+<hr>
+<h2>Batch Requests</h2>
+<h3>Combine Multiple Requests</h3>
+<pre><code class="language-json">POST https://graph.microsoft.com/v1.0/$batch
+Content-Type: application/json
+</p>
+<p>
+{
+  "requests": [
+    {
+      "id": "1",
+      "method": "GET",
+      "url": "/me"
+    },
+    {
+      "id": "2",
+      "method": "GET",
+      "url": "/me/memberOf"
+    },
+    {
+      "id": "3",
+      "method": "GET",
+      "url": "/me/drive/root/children"
+    }
+  ]
+}
+</code></pre>
+<hr>
+<h2>Pagination</h2>
+<h3>Handle Large Results</h3>
+<pre><code class="language-bash"># First request
+GET /users?$top=100
+</p>
+<h1>Response includes @odata.nextLink</h1>
+{
+  "@odata.nextLink": "https://graph.microsoft.com/v1.0/users?$skiptoken=...",
+  "value": [...]
+}
+</p>
+<h1>Follow nextLink for more results</h1>
+GET /users?$skiptoken=...
+</code></pre>
+<h3>Power Automate Pagination</h3>
+<pre><code class="language-yaml"># Enable pagination in HTTP action settings
+Settings:
+  Pagination: On
+  Threshold: 5000
+</code></pre>
+<hr>
+<h2>Project Integration</h2>
+<h3>Get SharePoint Site Permissions</h3>
+<pre><code class="language-bash"># Get site
+GET /sites/abctest179.sharepoint.com:/sites/Permission-Scanner-Test
+</p>
+<h1>Get drives</h1>
+GET /sites/{site-id}/drives
+</p>
+<h1>Get folder permissions</h1>
+GET /drives/{drive-id}/root:/{folder-path}:/permissions
+</code></pre>
+<h3>Example: Scan Folder Permissions</h3>
+<pre><code class="language-bash">SITE_ID="abctest179.sharepoint.com,site-guid,web-guid"
+DRIVE_ID="drive-id"
+FOLDER_PATH="TestLibrary_Basic/Folder1"
+</p>
+<p>
+curl -X GET "https://graph.microsoft.com/v1.0/drives/$DRIVE_ID/root:/$FOLDER_PATH:/permissions" \
+  -H "Authorization: Bearer $TOKEN"
+</code></pre>
+<hr>
+<h2>Error Handling</h2>
+<h3>Common Errors</h3>
+<table>
+<thead><tr><th>Code</th><th>Meaning</th><th>Solution</th></tr></thead>
+<tbody><tr><td>401</td><td>Unauthorized</td><td>Check token, re-authenticate</td></tr>
+<tr><td>403</td><td>Forbidden</td><td>Check permissions</td></tr>
+<tr><td>404</td><td>Not Found</td><td>Verify resource exists</td></tr>
+<tr><td>429</td><td>Too Many Requests</td><td>Implement retry with backoff</td></tr>
+<tr><td>503</td><td>Service Unavailable</td><td>Retry later</td></tr>
+</tbody></table>
+<h3>Throttling</h3>
+<pre><code class="language-text">Retry-After: 120
+</p>
+<p>
+Implement exponential backoff:
+1st retry: 1 second
+2nd retry: 2 seconds
+3rd retry: 4 seconds
+...
+</code></pre>
+<hr>
+<h2>Best Practices</h2>
+<h3>Performance</h3>
+<ul><li>Use $select to limit fields</li>
+<li>Use $filter to reduce results</li>
+<li>Batch multiple requests</li>
+<li>Cache tokens and responses</li>
+<li>Handle pagination properly</li>
+</ul>
+<h3>Security</h3>
+<ul><li>Use least-privilege permissions</li>
+<li>Prefer delegated over application permissions</li>
+<li>Rotate secrets regularly</li>
+<li>Monitor API usage</li>
+</ul>
+<h3>Reliability</h3>
+<ul><li>Handle throttling (429 errors)</li>
+<li>Implement retry logic</li>
+<li>Use batch requests for multiple calls</li>
+<li>Check @odata.nextLink for pagination</li>
+</ul>
+<hr>
+<h2>Graph Explorer</h2>
+<h3>Test API Calls</h3>
+<pre><code class="language-text">https://developer.microsoft.com/graph/graph-explorer
+</code></pre>
+<ul><li>Sign in with your account</li>
+<li>Test queries interactively</li>
+<li>View response structure</li>
+<li>Generate code snippets</li>
+</ul>
+<hr>
+<h2>Related Documentation</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/graph/" target="_blank">Microsoft Graph Documentation</a></li>
+<li><a href="https://developer.microsoft.com/graph/graph-explorer" target="_blank">Graph Explorer</a></li>
+<li><a href="https://learn.microsoft.com/en-us/graph/api/overview" target="_blank">Graph API Reference</a></li>
+<li><a href="https://learn.microsoft.com/en-us/graph/permissions-reference" target="_blank">Permissions Reference</a></li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-09</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SharePoint Permission Scanner - Complete Project Creation Guide</title>
+    <style>
+        :root {
+            --primary-color: #0078d4;
+            --secondary-color: #106ebe;
+            --success-color: #107c10;
+            --warning-color: #ff8c00;
+            --danger-color: #d13438;
+            --bg-light: #f3f2f1;
+            --bg-code: #1e1e1e;
+            --text-dark: #323130;
+            --border-color: #d1d1d1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        nav {
+            background: var(--bg-light);
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        nav li {
+            margin: 5px 10px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        section {
+            margin: 40px 0;
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            font-size: 1.5em;
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            color: var(--text-dark);
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            border-color: var(--primary-color);
+            color: #0d47a1;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            border-color: var(--success-color);
+            color: #1b5e20;
+        }
+
+        .alert-warning {
+            background: #fff3e0;
+            border-color: var(--warning-color);
+            color: #e65100;
+        }
+
+        .alert-danger {
+            background: #ffebee;
+            border-color: var(--danger-color);
+            color: #b71c1c;
+        }
+
+        .checklist {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .checklist li {
+            padding: 8px 0 8px 30px;
+            position: relative;
+        }
+
+        .checklist li:before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            font-size: 1.3em;
+            color: var(--primary-color);
+        }
+
+        code {
+            background: var(--bg-light);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d13438;
+        }
+
+        pre {
+            background: var(--bg-code);
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid #444;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+            font-size: 0.95em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-light);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 0 4px;
+        }
+
+        .badge-primary { background: var(--primary-color); color: white; }
+        .badge-success { background: var(--success-color); color: white; }
+        .badge-warning { background: var(--warning-color); color: white; }
+
+        .step-number {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .architecture-diagram {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 2px solid var(--border-color);
+        }
+
+        .toc {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .toc ul {
+            list-style-position: inside;
+        }
+
+        .toc li {
+            margin: 8px 0;
+        }
+
+        footer {
+            background: var(--bg-light);
+            padding: 30px;
+            text-align: center;
+            margin-top: 50px;
+            border-top: 3px solid var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📊 SharePoint Permission Scanner</h1>
+        <p>Complete Step-by-Step Project Creation Guide</p>
+        <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.9;">
+            Azure Functions v4 | .NET 8.0 | Power Platform | Dataverse
+        </p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#prerequisites">Prerequisites</a></li>
+            <li><a href="#phase1">Phase 1: Dataverse</a></li>
+            <li><a href="#phase2">Phase 2: Azure Function</a></li>
+            <li><a href="#phase3">Phase 3: Configuration</a></li>
+            <li><a href="#phase4">Phase 4: Testing</a></li>
+            <li><a href="#power-automate">Power Automate</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- OVERVIEW SECTION -->
+        <section id="overview">
+            <h2>📖 Project Overview</h2>
+
+            <div class="alert alert-info">
+                <strong>🎯 Purpose:</strong> Build a comprehensive solution that scans SharePoint document libraries,
+                detects folders with broken permission inheritance, and stores detailed permission data in Dataverse
+                for reporting and auditing.
+            </div>
+
+            <h3>What This Project Does</h3>
+            <ul>
+                <li>Scans SharePoint document libraries recursively</li>
+                <li>Identifies folders with unique (broken) permission inheritance</li>
+                <li>Extracts detailed permission assignments (users, groups, permission levels)</li>
+                <li>Stores data in Dataverse for analysis and reporting</li>
+                <li>Provides two implementation options: Power Automate or Azure Functions</li>
+            </ul>
+
+            <h3>Technology Stack</h3>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Technology</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td><strong>Backend</strong></td>
+                    <td>.NET 8.0 Azure Functions v4</td>
+                    <td>Scanning engine and business logic</td>
+                </tr>
+                <tr>
+                    <td><strong>Data Storage</strong></td>
+                    <td>Microsoft Dataverse</td>
+                    <td>3 tables for scan sessions, folders, permissions</td>
+                </tr>
+                <tr>
+                    <td><strong>API Integration</strong></td>
+                    <td>SharePoint REST API</td>
+                    <td>Permission querying and folder traversal</td>
+                </tr>
+                <tr>
+                    <td><strong>Authentication</strong></td>
+                    <td>Azure AD (Entra ID)</td>
+                    <td>OAuth 2.0 app registration</td>
+                </tr>
+                <tr>
+                    <td><strong>Orchestration</strong></td>
+                    <td>Power Automate (optional)</td>
+                    <td>Alternative to Azure Function</td>
+                </tr>
+                <tr>
+                    <td><strong>Monitoring</strong></td>
+                    <td>Application Insights</td>
+                    <td>Telemetry and diagnostics</td>
+                </tr>
+            </table>
+
+            <h3>Architecture Diagram</h3>
+            <div class="architecture-diagram">
+<pre>
+┌─────────────────────┐
+│   User / Trigger    │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐       ┌──────────────────────┐
+│  Power Automate     │──────▶│  Azure Function      │
+│  (Manual Trigger)   │       │  ScanPermissions     │
+└─────────────────────┘       └──────────┬───────────┘
+                                         │
+                    ┌────────────────────┼────────────────────┐
+                    │                    │                    │
+                    ▼                    ▼                    ▼
+          ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+          │  SharePoint      │  │   Dataverse     │  │  App Insights   │
+          │  REST API        │  │   (3 Tables)    │  │  (Monitoring)   │
+          └─────────────────┘  └─────────────────┘  └─────────────────┘
+                    │                    │
+                    │                    │
+                    ▼                    ▼
+          ┌─────────────────────────────────────────┐
+          │         Permission Data                 │
+          │  ┌──────────────────────────────────┐   │
+          │  │ sp_scansession (Scan Sessions)   │   │
+          │  └──────────────┬───────────────────┘   │
+          │                 │ 1:N                   │
+          │                 ▼                       │
+          │  ┌──────────────────────────────────┐   │
+          │  │ sp_folderrecord (Folders)        │◀──┤ Self-referential
+          │  └──────────────┬───────────────────┘   │ (Parent Folder)
+          │                 │ 1:N                   │
+          │                 ▼                       │
+          │  ┌──────────────────────────────────┐   │
+          │  │ sp_permissionentry (Permissions) │   │
+          │  └──────────────────────────────────┘   │
+          └─────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h3>Project Files Structure</h3>
+            <pre><code>SharePointPermissionScanner/
+├── SharePointPermissionScanner.csproj    # Project file with NuGet packages
+├── Program.cs                            # Dependency injection setup
+├── ScanPermissions.cs                    # Main Azure Function (HTTP trigger)
+├── host.json                             # Function host configuration (30-min timeout)
+├── local.settings.json                   # Local development settings (not in git)
+│
+├── Models/
+│   ├── ScanRequest.cs                    # Input DTO (site, library, session ID)
+│   ├── ScanResult.cs                     # Output DTO (totals, duration, errors)
+│   └── FolderPermission.cs               # Permission entry DTO
+│
+└── Services/
+    ├── ISharePointService.cs             # SharePoint API abstraction
+    ├── SharePointService.cs              # SharePoint REST API client
+    ├── IDataverseService.cs              # Dataverse abstraction
+    └── DataverseService.cs               # Dataverse data operations
+</code></pre>
+
+            <h3>Key Features</h3>
+            <ul>
+                <li><strong>Breadth-First Traversal:</strong> Queue-based folder scanning for efficiency</li>
+                <li><strong>Configurable Depth:</strong> Limit scan depth (0 = unlimited)</li>
+                <li><strong>System Folder Exclusion:</strong> Skip Forms, _catalogs, etc.</li>
+                <li><strong>Resilience:</strong> Polly retry policies for HTTP failures</li>
+                <li><strong>30-Minute Timeout:</strong> Support for large library scans</li>
+                <li><strong>Progress Logging:</strong> Every 50 folders</li>
+                <li><strong>Partial Success:</strong> Continues on individual folder errors</li>
+            </ul>
+        </section>
+
+        <!-- PREREQUISITES SECTION -->
+        <section id="prerequisites">
+            <h2>🔧 Prerequisites</h2>
+
+            <div class="alert alert-warning">
+                <strong>⚠️ Important:</strong> Complete ALL prerequisite steps before starting Phase 1.
+                Missing prerequisites will cause errors later.
+            </div>
+
+            <h3>Step 1: Install Development Tools</h3>
+
+            <h4>1.1 Install .NET 8.0 SDK</h4>
+            <pre><code># Windows (WinGet)
+winget install Microsoft.DotNet.SDK.8
+
+# macOS (Homebrew)
+brew install dotnet@8
+
+# Linux (Ubuntu/Debian)
+wget https://dot.net/v1/dotnet-install.sh
+chmod +x dotnet-install.sh
+./dotnet-install.sh --channel 8.0
+
+# Verify installation
+dotnet --version  # Should show 8.0.x
+</code></pre>
+
+            <h4>1.2 Install Visual Studio Code (Recommended)</h4>
+            <pre><code># Windows
+winget install Microsoft.VisualStudioCode
+
+# Or download from: https://code.visualstudio.com/
+</code></pre>
+
+            <h4>1.3 Install Azure Functions Core Tools v4</h4>
+            <pre><code># npm (All platforms)
+npm install -g azure-functions-core-tools@4 --unsafe-perm true
+
+# Windows (WinGet)
+winget install Microsoft.Azure.FunctionsCoreTools
+
+# Verify installation
+func --version  # Should show 4.x.x
+</code></pre>
+
+            <h4>1.4 Install Azure CLI</h4>
+            <pre><code># Windows
+winget install Microsoft.AzureCLI
+
+# macOS
+brew install azure-cli
+
+# Linux
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+# Verify installation
+az --version
+</code></pre>
+
+            <h4>1.5 Install Power Platform CLI</h4>
+            <pre><code># Windows
+winget install Microsoft.PowerPlatformCLI
+
+# Or download from: https://aka.ms/PowerPlatformCLI
+
+# Verify installation
+pac --version
+</code></pre>
+
+            <h3>Step 2: Azure AD App Registration</h3>
+
+            <div class="alert alert-info">
+                <strong>📝 Note:</strong> You need Global Administrator or Application Administrator role in Azure AD
+                to create app registrations and grant admin consent.
+            </div>
+
+            <ul class="checklist">
+                <li>Navigate to <a href="https://portal.azure.com">Azure Portal</a></li>
+                <li>Go to <strong>Azure Active Directory</strong> (or Entra ID)</li>
+                <li>Click <strong>App registrations</strong> → <strong>New registration</strong></li>
+                <li>Enter name: <code>SharePoint-Permission-Scanner</code></li>
+                <li>Supported account types: <strong>Accounts in this organizational directory only</strong></li>
+                <li>Click <strong>Register</strong></li>
+            </ul>
+
+            <h4>2.1 Configure API Permissions</h4>
+            <p>After registration, navigate to <strong>API permissions</strong>:</p>
+
+            <table>
+                <tr>
+                    <th>API</th>
+                    <th>Permission</th>
+                    <th>Type</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td rowspan="2"><strong>Microsoft Graph</strong></td>
+                    <td>Sites.Read.All</td>
+                    <td>Application</td>
+                    <td>Read all SharePoint sites</td>
+                </tr>
+                <tr>
+                    <td>Files.Read.All</td>
+                    <td>Application</td>
+                    <td>Read all files</td>
+                </tr>
+                <tr>
+                    <td><strong>SharePoint</strong></td>
+                    <td>Sites.Read.All</td>
+                    <td>Application</td>
+                    <td>Read site collections</td>
+                </tr>
+                <tr>
+                    <td><strong>Dataverse</strong></td>
+                    <td>user_impersonation</td>
+                    <td>Delegated</td>
+                    <td>Access Dataverse as user</td>
+                </tr>
+            </table>
+
+            <ul class="checklist">
+                <li>Click <strong>Add a permission</strong></li>
+                <li>Select <strong>Microsoft Graph</strong> → <strong>Application permissions</strong></li>
+                <li>Search and select: Sites.Read.All, Files.Read.All</li>
+                <li>Click <strong>Add permissions</strong></li>
+                <li>Repeat for <strong>SharePoint</strong> API</li>
+                <li>Click <strong>Grant admin consent for [Your Tenant]</strong></li>
+                <li>Verify all permissions show green checkmarks (✓)</li>
+            </ul>
+
+            <h4>2.2 Create Client Secret</h4>
+            <ul class="checklist">
+                <li>Navigate to <strong>Certificates & secrets</strong></li>
+                <li>Click <strong>New client secret</strong></li>
+                <li>Description: <code>SharePoint-Scanner-Secret</code></li>
+                <li>Expires: <strong>24 months</strong> (recommended)</li>
+                <li>Click <strong>Add</strong></li>
+                <li><strong>⚠️ COPY THE VALUE IMMEDIATELY</strong> (won't show again!)</li>
+            </ul>
+
+            <h4>2.3 Record Configuration Values</h4>
+            <p>Save these values - you'll need them later:</p>
+            <pre><code># From App Registration "Overview" page
+Tenant ID:    [Your Tenant GUID - e.g., ded5a2b7-531c-4cc9-9473-7563570120ae]
+Client ID:    [Your Application (client) ID]
+Client Secret: [The value you just copied]
+</code></pre>
+
+            <h3>Step 3: SharePoint Test Site Setup</h3>
+
+            <h4>3.1 Create Test Site</h4>
+            <ul class="checklist">
+                <li>Go to <a href="https://portal.office.com">Microsoft 365 Portal</a></li>
+                <li>Click <strong>SharePoint</strong> in app launcher</li>
+                <li>Click <strong>Create site</strong> → <strong>Team site</strong></li>
+                <li>Site name: <code>Permission-Scanner-Test</code></li>
+                <li>Click <strong>Finish</strong></li>
+                <li>Copy the site URL (e.g., <code>https://tenant.sharepoint.com/sites/Permission-Scanner-Test</code>)</li>
+            </ul>
+
+            <h4>3.2 Create Test Document Library</h4>
+            <ul class="checklist">
+                <li>Navigate to your test site</li>
+                <li>Click <strong>New</strong> → <strong>Document library</strong></li>
+                <li>Name: <code>TestDocuments</code></li>
+                <li>Click <strong>Create</strong></li>
+            </ul>
+
+            <h4>3.3 Create Test Folder Structure with Unique Permissions</h4>
+            <pre><code># Create this folder hierarchy:
+TestDocuments/
+├── Public/                  (Inherited permissions)
+├── Finance/                 (Unique: Finance Group - Edit)
+│   ├── 2024/               (Inherited from Finance)
+│   └── 2025/               (Inherited from Finance)
+├── HR/                     (Unique: HR Group - Full Control)
+│   └── Confidential/       (Unique: HR Managers - Full Control)
+└── Marketing/              (Inherited permissions)
+</code></pre>
+
+            <p>For each folder that needs unique permissions:</p>
+            <ul class="checklist">
+                <li>Right-click folder → <strong>Manage access</strong></li>
+                <li>Click <strong>Advanced settings</strong></li>
+                <li>Click <strong>Stop inheriting permissions</strong></li>
+                <li>Add specific users/groups with desired permission levels</li>
+            </ul>
+
+            <h3>Step 4: Authenticate CLI Tools</h3>
+
+            <h4>4.1 Azure CLI</h4>
+            <pre><code>az login
+# Follow browser prompts to sign in
+
+# Verify login
+az account show
+</code></pre>
+
+            <h4>4.2 Power Platform CLI</h4>
+            <pre><code># Authenticate to Dataverse environment
+pac auth create
+
+# List environments
+pac env list
+
+# Select your environment
+pac env select --environment "[Your Environment ID]"
+</code></pre>
+
+            <h3>Step 5: Verify Prerequisites</h3>
+            <ul class="checklist">
+                <li>.NET 8.0 SDK installed (<code>dotnet --version</code>)</li>
+                <li>Azure Functions Core Tools v4 installed (<code>func --version</code>)</li>
+                <li>Azure CLI installed and authenticated (<code>az account show</code>)</li>
+                <li>PAC CLI installed and authenticated (<code>pac auth list</code>)</li>
+                <li>Azure AD app registration created with client secret</li>
+                <li>API permissions granted and admin consent approved</li>
+                <li>SharePoint test site and library created</li>
+                <li>Test folder structure with unique permissions created</li>
+            </ul>
+
+            <div class="alert alert-success">
+                <strong>✅ Prerequisites Complete!</strong> You're ready to start Phase 1.
+            </div>
+        </section>
+
+        <!-- PHASE 1: DATAVERSE -->
+        <section id="phase1">
+            <h2>💾 Phase 1: Dataverse Foundation</h2>
+
+            <div class="alert alert-info">
+                <strong>📋 Objective:</strong> Create 3 Dataverse tables to store scan sessions, folder records,
+                and permission entries.
+            </div>
+
+            <h3>Table Architecture</h3>
+            <div class="architecture-diagram">
+<pre>
+┌─────────────────────────────────────────────┐
+│  sp_scansession (Scan Session)              │
+│  ─────────────────────────────────────────  │
+│  • sp_name (Text 100) - Primary             │
+│  • sp_siteurl (URL)                         │
+│  • sp_libraryname (Text 255)                │
+│  • sp_status (Choice)                       │
+│  • sp_startedon (DateTime)                  │
+│  • sp_completedon (DateTime)                │
+│  • sp_totalfolders (Whole Number)           │
+│  • sp_folderswithuniqueperms (Whole Number) │
+│  • sp_errormessage (Multiline Text)         │
+└──────────────────┬──────────────────────────┘
+                   │ 1:N
+                   ▼
+┌─────────────────────────────────────────────┐
+│  sp_folderrecord (Folder Record)            │◀──┐
+│  ─────────────────────────────────────────  │   │
+│  • sp_name (Text 500) - Primary             │   │
+│  • sp_folderpath (Text 2000)                │   │ Self-referential
+│  • sp_scansession (Lookup)                  │   │ sp_parentfolder
+│  • sp_parentfolder (Lookup - self)          ├───┘
+│  • sp_hasuniqueperms (Yes/No)               │
+│  • sp_depth (Whole Number)                  │
+│  • sp_itemcount (Whole Number)              │
+│  • sp_lastmodified (DateTime)               │
+└──────────────────┬──────────────────────────┘
+                   │ 1:N
+                   ▼
+┌─────────────────────────────────────────────┐
+│  sp_permissionentry (Permission Entry)      │
+│  ─────────────────────────────────────────  │
+│  • sp_name (Text 255) - Primary             │
+│  • sp_folderrecord (Lookup)                 │
+│  • sp_principaltype (Choice)                │
+│  • sp_principalname (Text 255)              │
+│  • sp_principalemail (Text 255)             │
+│  • sp_principalid (Whole Number)            │
+│  • sp_permissionlevel (Text 100)            │
+│  • sp_permissionmask (Text 50)              │
+└─────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h3>Option A: Create Tables via Power Apps Portal (Manual)</h3>
+
+            <h4>Step 1: Create Solution</h4>
+            <ul class="checklist">
+                <li>Go to <a href="https://make.powerapps.com">make.powerapps.com</a></li>
+                <li>Select your environment (top right)</li>
+                <li>Click <strong>Solutions</strong> (left navigation)</li>
+                <li>Click <strong>New solution</strong></li>
+                <li>Display name: <code>SharePoint Permission Scanner</code></li>
+                <li>Name: <code>SharePointPermissionScanner</code></li>
+                <li>Publisher: Create new or select existing (prefix: <code>sp</code>)</li>
+                <li>Version: <code>1.0.0.0</code></li>
+                <li>Click <strong>Create</strong></li>
+            </ul>
+
+            <h4>Step 2: Create Table - sp_scansession</h4>
+            <ul class="checklist">
+                <li>Open your solution</li>
+                <li>Click <strong>New</strong> → <strong>Table</strong> → <strong>Table</strong></li>
+                <li>Display name: <code>Scan Session</code></li>
+                <li>Plural name: <code>Scan Sessions</code></li>
+                <li>Primary column display name: <code>Name</code></li>
+                <li>Schema name: <code>sp_scansession</code></li>
+                <li>Enable <strong>Enable attachments</strong> = OFF</li>
+                <li>Click <strong>Save</strong></li>
+            </ul>
+
+            <p><strong>Add columns to sp_scansession:</strong></p>
+            <table>
+                <tr>
+                    <th>Display Name</th>
+                    <th>Name</th>
+                    <th>Data Type</th>
+                    <th>Max Length</th>
+                    <th>Required</th>
+                </tr>
+                <tr>
+                    <td>Site URL</td>
+                    <td>sp_siteurl</td>
+                    <td>Text - URL</td>
+                    <td>-</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Library Name</td>
+                    <td>sp_libraryname</td>
+                    <td>Text</td>
+                    <td>255</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>sp_status</td>
+                    <td>Choice</td>
+                    <td>-</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Started On</td>
+                    <td>sp_startedon</td>
+                    <td>Date and Time</td>
+                    <td>-</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Completed On</td>
+                    <td>sp_completedon</td>
+                    <td>Date and Time</td>
+                    <td>-</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Total Folders</td>
+                    <td>sp_totalfolders</td>
+                    <td>Whole Number</td>
+                    <td>-</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Folders With Unique Perms</td>
+                    <td>sp_folderswithuniqueperms</td>
+                    <td>Whole Number</td>
+                    <td>-</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Error Message</td>
+                    <td>sp_errormessage</td>
+                    <td>Text - Multiple Lines</td>
+                    <td>-</td>
+                    <td>No</td>
+                </tr>
+            </table>
+
+            <p><strong>Configure Status choice column:</strong></p>
+            <ul>
+                <li>Pending (Default)</li>
+                <li>Running</li>
+                <li>Completed</li>
+                <li>Failed</li>
+            </ul>
+
+            <h4>Step 3: Create Table - sp_folderrecord</h4>
+            <p>Repeat table creation process with these settings:</p>
+            <ul class="checklist">
+                <li>Display name: <code>Folder Record</code></li>
+                <li>Schema name: <code>sp_folderrecord</code></li>
+            </ul>
+
+            <table>
+                <tr>
+                    <th>Display Name</th>
+                    <th>Name</th>
+                    <th>Data Type</th>
+                    <th>Max Length</th>
+                    <th>Required</th>
+                </tr>
+                <tr>
+                    <td>Folder Path</td>
+                    <td>sp_folderpath</td>
+                    <td>Text</td>
+                    <td>2000</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Scan Session</td>
+                    <td>sp_scansession</td>
+                    <td>Lookup → Scan Session</td>
+                    <td>-</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Parent Folder</td>
+                    <td>sp_parentfolder</td>
+                    <td>Lookup → Folder Record (self)</td>
+                    <td>-</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Has Unique Permissions</td>
+                    <td>sp_hasuniqueperms</td>
+                    <td>Yes/No</td>
+                    <td>-</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Depth</td>
+                    <td>sp_depth</td>
+                    <td>Whole Number</td>
+                    <td>-</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Item Count</td>
+                    <td>sp_itemcount</td>
+                    <td>Whole Number</td>
+                    <td>-</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Last Modified</td>
+                    <td>sp_lastmodified</td>
+                    <td>Date and Time</td>
+                    <td>-</td>
+                    <td>No</td>
+                </tr>
+            </table>
+
+            <div class="alert alert-warning">
+                <strong>⚠️ Important:</strong> When creating lookup columns, ensure cascade delete behavior is set to:
+                <ul>
+                    <li><strong>sp_scansession → sp_folderrecord:</strong> Cascade Delete</li>
+                    <li><strong>sp_parentfolder (self):</strong> Restrict Delete (prevent orphans)</li>
+                </ul>
+            </div>
+
+            <h4>Step 4: Create Table - sp_permissionentry</h4>
+            <ul class="checklist">
+                <li>Display name: <code>Permission Entry</code></li>
+                <li>Schema name: <code>sp_permissionentry</code></li>
+            </ul>
+
+            <table>
+                <tr>
+                    <th>Display Name</th>
+                    <th>Name</th>
+                    <th>Data Type</th>
+                    <th>Max Length</th>
+                    <th>Required</th>
+                </tr>
+                <tr>
+                    <td>Folder Record</td>
+                    <td>sp_folderrecord</td>
+                    <td>Lookup → Folder Record</td>
+                    <td>-</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Principal Type</td>
+                    <td>sp_principaltype</td>
+                    <td>Choice</td>
+                    <td>-</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Principal Name</td>
+                    <td>sp_principalname</td>
+                    <td>Text</td>
+                    <td>255</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Principal Email</td>
+                    <td>sp_principalemail</td>
+                    <td>Text</td>
+                    <td>255</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Principal ID</td>
+                    <td>sp_principalid</td>
+                    <td>Whole Number</td>
+                    <td>-</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Permission Level</td>
+                    <td>sp_permissionlevel</td>
+                    <td>Text</td>
+                    <td>100</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Permission Mask</td>
+                    <td>sp_permissionmask</td>
+                    <td>Text</td>
+                    <td>50</td>
+                    <td>No</td>
+                </tr>
+            </table>
+
+            <p><strong>Configure Principal Type choice column:</strong></p>
+            <ul>
+                <li>User (Value: 1)</li>
+                <li>Security Group (Value: 4)</li>
+                <li>SharePoint Group (Value: 8)</li>
+                <li>M365 Group (Value: 16)</li>
+            </ul>
+
+            <h3>Option B: Create Tables via PowerShell Script (Automated)</h3>
+
+            <p>Use the provided PowerShell script for faster setup:</p>
+
+            <pre><code># Download the script from project repository
+# Location: projects/sharepoint-scanner/solution/create-tables.ps1
+
+# Authenticate first
+pac auth create
+
+# Run the script
+cd /path/to/sharepoint-scanner/solution
+powershell -ExecutionPolicy Bypass -File create-tables.ps1
+</code></pre>
+
+            <div class="alert alert-success">
+                <strong>✅ Expected Output:</strong> Script will create all 3 tables, add columns,
+                create relationships, and publish customizations.
+            </div>
+
+            <h3>Verify Table Creation</h3>
+
+            <pre><code># Using PAC CLI
+pac solution list  # Verify SharePointPermissionScanner exists
+
+# Or use verification script
+powershell -ExecutionPolicy Bypass -File verify-tables.ps1
+</code></pre>
+
+            <h4>Manual Verification</h4>
+            <ul class="checklist">
+                <li>Go to <a href="https://make.powerapps.com">make.powerapps.com</a></li>
+                <li>Click <strong>Tables</strong> (left navigation)</li>
+                <li>Filter by solution: <code>SharePointPermissionScanner</code></li>
+                <li>Verify all 3 tables exist: sp_scansession, sp_folderrecord, sp_permissionentry</li>
+                <li>Open each table and verify columns match schema</li>
+                <li>Check relationships under <strong>Relationships</strong> tab</li>
+            </ul>
+
+            <div class="alert alert-success">
+                <strong>✅ Phase 1 Complete!</strong> Dataverse foundation is ready. Proceed to Phase 2.
+            </div>
+        </section>
+
+        <!-- PHASE 2: AZURE FUNCTION -->
+        <section id="phase2">
+            <h2>⚡ Phase 2: Azure Function Project</h2>
+
+            <div class="alert alert-info">
+                <strong>📋 Objective:</strong> Create a .NET 8.0 Azure Function that scans SharePoint permissions
+                and stores results in Dataverse.
+            </div>
+
+            <h3>Step 1: Create Project Directory</h3>
+
+            <pre><code># Create project folder
+mkdir SharePointPermissionScanner
+cd SharePointPermissionScanner
+
+# Initialize Azure Function project
+func init . --worker-runtime dotnet-isolated --target-framework net8.0
+
+# This creates:
+# - SharePointPermissionScanner.csproj
+# - Program.cs
+# - host.json
+# - .gitignore
+# - local.settings.json
+</code></pre>
+
+            <h3>Step 2: Create Project File (SharePointPermissionScanner.csproj)</h3>
+
+            <p>Replace the generated <code>SharePointPermissionScanner.csproj</code> with this complete version:</p>
+
+            <pre><code>&lt;Project Sdk="Microsoft.NET.Sdk"&gt;
+  &lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;net8.0&lt;/TargetFramework&gt;
+    &lt;AzureFunctionsVersion&gt;v4&lt;/AzureFunctionsVersion&gt;
+    &lt;OutputType&gt;Exe&lt;/OutputType&gt;
+    &lt;ImplicitUsings&gt;enable&lt;/ImplicitUsings&gt;
+    &lt;Nullable&gt;enable&lt;/Nullable&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;!-- Azure Functions Core --&gt;
+    &lt;PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.21.0" /&gt;
+    &lt;PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.1.0" /&gt;
+    &lt;PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="1.2.1" /&gt;
+    &lt;PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.16.4" /&gt;
+
+    &lt;!-- Application Insights --&gt;
+    &lt;PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" /&gt;
+    &lt;PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="1.2.0" /&gt;
+
+    &lt;!-- Authentication --&gt;
+    &lt;PackageReference Include="Azure.Identity" Version="1.13.0" /&gt;
+    &lt;PackageReference Include="Microsoft.Identity.Client" Version="4.66.0" /&gt;
+
+    &lt;!-- Dataverse --&gt;
+    &lt;PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.1.22" /&gt;
+
+    &lt;!-- Resilience & HTTP --&gt;
+    &lt;PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.0" /&gt;
+    &lt;PackageReference Include="Polly.Extensions.Http" Version="3.0.0" /&gt;
+
+    &lt;!-- Key Vault (Optional) --&gt;
+    &lt;PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.6.0" /&gt;
+    &lt;PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.3.2" /&gt;
+
+    &lt;!-- Health Checks --&gt;
+    &lt;PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" /&gt;
+    &lt;PackageReference Include="AspNetCore.HealthChecks.Uris" Version="8.0.1" /&gt;
+  &lt;/ItemGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;None Update="host.json"&gt;
+      &lt;CopyToOutputDirectory&gt;PreserveNewest&lt;/CopyToOutputDirectory&gt;
+    &lt;/None&gt;
+    &lt;None Update="local.settings.json"&gt;
+      &lt;CopyToOutputDirectory&gt;PreserveNewest&lt;/CopyToOutputDirectory&gt;
+      &lt;CopyToPublishDirectory&gt;Never&lt;/CopyToPublishDirectory&gt;
+    &lt;/None&gt;
+  &lt;/ItemGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" /&gt;
+  &lt;/ItemGroup&gt;
+&lt;/Project&gt;
+</code></pre>
+
+            <pre><code># Restore NuGet packages
+dotnet restore
+</code></pre>
+
+            <h3>Step 3: Create Folder Structure</h3>
+
+            <pre><code># Create folders
+mkdir Models
+mkdir Services
+
+# Your structure should now look like:
+SharePointPermissionScanner/
+├── Models/
+├── Services/
+├── SharePointPermissionScanner.csproj
+├── Program.cs
+├── host.json
+├── local.settings.json
+└── .gitignore
+</code></pre>
+
+            <h3>Step 4: Create Model Classes</h3>
+
+            <h4>4.1 Models/ScanRequest.cs</h4>
+            <pre><code>using System.Text.Json.Serialization;
+
+namespace SharePointPermissionScanner.Models;
+
+/// &lt;summary&gt;
+/// Request model for permission scan
+/// &lt;/summary&gt;
+public class ScanRequest
+{
+    [JsonPropertyName("siteUrl")]
+    public string SiteUrl { get; set; } = string.Empty;
+
+    [JsonPropertyName("libraryName")]
+    public string LibraryName { get; set; } = string.Empty;
+
+    [JsonPropertyName("scanSessionId")]
+    public string ScanSessionId { get; set; } = string.Empty;
+
+    [JsonPropertyName("maxDepth")]
+    public int MaxDepth { get; set; } = 0; // 0 = unlimited
+
+    [JsonPropertyName("excludeSystemFolders")]
+    public bool ExcludeSystemFolders { get; set; } = true;
+}
+</code></pre>
+
+            <h4>4.2 Models/ScanResult.cs</h4>
+            <pre><code>using System.Text.Json.Serialization;
+
+namespace SharePointPermissionScanner.Models;
+
+/// &lt;summary&gt;
+/// Result model for permission scan
+/// &lt;/summary&gt;
+public class ScanResult
+{
+    [JsonPropertyName("success")]
+    public bool Success { get; set; }
+
+    [JsonPropertyName("totalFolders")]
+    public int TotalFolders { get; set; }
+
+    [JsonPropertyName("foldersWithUniquePermissions")]
+    public int FoldersWithUniquePermissions { get; set; }
+
+    [JsonPropertyName("totalPermissionEntries")]
+    public int TotalPermissionEntries { get; set; }
+
+    [JsonPropertyName("durationSeconds")]
+    public double DurationSeconds { get; set; }
+
+    [JsonPropertyName("errorMessage")]
+    public string? ErrorMessage { get; set; }
+
+    [JsonPropertyName("warnings")]
+    public List&lt;string&gt; Warnings { get; set; } = new();
+
+    [JsonPropertyName("scanSessionId")]
+    public string? ScanSessionId { get; set; }
+}
+</code></pre>
+
+            <h4>4.3 Models/FolderPermission.cs</h4>
+            <pre><code>namespace SharePointPermissionScanner.Models;
+
+/// &lt;summary&gt;
+/// Represents a single permission assignment
+/// &lt;/summary&gt;
+public class FolderPermission
+{
+    public int PrincipalId { get; set; }
+    public string PrincipalName { get; set; } = string.Empty;
+    public string PrincipalType { get; set; } = string.Empty; // User, Group, etc.
+    public string? PrincipalEmail { get; set; }
+    public string PermissionLevel { get; set; } = string.Empty; // Full Control, Edit, Read
+    public string? PermissionMask { get; set; }
+}
+
+/// &lt;summary&gt;
+/// Represents a folder with its permissions
+/// &lt;/summary&gt;
+public class FolderInfo
+{
+    public string ServerRelativeUrl { get; set; } = string.Empty;
+    public bool HasUniquePermissions { get; set; }
+    public int Depth { get; set; }
+    public int ItemCount { get; set; }
+    public DateTime? LastModified { get; set; }
+    public List&lt;FolderPermission&gt; Permissions { get; set; } = new();
+}
+</code></pre>
+
+            <div class="alert alert-info">
+                <strong>📝 Note:</strong> In the next steps, we'll create service interfaces and implementations.
+                Due to length, I'll provide simplified versions. Full implementations are available in the project repository.
+            </div>
+
+            <h3>Step 5: Create Service Interfaces</h3>
+
+            <h4>5.1 Services/ISharePointService.cs</h4>
+            <pre><code>using SharePointPermissionScanner.Models;
+
+namespace SharePointPermissionScanner.Services;
+
+public interface ISharePointService
+{
+    Task InitializeAsync(string siteUrl);
+    string BuildRootFolderPath(string siteUrl, string libraryName);
+    Task&lt;bool&gt; HasUniquePermissionsAsync(string folderPath);
+    Task&lt;List&lt;FolderPermission&gt;&gt; GetPermissionsAsync(string folderPath);
+    Task&lt;List&lt;string&gt;&gt; GetChildFoldersAsync(string folderPath, bool excludeSystem);
+}
+</code></pre>
+
+            <h4>5.2 Services/IDataverseService.cs</h4>
+            <pre><code>using SharePointPermissionScanner.Models;
+
+namespace SharePointPermissionScanner.Services;
+
+public interface IDataverseService
+{
+    Task InitializeAsync();
+    Task&lt;string&gt; CreateFolderRecordAsync(string sessionId, FolderInfo folder);
+    Task CreatePermissionEntriesAsync(string folderRecordId, List&lt;FolderPermission&gt; permissions);
+    Task UpdateScanSessionAsync(string sessionId, int totalFolders, int uniquePerms,
+        bool success, string? errorMessage = null);
+}
+</code></pre>
+
+            <div class="alert alert-warning">
+                <strong>⚠️ Service Implementations:</strong> Full service implementations are complex (300+ lines each).
+                For brevity, I'll provide placeholder implementations. <strong>Use the actual implementations from the
+                project repository at:</strong> <code>projects/sharepoint-scanner/functions/SharePointPermissionScanner/Services/</code>
+            </div>
+
+            <h3>Step 6: Create Main Function (ScanPermissions.cs)</h3>
+
+            <p>Create <code>ScanPermissions.cs</code> in the project root:</p>
+
+            <pre><code>using System.Diagnostics;
+using System.Net;
+using System.Text.Json;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Logging;
+using SharePointPermissionScanner.Models;
+using SharePointPermissionScanner.Services;
+
+namespace SharePointPermissionScanner;
+
+public class ScanPermissions
+{
+    private readonly ILogger&lt;ScanPermissions&gt; _logger;
+    private readonly ISharePointService _sharePointService;
+    private readonly IDataverseService _dataverseService;
+
+    public ScanPermissions(
+        ILogger&lt;ScanPermissions&gt; logger,
+        ISharePointService sharePointService,
+        IDataverseService dataverseService)
+    {
+        _logger = logger;
+        _sharePointService = sharePointService;
+        _dataverseService = dataverseService;
+    }
+
+    [Function("ScanPermissions")]
+    public async Task&lt;HttpResponseData&gt; Run(
+        [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+    {
+        _logger.LogInformation("SharePoint Permission Scanner triggered");
+
+        var stopwatch = Stopwatch.StartNew();
+        var result = new ScanResult();
+
+        try
+        {
+            // Parse request
+            var requestBody = await req.ReadAsStringAsync();
+            var scanRequest = JsonSerializer.Deserialize&lt;ScanRequest&gt;(requestBody!,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (scanRequest == null || string.IsNullOrEmpty(scanRequest.SiteUrl))
+            {
+                return await CreateErrorResponse(req, HttpStatusCode.BadRequest,
+                    "Invalid request");
+            }
+
+            result.ScanSessionId = scanRequest.ScanSessionId;
+
+            // Initialize services
+            await _sharePointService.InitializeAsync(scanRequest.SiteUrl);
+            await _dataverseService.InitializeAsync();
+
+            // Build root path
+            var rootFolderPath = _sharePointService.BuildRootFolderPath(
+                scanRequest.SiteUrl, scanRequest.LibraryName);
+
+            // Process folders (breadth-first)
+            var foldersToProcess = new Queue&lt;(string Path, int Depth)&gt;();
+            foldersToProcess.Enqueue((rootFolderPath, 0));
+
+            int totalFolders = 0;
+            int foldersWithUniquePerms = 0;
+            int totalPermissionEntries = 0;
+
+            while (foldersToProcess.Count &gt; 0)
+            {
+                var (currentFolder, currentDepth) = foldersToProcess.Dequeue();
+
+                if (scanRequest.MaxDepth &gt; 0 && currentDepth &gt; scanRequest.MaxDepth)
+                    continue;
+
+                totalFolders++;
+
+                try
+                {
+                    // Check unique permissions
+                    var hasUniquePerms = await _sharePointService
+                        .HasUniquePermissionsAsync(currentFolder);
+
+                    if (hasUniquePerms)
+                    {
+                        foldersWithUniquePerms++;
+
+                        // Get permissions
+                        var permissions = await _sharePointService
+                            .GetPermissionsAsync(currentFolder);
+
+                        // Save to Dataverse
+                        var folderInfo = new FolderInfo
+                        {
+                            ServerRelativeUrl = currentFolder,
+                            HasUniquePermissions = true,
+                            Depth = currentDepth,
+                            Permissions = permissions
+                        };
+
+                        var folderRecordId = await _dataverseService
+                            .CreateFolderRecordAsync(scanRequest.ScanSessionId, folderInfo);
+
+                        await _dataverseService.CreatePermissionEntriesAsync(
+                            folderRecordId, permissions);
+
+                        totalPermissionEntries += permissions.Count;
+                    }
+
+                    // Get child folders
+                    var childFolders = await _sharePointService.GetChildFoldersAsync(
+                        currentFolder, scanRequest.ExcludeSystemFolders);
+
+                    foreach (var childFolder in childFolders)
+                        foldersToProcess.Enqueue((childFolder, currentDepth + 1));
+
+                    if (totalFolders % 50 == 0)
+                    {
+                        _logger.LogInformation("Progress: {Processed} folders, {Remaining} in queue",
+                            totalFolders, foldersToProcess.Count);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Error processing folder: {Folder}", currentFolder);
+                    result.Warnings.Add($"Error in {currentFolder}: {ex.Message}");
+                }
+            }
+
+            stopwatch.Stop();
+
+            // Update session
+            await _dataverseService.UpdateScanSessionAsync(
+                scanRequest.ScanSessionId, totalFolders, foldersWithUniquePerms, true);
+
+            // Build result
+            result.Success = true;
+            result.TotalFolders = totalFolders;
+            result.FoldersWithUniquePermissions = foldersWithUniquePerms;
+            result.TotalPermissionEntries = totalPermissionEntries;
+            result.DurationSeconds = stopwatch.Elapsed.TotalSeconds;
+
+            _logger.LogInformation("Scan complete: {Total} folders, {Unique} unique, {Duration}s",
+                totalFolders, foldersWithUniquePerms, result.DurationSeconds);
+
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(result);
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Scan failed");
+
+            result.Success = false;
+            result.ErrorMessage = ex.Message;
+            result.DurationSeconds = stopwatch.Elapsed.TotalSeconds;
+
+            var response = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await response.WriteAsJsonAsync(result);
+            return response;
+        }
+    }
+
+    private async Task&lt;HttpResponseData&gt; CreateErrorResponse(
+        HttpRequestData req, HttpStatusCode statusCode, string message)
+    {
+        var response = req.CreateResponse(statusCode);
+        await response.WriteAsJsonAsync(new ScanResult
+        {
+            Success = false,
+            ErrorMessage = message
+        });
+        return response;
+    }
+}
+</code></pre>
+
+            <h3>Step 7: Configure Program.cs (Dependency Injection)</h3>
+
+            <p>Replace <code>Program.cs</code> content:</p>
+
+            <pre><code>using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using SharePointPermissionScanner.Services;
+
+var host = new HostBuilder()
+    .ConfigureFunctionsWebApplication()
+    .ConfigureServices(services =&gt;
+    {
+        services.AddApplicationInsightsTelemetryWorkerService();
+        services.ConfigureFunctionsApplicationInsights();
+
+        // Register services
+        services.AddSingleton&lt;ISharePointService, SharePointService&gt;();
+        services.AddSingleton&lt;IDataverseService, DataverseService&gt;();
+    })
+    .Build();
+
+host.Run();
+</code></pre>
+
+            <h3>Step 8: Configure host.json (30-Minute Timeout)</h3>
+
+            <p>Update <code>host.json</code>:</p>
+
+            <pre><code>{
+  "version": "2.0",
+  "logging": {
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": true,
+        "maxTelemetryItemsPerSecond": 20
+      }
+    }
+  },
+  "functionTimeout": "00:30:00",
+  "extensions": {
+    "http": {
+      "routePrefix": "api"
+    }
+  }
+}
+</code></pre>
+
+            <div class="alert alert-success">
+                <strong>✅ Phase 2 Complete!</strong> Azure Function project structure is ready.
+                Next, we'll configure authentication and settings.
+            </div>
+        </section>
+
+        <!-- PHASE 3: CONFIGURATION -->
+        <section id="phase3">
+            <h2>⚙️ Phase 3: Configuration & Authentication</h2>
+
+            <h3>Step 1: Create local.settings.json</h3>
+
+            <p>Create/update <code>local.settings.json</code> for local development:</p>
+
+            <pre><code>{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+
+    "SharePoint__TenantId": "YOUR_TENANT_ID",
+    "SharePoint__ClientId": "YOUR_CLIENT_ID",
+    "SharePoint__ClientSecret": "YOUR_CLIENT_SECRET",
+
+    "Dataverse__Environment": "https://YOUR_ORG.crm.dynamics.com",
+    "Dataverse__ClientId": "YOUR_CLIENT_ID",
+    "Dataverse__ClientSecret": "YOUR_CLIENT_SECRET",
+
+    "ApplicationInsights__ConnectionString": ""
+  }
+}
+</code></pre>
+
+            <div class="alert alert-warning">
+                <strong>⚠️ Security:</strong> The <code>local.settings.json</code> file is already in <code>.gitignore</code>.
+                NEVER commit this file to source control!
+            </div>
+
+            <h4>Fill in Your Values:</h4>
+            <table>
+                <tr>
+                    <th>Setting</th>
+                    <th>Where to Find</th>
+                </tr>
+                <tr>
+                    <td><code>SharePoint__TenantId</code></td>
+                    <td>Azure Portal → Azure AD → Overview → Tenant ID</td>
+                </tr>
+                <tr>
+                    <td><code>SharePoint__ClientId</code></td>
+                    <td>Azure Portal → App Registration → Application (client) ID</td>
+                </tr>
+                <tr>
+                    <td><code>SharePoint__ClientSecret</code></td>
+                    <td>Value you copied when creating client secret</td>
+                </tr>
+                <tr>
+                    <td><code>Dataverse__Environment</code></td>
+                    <td>Power Platform Admin Center → Environment URL</td>
+                </tr>
+                <tr>
+                    <td><code>Dataverse__ClientId</code></td>
+                    <td>Same as SharePoint (can reuse app registration)</td>
+                </tr>
+                <tr>
+                    <td><code>Dataverse__ClientSecret</code></td>
+                    <td>Same as SharePoint</td>
+                </tr>
+            </table>
+
+            <h3>Step 2: Build & Test Locally</h3>
+
+            <pre><code># Restore and build
+dotnet restore
+dotnet build
+
+# Expected output: Build succeeded (0 errors)
+</code></pre>
+
+            <h4>Resolve Common Build Errors:</h4>
+
+            <div class="alert alert-danger">
+                <strong>Error:</strong> <code>The type or namespace name 'SharePointService' could not be found</code><br>
+                <strong>Solution:</strong> You need to implement the service classes. Copy full implementations from:<br>
+                <code>projects/sharepoint-scanner/functions/SharePointPermissionScanner/Services/</code>
+            </div>
+
+            <div class="alert alert-danger">
+                <strong>Error:</strong> <code>Package 'X' is not compatible with net8.0</code><br>
+                <strong>Solution:</strong> Verify you're using .NET 8.0 SDK (<code>dotnet --version</code>).
+                Update packages if needed.
+            </div>
+
+            <h3>Step 3: Run Function Locally</h3>
+
+            <pre><code># Start Azure Functions runtime
+func start
+
+# Expected output:
+#   Azure Functions Core Tools
+#   Functions:
+#     ScanPermissions: [POST] http://localhost:7071/api/ScanPermissions
+</code></pre>
+
+            <h3>Step 4: Test Function with Sample Request</h3>
+
+            <p>Create <code>test-request.json</code>:</p>
+
+            <pre><code>{
+  "siteUrl": "https://YOUR_TENANT.sharepoint.com/sites/Permission-Scanner-Test",
+  "libraryName": "TestDocuments",
+  "scanSessionId": "GUID_FROM_DATAVERSE",
+  "maxDepth": 0,
+  "excludeSystemFolders": true
+}
+</code></pre>
+
+            <p>Send test request:</p>
+
+            <pre><code># Using curl
+curl -X POST http://localhost:7071/api/ScanPermissions \
+  -H "Content-Type: application/json" \
+  -d @test-request.json
+
+# Or using PowerShell
+$body = Get-Content test-request.json
+Invoke-RestMethod -Method Post -Uri "http://localhost:7071/api/ScanPermissions" `
+  -ContentType "application/json" -Body $body
+</code></pre>
+
+            <h4>Expected Response:</h4>
+            <pre><code>{
+  "success": true,
+  "totalFolders": 15,
+  "foldersWithUniquePermissions": 3,
+  "totalPermissionEntries": 12,
+  "durationSeconds": 8.45,
+  "errorMessage": null,
+  "warnings": [],
+  "scanSessionId": "YOUR_SESSION_ID"
+}
+</code></pre>
+
+            <div class="alert alert-success">
+                <strong>✅ Phase 3 Complete!</strong> Function runs locally and processes requests.
+                Next step is deployment to Azure.
+            </div>
+        </section>
+
+        <!-- PHASE 4: TESTING -->
+        <section id="phase4">
+            <h2>🧪 Phase 4: Testing & Verification</h2>
+
+            <h3>Test Scenario 1: Simple Library Scan</h3>
+
+            <ul class="checklist">
+                <li>Create scan session in Dataverse (manually or via Power Automate)</li>
+                <li>Send POST request with test site URL</li>
+                <li>Verify scan completes successfully</li>
+                <li>Check Dataverse for new folder records</li>
+                <li>Verify permission entries were created</li>
+                <li>Confirm scan session status updated to "Completed"</li>
+            </ul>
+
+            <h3>Test Scenario 2: Folders with Unique Permissions</h3>
+
+            <p>Create this test structure:</p>
+            <pre><code>TestDocuments/
+├── Public/            (Inherited - should NOT appear)
+└── Secure/            (Unique permissions - SHOULD appear)
+    ├── Finance/       (Inherited from Secure - should NOT appear)
+    └── HR/            (Unique permissions - SHOULD appear)
+</code></pre>
+
+            <p>Expected results:</p>
+            <ul>
+                <li>Total folders scanned: 4</li>
+                <li>Folders with unique permissions: 2 (Secure, HR)</li>
+                <li>Permission entries: Varies based on assignments</li>
+            </ul>
+
+            <h3>Test Scenario 3: Error Handling</h3>
+
+            <p>Test with invalid inputs:</p>
+
+            <h4>Test 1: Invalid Site URL</h4>
+            <pre><code>{
+  "siteUrl": "https://invalid.sharepoint.com/sites/NonExistent",
+  "libraryName": "Documents",
+  "scanSessionId": "test-session"
+}
+</code></pre>
+            <p><strong>Expected:</strong> <code>success: false</code>, error message about site not found</p>
+
+            <h4>Test 2: Missing Required Fields</h4>
+            <pre><code>{
+  "siteUrl": "https://tenant.sharepoint.com/sites/Test"
+  // Missing libraryName and scanSessionId
+}
+</code></pre>
+            <p><strong>Expected:</strong> HTTP 400 Bad Request</p>
+
+            <h4>Test 3: Invalid Library Name</h4>
+            <pre><code>{
+  "siteUrl": "https://tenant.sharepoint.com/sites/Test",
+  "libraryName": "NonExistentLibrary",
+  "scanSessionId": "test-session"
+}
+</code></pre>
+            <p><strong>Expected:</strong> <code>success: false</code>, error about library not found</p>
+
+            <h3>Verify Data in Dataverse</h3>
+
+            <h4>Using Power Apps Portal</h4>
+            <ul class="checklist">
+                <li>Go to <a href="https://make.powerapps.com">make.powerapps.com</a></li>
+                <li>Click <strong>Tables</strong> → <code>sp_scansession</code></li>
+                <li>Open your scan session record</li>
+                <li>Verify <strong>Total Folders</strong> and <strong>Folders With Unique Perms</strong> match expected</li>
+                <li>Click <strong>Related</strong> → <strong>Folder Records</strong></li>
+                <li>Verify folder paths are correct</li>
+                <li>Open a folder record → <strong>Related</strong> → <strong>Permission Entries</strong></li>
+                <li>Verify principal names and permission levels</li>
+            </ul>
+
+            <h4>Using PAC CLI</h4>
+            <pre><code># Query scan sessions
+pac data list --entity-logical-name sp_scansession
+
+# Query folder records (replace SESSION_ID)
+pac data list --entity-logical-name sp_folderrecord \
+  --filter "sp_scansession eq 'SESSION_ID'"
+
+# Query permission entries (replace FOLDER_ID)
+pac data list --entity-logical-name sp_permissionentry \
+  --filter "sp_folderrecord eq 'FOLDER_ID'"
+</code></pre>
+
+            <h3>Performance Testing</h3>
+
+            <table>
+                <tr>
+                    <th>Library Size</th>
+                    <th>Expected Duration</th>
+                    <th>Notes</th>
+                </tr>
+                <tr>
+                    <td>Small (1-50 folders)</td>
+                    <td>&lt; 30 seconds</td>
+                    <td>Typical test library</td>
+                </tr>
+                <tr>
+                    <td>Medium (51-500 folders)</td>
+                    <td>1-5 minutes</td>
+                    <td>Average document library</td>
+                </tr>
+                <tr>
+                    <td>Large (501-2000 folders)</td>
+                    <td>5-15 minutes</td>
+                    <td>Large project library</td>
+                </tr>
+                <tr>
+                    <td>Very Large (2000+ folders)</td>
+                    <td>15-30 minutes</td>
+                    <td>May require timeout adjustment</td>
+                </tr>
+            </table>
+
+            <div class="alert alert-info">
+                <strong>💡 Tip:</strong> Monitor Application Insights for performance metrics and errors.
+                Look for slow SharePoint API calls or Dataverse timeouts.
+            </div>
+
+            <div class="alert alert-success">
+                <strong>✅ Phase 4 Complete!</strong> Function is fully tested and ready for deployment.
+            </div>
+        </section>
+
+        <!-- POWER AUTOMATE SECTION -->
+        <section id="power-automate">
+            <h2>🔄 Alternative: Power Automate Flow</h2>
+
+            <div class="alert alert-info">
+                <strong>📋 Alternative Implementation:</strong> Instead of Azure Functions, you can implement
+                the entire scanning logic using Power Automate cloud flows.
+            </div>
+
+            <h3>When to Use Power Automate vs Azure Functions</h3>
+
+            <table>
+                <tr>
+                    <th>Factor</th>
+                    <th>Power Automate</th>
+                    <th>Azure Function</th>
+                </tr>
+                <tr>
+                    <td><strong>Ease of Setup</strong></td>
+                    <td>✅ No code, visual designer</td>
+                    <td>❌ Requires C# development</td>
+                </tr>
+                <tr>
+                    <td><strong>Performance</strong></td>
+                    <td>❌ Slower (HTTP calls per folder)</td>
+                    <td>✅ Faster (compiled code)</td>
+                </tr>
+                <tr>
+                    <td><strong>Scalability</strong></td>
+                    <td>❌ Limited by flow runs</td>
+                    <td>✅ Scales automatically</td>
+                </tr>
+                <tr>
+                    <td><strong>Cost</strong></td>
+                    <td>Power Automate license required</td>
+                    <td>Consumption plan (pay-per-execution)</td>
+                </tr>
+                <tr>
+                    <td><strong>Maintenance</strong></td>
+                    <td>✅ Easy to modify in portal</td>
+                    <td>❌ Requires dev deployment</td>
+                </tr>
+                <tr>
+                    <td><strong>Debugging</strong></td>
+                    <td>✅ Visual run history</td>
+                    <td>Application Insights logs</td>
+                </tr>
+            </table>
+
+            <h3>Power Automate Flow Structure</h3>
+
+            <div class="architecture-diagram">
+<pre>
+┌─────────────────────────────────────┐
+│  1. Manual Trigger                  │
+│     - Input: Site URL, Library Name │
+└──────────────────┬──────────────────┘
+                   ▼
+┌─────────────────────────────────────┐
+│  2. Initialize Variables            │
+│     - Queue (Array)                 │
+│     - Processed count (Integer)     │
+│     - Unique perms count (Integer)  │
+└──────────────────┬──────────────────┘
+                   ▼
+┌─────────────────────────────────────┐
+│  3. Create Scan Session (Dataverse) │
+│     - Generate session GUID         │
+│     - Status: Running               │
+└──────────────────┬──────────────────┘
+                   ▼
+┌─────────────────────────────────────┐
+│  4. Try-Catch-Finally Scope         │
+│  ┌─────────────────────────────┐   │
+│  │  Try:                       │   │
+│  │  ┌───────────────────────┐  │   │
+│  │  │ Do Until Queue Empty  │  │   │
+│  │  │  ↓                    │  │   │
+│  │  │ Get Current Folder    │  │   │
+│  │  │  ↓                    │  │   │
+│  │  │ HTTP: HasUniquePerms  │  │   │
+│  │  │  ↓                    │  │   │
+│  │  │ Condition: If True    │  │   │
+│  │  │   ├─ HTTP: Get Perms  │  │   │
+│  │  │   ├─ Create Folder    │  │   │
+│  │  │   └─ Create Perm Entry│  │   │
+│  │  │  ↓                    │  │   │
+│  │  │ HTTP: Get Child Folders│ │   │
+│  │  │  ↓                    │  │   │
+│  │  │ Append to Queue       │  │   │
+│  │  └───────────────────────┘  │   │
+│  └─────────────────────────────┘   │
+│  ┌─────────────────────────────┐   │
+│  │  Catch:                     │   │
+│  │  - Update Session (Failed)  │   │
+│  │  - Send notification        │   │
+│  └─────────────────────────────┘   │
+│  ┌─────────────────────────────┐   │
+│  │  Finally:                   │   │
+│  │  - Update Session (Complete)│   │
+│  └─────────────────────────────┘   │
+└─────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h3>Key Power Automate Expressions</h3>
+
+            <h4>Build SharePoint REST API URL</h4>
+            <pre><code>@{concat(
+  triggerBody()?['siteUrl'],
+  '/_api/web/GetFolderByServerRelativeUrl(',
+  quote(variables('CurrentFolder')),
+  ')/ListItemAllFields/HasUniqueRoleAssignments'
+)}
+</code></pre>
+
+            <h4>Check Queue Not Empty</h4>
+            <pre><code>@greater(length(variables('FolderQueue')), 0)
+</code></pre>
+
+            <h4>Get First Item from Queue</h4>
+            <pre><code>@first(variables('FolderQueue'))
+</code></pre>
+
+            <h4>Remove First Item (Dequeue)</h4>
+            <pre><code>@skip(variables('FolderQueue'), 1)
+</code></pre>
+
+            <h3>Complete Power Automate Guide</h3>
+
+            <p>For the complete step-by-step Power Automate flow construction guide, see:</p>
+            <ul>
+                <li><code>projects/sharepoint-scanner/phases/phase-2-power-automate.md</code></li>
+                <li><code>projects/sharepoint-scanner/phases/phase-2-complete-guide.md</code></li>
+            </ul>
+
+            <p>The Power Automate guide includes:</p>
+            <ul>
+                <li>60+ action steps with screenshots</li>
+                <li>All expressions and formulas</li>
+                <li>Error handling patterns</li>
+                <li>Try-Catch-Finally implementation</li>
+                <li>Loop optimization techniques</li>
+                <li>Dataverse connection setup</li>
+            </ul>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <h3>📚 Additional Resources</h3>
+            <ul style="text-align: left; max-width: 600px; margin: 20px auto;">
+                <li><strong>Full Project Repository:</strong> <code>/projects/sharepoint-scanner/</code></li>
+                <li><strong>Service Implementations:</strong> <code>/functions/SharePointPermissionScanner/Services/</code></li>
+                <li><strong>Phase Guides:</strong> <code>/phases/phase-0-prerequisites.md</code> through <code>phase-5-deployment.md</code></li>
+                <li><strong>CLI Setup:</strong> <code>/setup/CLI-TOOLS-SETUP.md</code></li>
+                <li><strong>Security Guide:</strong> <code>/functions/SECURITY_SETUP.md</code></li>
+                <li><strong>Power Automate:</strong> <code>/phases/phase-2-complete-guide.md</code></li>
+            </ul>
+
+            <hr style="margin: 30px 0; border: 1px solid var(--border-color);">
+
+            <p style="font-size: 0.9em; color: #666;">
+                <strong>SharePoint Permission Scanner</strong> | Azure Functions v4 | .NET 8.0 | Dataverse<br>
+                Created: January 2026 | Last Updated: January 12, 2026
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

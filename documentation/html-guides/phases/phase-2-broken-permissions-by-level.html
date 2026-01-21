@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Automate Flow: Fetch Folders with Broken Permissions by Level</title>
+    <style>
+        :root {
+            --primary-color: #0078d4;
+            --secondary-color: #106ebe;
+            --success-color: #107c10;
+            --warning-color: #ffaa44;
+            --danger-color: #d13438;
+            --light-bg: #f3f2f1;
+            --code-bg: #f5f5f5;
+            --border-color: #e1dfdd;
+            --text-color: #323130;
+            --heading-color: #201f1e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: #fff;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: var(--light-bg);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .sidebar h3 {
+            color: var(--heading-color);
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            padding: 6px 10px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #fff;
+            color: var(--primary-color);
+        }
+
+        .sidebar .nested {
+            margin-left: 15px;
+            font-size: 13px;
+        }
+
+        /* Main Content */
+        .content {
+            flex: 1;
+            padding: 40px 60px;
+            max-width: 900px;
+        }
+
+        h1 {
+            color: var(--heading-color);
+            font-size: 32px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        h2 {
+            color: var(--heading-color);
+            font-size: 26px;
+            margin: 40px 0 20px;
+            padding-top: 20px;
+        }
+
+        h3 {
+            color: var(--heading-color);
+            font-size: 20px;
+            margin: 30px 0 15px;
+        }
+
+        h4 {
+            color: var(--heading-color);
+            font-size: 16px;
+            margin: 20px 0 10px;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        pre code {
+            display: block;
+        }
+
+        p code, li code {
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 90%;
+        }
+
+        /* Copy Button */
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        pre:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+
+        thead {
+            background: var(--light-bg);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--heading-color);
+        }
+
+        tbody tr:hover {
+            background: #fafafa;
+        }
+
+        /* Callout Boxes */
+        .callout {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-left: 4px solid;
+            border-radius: 4px;
+            background: #f8f9fa;
+        }
+
+        .callout-note {
+            border-left-color: var(--primary-color);
+            background: #e7f3ff;
+        }
+
+        .callout-warning {
+            border-left-color: var(--warning-color);
+            background: #fff8e6;
+        }
+
+        .callout-success {
+            border-left-color: var(--success-color);
+            background: #f0f9f0;
+        }
+
+        .callout-danger {
+            border-left-color: var(--danger-color);
+            background: #fff0f0;
+        }
+
+        .callout strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .badge-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .badge-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning-color);
+            color: #333;
+        }
+
+        /* Checkboxes */
+        input[type="checkbox"] {
+            margin-right: 8px;
+            transform: scale(1.2);
+        }
+
+        /* Links */
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Flow Diagram */
+        .flow-diagram {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+            line-height: 1.4;
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            background: var(--light-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        /* Horizontal Rule */
+        hr {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 30px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+        }
+
+        @media print {
+            .sidebar {
+                display: none;
+            }
+
+            .content {
+                max-width: 100%;
+            }
+
+            .copy-btn {
+                display: none;
+            }
+        }
+
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary-color);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .scroll-top:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        .scroll-top.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <h3>📑 Table of Contents</h3>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#prerequisites">Prerequisites</a></li>
+                <li><a href="#step-by-step">Step-by-Step Flow Creation</a>
+                    <ul class="nested">
+                        <li><a href="#part-a">Part A: Create New Flow</a></li>
+                        <li><a href="#part-b">Part B: Initialize Variables</a></li>
+                        <li><a href="#part-c">Part C: HTTP Request</a></li>
+                        <li><a href="#part-d">Part D: Parse JSON</a></li>
+                        <li><a href="#part-e">Part E: Calculate Level</a></li>
+                        <li><a href="#part-f">Part F: Filter by Level</a></li>
+                        <li><a href="#part-g">Part G: Response</a></li>
+                        <li><a href="#part-h">Part H: Debug Parsed Results</a></li>
+                        <li><a href="#part-i">Part I: Reset Inheritance Loop</a></li>
+                        <li><a href="#part-j">Part J: Summary Debug</a></li>
+                    </ul>
+                </li>
+                <li><a href="#reset-api-reference">Reset API Reference</a></li>
+                <li><a href="#flow-summary">Complete Flow Summary</a></li>
+                <li><a href="#testing">Testing the Flow</a></li>
+                <li><a href="#understanding-results">Understanding Results</a></li>
+                <li><a href="#customization">Customization Guide</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+                <li><a href="#expressions">Complete Expressions</a></li>
+                <li><a href="#integration">Integration Options</a></li>
+                <li><a href="#next-steps">Next Steps</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content">
+            <h1>📊 Power Automate Flow: Fetch Folders with Broken Permissions by Level</h1>
+
+            <!-- Important Limitation Warning -->
+            <div class="callout callout-danger" style="margin: 20px 0; padding: 20px; background: #fde7e9; border-left: 4px solid #d13438; border-radius: 4px;">
+                <strong style="color: #d13438; font-size: 1.1em;">IMPORTANT LIMITATION DISCOVERED</strong>
+                <p style="margin-top: 10px;">The <code>HasUniqueRoleAssignments</code> property <strong>cannot be used in SharePoint REST API $filter clause</strong>. It's a computed property, not a queryable column. You will get the error:</p>
+                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 10px; margin: 10px 0; border-radius: 4px;"><code>Column 'HasUniqueRoleAssignments' does not exist.</code></pre>
+                <p><strong>Solution:</strong> Use the two-step approach documented in:</p>
+                <ul style="margin: 10px 0 0 20px;">
+                    <li><a href="phase-2b-recursive-permission-scan.md">phase-2b-recursive-permission-scan.md</a> (Markdown)</li>
+                    <li><a href="phase-2b-recursive-permission-scan.html">phase-2b-recursive-permission-scan.html</a> (HTML)</li>
+                </ul>
+                <p style="margin-top: 10px;">The corrected approach fetches all folders first, then checks each folder's <code>HasUniqueRoleAssignments</code> property individually.</p>
+            </div>
+
+            <!-- Overview Section -->
+            <section id="overview">
+                <h2>📋 Overview</h2>
+                <p>This guide provides a complete step-by-step walkthrough for creating a Power Automate cloud flow that:</p>
+                <ol>
+                    <li><strong>Fetches all folders with broken permissions</strong> from a SharePoint document library using a single optimized OData query</li>
+                    <li><strong>Calculates the folder depth level</strong> for each folder based on its path</li>
+                    <li><strong>Optionally filters folders by maximum depth level</strong> using Filter Array action</li>
+                    <li><strong>Returns results as JSON</strong> for consumption by other systems or testing</li>
+                </ol>
+
+                <h3>What You'll Build</h3>
+                <div class="flow-diagram">┌─────────────────────────────────────────────────────────────────┐
+│                    MANUAL TRIGGER (Instant)                     │
+│  Inputs: SiteURL, LibraryName, BaseLibraryPath, MaxLevel       │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 1: Initialize Variables                       │
+│  • SiteURL = User input or default                              │
+│  • LibraryName = User input or default                          │
+│  • BaseLibraryPath = Calculated from site/library               │
+│  • MaxLevel = -1 (all levels) or specific number                │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│           STEP 2: HTTP - Fetch Folders with Broken Perms        │
+│  Query: _api/web/lists/getbytitle('{lib}')/items                │
+│  Filter: HasUniqueRoleAssignments eq true                       │
+│          AND FileSystemObjectType eq 1                          │
+│  Select: Id, Title, FileLeafRef, FileRef, FileDirRef, etc.      │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 3: Parse JSON Response                        │
+│  Schema: SharePoint list item schema                            │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│         STEP 4: Select - Calculate Level for Each Folder        │
+│  For each folder:                                                │
+│    • Extract all original fields                                │
+│    • Calculate Level = (path segments) - (base segments)        │
+│    • Add "Level" property to each folder object                 │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│    STEP 5: Filter Array - Filter by Level (Optional)            │
+│  Condition: If MaxLevel >= 0, filter where Level <= MaxLevel    │
+│            If MaxLevel = -1, include all folders                │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│            STEP 6: Respond with Results                         │
+│  Return JSON:                                                    │
+│    • TotalCount                                                  │
+│    • FilteredCount                                               │
+│    • MaxLevelApplied                                             │
+│    • Folders array (with Level property)                        │
+└─────────────────────────────────────────────────────────────────┘</div>
+            </section>
+
+            <hr>
+
+            <!-- Prerequisites Section -->
+            <section id="prerequisites">
+                <h2>✅ Prerequisites</h2>
+
+                <h3>Required Permissions</h3>
+                <ul>
+                    <li><input type="checkbox"> <strong>Power Automate License</strong>: Power Automate Premium or Per User license</li>
+                    <li><input type="checkbox"> <strong>SharePoint Permissions</strong>: Read access to target SharePoint site and library</li>
+                    <li><input type="checkbox"> <strong>Solution Access</strong>: Access to the Power Platform environment and solution</li>
+                </ul>
+
+                <h3>Environment URL</h3>
+                <div class="callout callout-note">
+                    <strong>📍 Navigate to:</strong>
+                    <p><a href="https://make.powerautomate.com/environments/1a81be40-03fb-e3fe-8964-ac88c74859cc/solutions" target="_blank">https://make.powerautomate.com/environments/1a81be40-03fb-e3fe-8964-ac88c74859cc/solutions</a></p>
+                </div>
+
+                <h3>Knowledge Requirements</h3>
+                <ul>
+                    <li>Basic understanding of Power Automate</li>
+                    <li>Familiarity with SharePoint REST API concepts</li>
+                    <li>Understanding of JSON structure</li>
+                </ul>
+            </section>
+
+            <hr>
+
+            <!-- Step-by-Step Section -->
+            <section id="step-by-step">
+                <h2>🚀 Step-by-Step Flow Creation</h2>
+
+                <!-- Part A -->
+                <div id="part-a">
+                    <h3>PART A: Create New Flow in Solution</h3>
+
+                    <h4>Step A1: Navigate to Solutions</h4>
+                    <ol>
+                        <li>Open your browser and go to:
+                            <pre><code>https://make.powerautomate.com/environments/1a81be40-03fb-e3fe-8964-ac88c74859cc/solutions</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+                        </li>
+                        <li>Click on your <strong>SharePoint Scanner solution</strong> (or create a new solution)</li>
+                        <li>Click <strong>+ New</strong> → <strong>Automation</strong> → <strong>Cloud flow</strong> → <strong>Instant</strong></li>
+                    </ol>
+
+                    <h4>Step A2: Configure Flow Settings</h4>
+                    <p><strong>Flow Name:</strong> <code>Fetch Folders with Broken Permissions by Level</code></p>
+                    <p><strong>Choose trigger:</strong></p>
+                    <ul>
+                        <li>Select <strong>Manually trigger a flow</strong></li>
+                        <li>Click <strong>Create</strong></li>
+                    </ul>
+
+                    <h4>Step A3: Add Input Parameters</h4>
+                    <p>Click on <strong>Manually trigger a flow</strong> action to expand it.</p>
+                    <p>Click <strong>+ Add an input</strong> and add the following inputs:</p>
+
+                    <div class="highlight-box">
+                        <strong>Input 1: Site URL</strong>
+                        <ul>
+                            <li><strong>Input type:</strong> Text</li>
+                            <li><strong>Input name:</strong> <code>SiteURL</code></li>
+                            <li><strong>Please enter your input:</strong> <code>https://yourtenant.sharepoint.com/sites/hr</code></li>
+                            <li><strong>Description (optional):</strong> SharePoint site URL (e.g., https://contoso.sharepoint.com/sites/hr)</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>Input 2: Library Name</strong>
+                        <ul>
+                            <li><strong>Input type:</strong> Text</li>
+                            <li><strong>Input name:</strong> <code>LibraryName</code></li>
+                            <li><strong>Please enter your input:</strong> <code>Shared Documents</code></li>
+                            <li><strong>Description (optional):</strong> Document library title (e.g., "Shared Documents", "Documents")</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>Input 3: Base Library Path</strong>
+                        <ul>
+                            <li><strong>Input type:</strong> Text</li>
+                            <li><strong>Input name:</strong> <code>BaseLibraryPath</code></li>
+                            <li><strong>Please enter your input:</strong> <code>/sites/hr/Shared Documents</code></li>
+                            <li><strong>Description (optional):</strong> Server-relative path to library (used to calculate folder levels)</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>Input 4: Max Level</strong>
+                        <ul>
+                            <li><strong>Input type:</strong> Number</li>
+                            <li><strong>Input name:</strong> <code>MaxLevel</code></li>
+                            <li><strong>Please enter your input:</strong> <code>-1</code></li>
+                            <li><strong>Description (optional):</strong> Maximum folder depth (-1 = all levels, 0 = root only, 1 = one level deep, etc.)</li>
+                        </ul>
+                    </div>
+
+                    <p>Your trigger should now look like this:</p>
+                    <pre><code>Manually trigger a flow
+├── SiteURL (Text): https://yourtenant.sharepoint.com/sites/hr
+├── LibraryName (Text): Shared Documents
+├── BaseLibraryPath (Text): /sites/hr/Shared Documents
+└── MaxLevel (Number): -1</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+                </div>
+
+                <hr>
+
+                <!-- Part B -->
+                <div id="part-b">
+                    <h3>PART B: Initialize Variables</h3>
+                    <p>Click <strong>+ New step</strong> and search for <strong>Initialize variable</strong>. Add the following variables:</p>
+
+                    <h4>Variable 1: varBaseDepth (Calculate Base Path Depth)</h4>
+                    <p><strong>Action:</strong> Initialize variable</p>
+                    <ul>
+                        <li><strong>Name:</strong> <code>varBaseDepth</code></li>
+                        <li><strong>Type:</strong> Integer</li>
+                        <li><strong>Value:</strong> (Click <strong>Expression</strong> tab)</li>
+                    </ul>
+                    <pre><code>length(split(triggerBody()['text_1'], '/'))</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <div class="callout callout-note">
+                        <strong>💡 Explanation:</strong>
+                        <p>Counts the number of segments in BaseLibraryPath</p>
+                        <p>Example: "/sites/hr/Shared Documents" = ["", "sites", "hr", "Shared Documents"] = 4</p>
+                    </div>
+
+                    <div class="callout callout-warning">
+                        <strong>⚠️ Note:</strong>
+                        <p><code>text_1</code> corresponds to BaseLibraryPath (third input). Power Automate uses internal names like <code>text</code>, <code>text_1</code>, <code>text_2</code>, etc.</p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Part C -->
+                <div id="part-c">
+                    <h3>PART C: HTTP Request - Fetch Folders with Broken Permissions</h3>
+                    <p>Click <strong>+ New step</strong> → Search for <strong>HTTP</strong> → Select <strong>HTTP (Premium)</strong> or <strong>Send an HTTP request to SharePoint</strong></p>
+
+                    <h4>Option 1: Using "Send an HTTP request to SharePoint" (Recommended)</h4>
+                    <p><strong>Action:</strong> Send an HTTP request to SharePoint</p>
+
+                    <p><strong>Site Address:</strong></p>
+                    <ul>
+                        <li>Click <strong>Enter custom value</strong></li>
+                        <li>Select <strong>SiteURL</strong> from dynamic content (or use expression: <code>triggerBody()['text']</code>)</li>
+                    </ul>
+
+                    <p><strong>Method:</strong> <code>GET</code></p>
+
+                    <p><strong>Uri:</strong> (Click <strong>Expression</strong> tab and use this formula)</p>
+                    <pre><code>concat('_api/web/lists/getbytitle(''', triggerBody()['text_1'], ''')/items?$select=Id,Title,FileLeafRef,FileRef,FileDirRef,Created,Modified,HasUniqueRoleAssignments,FileSystemObjectType&$filter=HasUniqueRoleAssignments eq true and FileSystemObjectType eq 1 and startswith(FileRef,''', triggerBody()['text_2'], ''')')</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <div class="callout callout-note">
+                        <strong>Path Filtering:</strong>
+                        <p>The <code>startswith(FileRef, '{path}')</code> filter ensures only folders under the specified <code>BaseLibraryPath</code> are returned, not all folders in the library.</p>
+                    </div>
+
+                    <p><strong>Headers:</strong></p>
+                    <pre><code>{
+  "Accept": "application/json;odata=verbose",
+  "Content-Type": "application/json"
+}</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <div class="callout callout-success">
+                        <strong>✅ Result Example:</strong>
+                        <pre><code>_api/web/lists/getbytitle('Documents')/items?$select=Id,Title,FileLeafRef,FileRef,FileDirRef,Created,Modified,HasUniqueRoleAssignments,FileSystemObjectType&$filter=HasUniqueRoleAssignments eq true and FileSystemObjectType eq 1 and startswith(FileRef,'/sites/Permission-Scanner-Test/Shared Documents')</code></pre>
+                    </div>
+
+                    <h4>Filter Conditions Explained:</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Condition</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>HasUniqueRoleAssignments eq true</code></td>
+                                <td>Only folders with broken permissions</td>
+                            </tr>
+                            <tr>
+                                <td><code>FileSystemObjectType eq 1</code></td>
+                                <td>Only folders (not files)</td>
+                            </tr>
+                            <tr>
+                                <td><code>startswith(FileRef, '{path}')</code></td>
+                                <td>Only folders under specified path</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p><strong>Rename Action:</strong> Click the three dots (⋯) and rename to <strong>HTTP_Get_Folders_With_Broken_Permissions</strong></p>
+                </div>
+
+                <hr>
+
+                <!-- Part D -->
+                <div id="part-d">
+                    <h3>PART D: Parse JSON Response</h3>
+                    <p>Click <strong>+ New step</strong> → Search for <strong>Parse JSON</strong></p>
+
+                    <p><strong>Content:</strong> (Select from dynamic content)</p>
+                    <pre><code>body('HTTP_Get_Folders_With_Broken_Permissions')</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <p><strong>Schema:</strong> Click <strong>Generate from sample</strong></p>
+                    <p>Paste this sample JSON:</p>
+                    <pre><code>{
+  "d": {
+    "results": [
+      {
+        "__metadata": {
+          "id": "Web/Lists(guid'abc-123')/Items(15)",
+          "uri": "https://contoso.sharepoint.com/sites/hr/_api/Web/Lists(guid'abc-123')/Items(15)",
+          "etag": "\"1\"",
+          "type": "SP.Data.Shared_x0020_DocumentsItem"
+        },
+        "FileSystemObjectType": 1,
+        "Id": 15,
+        "ContentTypeId": "0x0120D520...",
+        "Title": "Confidential",
+        "FileLeafRef": "Confidential",
+        "FileRef": "/sites/hr/Shared Documents/Confidential",
+        "FileDirRef": "/sites/hr/Shared Documents",
+        "Created": "2024-01-15T10:30:00Z",
+        "Modified": "2024-02-20T14:15:30Z",
+        "AuthorId": 12,
+        "EditorId": 8,
+        "HasUniqueRoleAssignments": true,
+        "ItemChildCount": 23,
+        "FolderChildCount": 5
+      }
+    ]
+  }
+}</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <p>Click <strong>Done</strong> - Power Automate will auto-generate the schema.</p>
+                    <p><strong>Rename Action:</strong> <code>Parse_JSON_Folders</code></p>
+                </div>
+
+                <hr>
+
+                <!-- Part E -->
+                <div id="part-e">
+                    <h3>PART E: Calculate Level for Each Folder (Select Action)</h3>
+                    <p>Click <strong>+ New step</strong> → Search for <strong>Select</strong></p>
+
+                    <p><strong>From:</strong> (Select from dynamic content)</p>
+                    <pre><code>body('Parse_JSON_Folders')?['d']?['results']</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <p><strong>Map:</strong> Click <strong>Switch to input entire array</strong> (toggle button on the right)</p>
+                    <p><strong>Enter this JSON expression:</strong></p>
+                    <pre><code>{
+  "Id": @{item()['Id']},
+  "Title": @{item()['Title']},
+  "FileLeafRef": "@{item()['FileLeafRef']}",
+  "FileRef": "@{item()['FileRef']}",
+  "FileDirRef": "@{item()['FileDirRef']}",
+  "Created": "@{item()['Created']}",
+  "Modified": "@{item()['Modified']}",
+  "AuthorId": @{item()['AuthorId']},
+  "EditorId": @{item()['EditorId']},
+  "HasUniqueRoleAssignments": @{item()['HasUniqueRoleAssignments']},
+  "FileSystemObjectType": @{item()['FileSystemObjectType']},
+  "ItemChildCount": @{item()['ItemChildCount']},
+  "FolderChildCount": @{item()['FolderChildCount']},
+  "Level": @{sub(length(split(item()['FileDirRef'], '/')), variables('varBaseDepth'))}
+}</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <h4>Understanding the Level Calculation:</h4>
+                    <pre><code>Level = length(split(item()['FileDirRef'], '/')) - varBaseDepth</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <div class="callout callout-note">
+                        <strong>📊 Example:</strong>
+                        <ul>
+                            <li>BaseLibraryPath: <code>/sites/hr/Shared Documents</code> → 4 segments</li>
+                            <li>FileDirRef: <code>/sites/hr/Shared Documents/Projects/2024</code> → 6 segments</li>
+                            <li>Level: 6 - 4 = <strong>2</strong> (two levels deep)</li>
+                        </ul>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                <th>Example Path</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Level 0:</strong></td>
+                                <td><code>/sites/hr/Shared Documents</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Level 1:</strong></td>
+                                <td><code>/sites/hr/Shared Documents/Projects</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Level 2:</strong></td>
+                                <td><code>/sites/hr/Shared Documents/Projects/2024</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Level 3:</strong></td>
+                                <td><code>/sites/hr/Shared Documents/Projects/2024/Q1</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p><strong>Rename Action:</strong> <code>Select_Add_Level</code></p>
+                </div>
+
+                <hr>
+
+                <!-- Part F -->
+                <div id="part-f">
+                    <h3>PART F: Filter by Level (Optional)</h3>
+                    <p>Click <strong>+ New step</strong> → Search for <strong>Filter array</strong></p>
+
+                    <p><strong>From:</strong> (Select from dynamic content)</p>
+                    <pre><code>body('Select_Add_Level')</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <p><strong>Condition:</strong> Click <strong>Edit in advanced mode</strong> and paste this expression:</p>
+                    <pre><code>@or(
+  equals(triggerBody()['number'], -1),
+  lessOrEquals(item()['Level'], triggerBody()['number'])
+)</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <div class="callout callout-note">
+                        <strong>💡 Explanation:</strong>
+                        <ul>
+                            <li>If <code>MaxLevel = -1</code>: Include all folders (no filtering)</li>
+                            <li>If <code>MaxLevel >= 0</code>: Include only folders where <code>Level <= MaxLevel</code></li>
+                        </ul>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>MaxLevel Value</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>-1</code></td>
+                                <td>All levels (no filter)</td>
+                            </tr>
+                            <tr>
+                                <td><code>0</code></td>
+                                <td>Only folders at library root</td>
+                            </tr>
+                            <tr>
+                                <td><code>2</code></td>
+                                <td>Folders at levels 0, 1, and 2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p><strong>Rename Action:</strong> <code>Filter_By_Level</code></p>
+                </div>
+
+                <hr>
+
+                <!-- Part G -->
+                <div id="part-g">
+                    <h3>PART G: Response - Return Results</h3>
+                    <p>Click <strong>+ New step</strong> → Search for <strong>Response</strong></p>
+
+                    <p><strong>Status Code:</strong> <code>200</code></p>
+
+                    <p><strong>Headers:</strong> (Click <strong>Add new item</strong> for each header)</p>
+                    <pre><code>{
+  "Content-Type": "application/json"
+}</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <p><strong>Body:</strong> (Click <strong>Expression</strong> tab)</p>
+                    <p>Paste this complete expression:</p>
+                    <pre><code>json(
+  concat(
+    '{"success":true,"message":"Folders with broken permissions retrieved successfully","totalFolders":',
+    length(body('Select_Add_Level')),
+    ',"filteredFolders":',
+    length(body('Filter_By_Level')),
+    ',"maxLevelApplied":',
+    triggerBody()['number'],
+    ',"baseLibraryPath":"',
+    triggerBody()['text_1'],
+    '","baseDepth":',
+    variables('varBaseDepth'),
+    ',"timestamp":"',
+    utcNow(),
+    '","folders":',
+    string(body('Filter_By_Level')),
+    '}'
+  )
+)</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <p><strong>Rename Action:</strong> <code>Response_Return_Results</code></p>
+                </div>
+
+                <hr>
+
+                <!-- Part H -->
+                <div id="part-h">
+                    <h3>PART H: Debug - Display Parsed Results</h3>
+                    <p>Click <strong>+ New step</strong> → Search for <strong>Compose</strong></p>
+
+                    <p><strong>Action:</strong> Compose</p>
+                    <p><strong>Rename Action:</strong> <code>DEBUG_ParsedFolders</code></p>
+
+                    <p><strong>Inputs:</strong> (Click <strong>Expression</strong> and build this JSON)</p>
+                    <pre><code>{
+  "Step": "Folders with Broken Permissions Found",
+  "TotalCount": @{length(body('Parse_JSON_Folders')?['d']?['results'])},
+  "SiteURL": "@{triggerBody()['text']}",
+  "LibraryName": "@{triggerBody()['text_1']}",
+  "Folders": @{body('Parse_JSON_Folders')?['d']?['results']}
+}</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <p><strong>Or use this complete expression:</strong></p>
+                    <pre><code>json(
+  concat(
+    '{"Step":"Folders with Broken Permissions Found","TotalCount":',
+    length(body('Parse_JSON_Folders')?['d']?['results']),
+    ',"SiteURL":"',
+    triggerBody()['text'],
+    '","LibraryName":"',
+    triggerBody()['text_1'],
+    '","Folders":',
+    string(body('Parse_JSON_Folders')?['d']?['results']),
+    '}'
+  )
+)</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <div class="callout callout-note">
+                        <strong>What This Shows:</strong>
+                        <ul>
+                            <li>Total count of folders found with broken permissions</li>
+                            <li>The input site and library</li>
+                            <li>Full array of folder details</li>
+                        </ul>
+                        <p><strong>View Output:</strong> After running the flow, click on this action to expand and see the full JSON output.</p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Part I -->
+                <div id="part-i">
+                    <h3>PART I: Loop Through Each Folder and Reset Inheritance</h3>
+                    <p>Click <strong>+ New step</strong> → Search for <strong>Apply to each</strong></p>
+
+                    <p><strong>Select an output from previous steps:</strong></p>
+                    <pre><code>body('Parse_JSON_Folders')?['d']?['results']</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <p><strong>Rename Action:</strong> <code>Apply_to_each_Folder</code></p>
+
+                    <hr>
+
+                    <h4>Step I1: Debug - Show Current Folder Being Processed</h4>
+                    <p><strong>Inside the Apply_to_each loop</strong>, click <strong>Add an action</strong> → Search for <strong>Compose</strong></p>
+
+                    <p><strong>Rename Action:</strong> <code>DEBUG_ProcessingFolder</code></p>
+
+                    <p><strong>Inputs:</strong></p>
+                    <pre><code>{
+  "Step": "Processing Folder",
+  "FolderName": "@{items('Apply_to_each_Folder')?['FileLeafRef']}",
+  "FolderPath": "@{items('Apply_to_each_Folder')?['FileRef']}",
+  "FolderLevel": @{sub(length(split(items('Apply_to_each_Folder')?['FileRef'], '/')), variables('varBaseDepth'))},
+  "ItemId": @{items('Apply_to_each_Folder')?['Id']}
+}</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <p><strong>Or use this complete expression:</strong></p>
+                    <pre><code>json(
+  concat(
+    '{"Step":"Processing Folder","FolderName":"',
+    items('Apply_to_each_Folder')?['FileLeafRef'],
+    '","FolderPath":"',
+    items('Apply_to_each_Folder')?['FileRef'],
+    '","FolderLevel":',
+    sub(length(split(items('Apply_to_each_Folder')?['FileRef'], '/')), variables('varBaseDepth')),
+    ',"ItemId":',
+    items('Apply_to_each_Folder')?['Id'],
+    '}'
+  )
+)</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <hr>
+
+                    <h4>Step I2: Reset Folder Inheritance (Clear Broken Permissions)</h4>
+                    <p><strong>Inside the Apply_to_each loop</strong>, click <strong>Add an action</strong> → Search for <strong>Send an HTTP request to SharePoint</strong></p>
+
+                    <p><strong>Action:</strong> Send an HTTP request to SharePoint</p>
+                    <p><strong>Rename Action:</strong> <code>Reset_Folder_Inheritance</code></p>
+
+                    <p><strong>Site Address:</strong> (Select dynamic content or expression)</p>
+                    <pre><code>@{triggerBody()['text']}</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <p><strong>Method:</strong> <code>POST</code></p>
+
+                    <p><strong>Uri:</strong> (Use this expression)</p>
+                    <pre><code>concat(
+  '_api/web/GetFolderByServerRelativeUrl(''',
+  items('Apply_to_each_Folder')?['FileRef'],
+  ''')/ListItemAllFields/ResetRoleInheritance()'
+)</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <p><strong>Headers:</strong></p>
+                    <pre><code>{
+  "Accept": "application/json;odata=nometadata"
+}</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <p><strong>Body:</strong> (Leave empty)</p>
+
+                    <div class="callout callout-warning">
+                        <strong>What ResetRoleInheritance Does:</strong>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Before</th>
+                                    <th>After</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Folder has unique/custom permissions</td>
+                                    <td>Folder inherits from parent</td>
+                                </tr>
+                                <tr>
+                                    <td><code>HasUniqueRoleAssignments = true</code></td>
+                                    <td><code>HasUniqueRoleAssignments = false</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Custom role assignments exist</td>
+                                    <td>Role assignments removed</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout callout-danger">
+                        <strong>Warning:</strong>
+                        <p>This action is <strong>destructive</strong> - it removes all custom permissions and restores inheritance from the parent folder. <strong>There is no undo!</strong></p>
+                    </div>
+
+                    <hr>
+
+                    <h4>Step I3: Debug - Show Reset Result (Optional)</h4>
+                    <p><strong>Inside the Apply_to_each loop</strong>, click <strong>Add an action</strong> → Search for <strong>Compose</strong></p>
+
+                    <p><strong>Rename Action:</strong> <code>DEBUG_ResetResult</code></p>
+
+                    <p><strong>Inputs:</strong></p>
+                    <pre><code>{
+  "Step": "Inheritance Reset Complete",
+  "FolderPath": "@{items('Apply_to_each_Folder')?['FileRef']}",
+  "Status": "Permissions cleared - now inherits from parent"
+}</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+                </div>
+
+                <hr>
+
+                <!-- Part J -->
+                <div id="part-j">
+                    <h3>PART J: Summary Debug (After Loop)</h3>
+                    <p><strong>After the Apply_to_each loop</strong> (outside/below it), click <strong>+ New step</strong> → Search for <strong>Compose</strong></p>
+
+                    <p><strong>Rename Action:</strong> <code>DEBUG_Summary</code></p>
+
+                    <p><strong>Inputs:</strong></p>
+                    <pre><code>{
+  "Step": "COMPLETED",
+  "TotalFoldersProcessed": @{length(body('Parse_JSON_Folders')?['d']?['results'])},
+  "Action": "Reset inheritance on all folders with broken permissions",
+  "SiteURL": "@{triggerBody()['text']}",
+  "LibraryName": "@{triggerBody()['text_1']}",
+  "CompletedAt": "@{utcNow()}"
+}</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                    <p><strong>Or use this complete expression:</strong></p>
+                    <pre><code>json(
+  concat(
+    '{"Step":"COMPLETED","TotalFoldersProcessed":',
+    length(body('Parse_JSON_Folders')?['d']?['results']),
+    ',"Action":"Reset inheritance on all folders with broken permissions","SiteURL":"',
+    triggerBody()['text'],
+    '","LibraryName":"',
+    triggerBody()['text_1'],
+    '","CompletedAt":"',
+    utcNow(),
+    '"}'
+  )
+)</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+                </div>
+            </section>
+
+            <hr>
+
+            <!-- REST API Reference Section -->
+            <section id="reset-api-reference">
+                <h2>REST API Reference: ResetRoleInheritance</h2>
+
+                <h3>Endpoint</h3>
+                <pre><code>POST _api/web/GetFolderByServerRelativeUrl('{folderPath}')/ListItemAllFields/ResetRoleInheritance()</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                <h3>What It Does</h3>
+                <ul>
+                    <li>Removes all unique role assignments from the folder</li>
+                    <li>Folder starts inheriting permissions from its parent</li>
+                    <li>Sets <code>HasUniqueRoleAssignments</code> to <code>false</code></li>
+                </ul>
+
+                <h3>Example</h3>
+                <pre><code>POST https://contoso.sharepoint.com/sites/hr/_api/web/GetFolderByServerRelativeUrl('/sites/hr/Shared Documents/Confidential')/ListItemAllFields/ResetRoleInheritance()</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                <h3>Response</h3>
+                <ul>
+                    <li><strong>Success:</strong> HTTP 200 (no body)</li>
+                    <li><strong>Error:</strong> HTTP 4xx/5xx with error message</li>
+                </ul>
+
+                <h3>Related API Methods</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>ResetRoleInheritance()</code></td>
+                            <td>Clear custom permissions, inherit from parent</td>
+                        </tr>
+                        <tr>
+                            <td><code>BreakRoleInheritance(copyRoleAssignments, clearSubscopes)</code></td>
+                            <td>Break inheritance and optionally copy existing permissions</td>
+                        </tr>
+                        <tr>
+                            <td><code>RoleAssignments</code></td>
+                            <td>Get current role assignments</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <hr>
+
+            <!-- Flow Summary -->
+            <section id="flow-summary">
+                <h2>🎯 Complete Flow Summary</h2>
+                <p>Your flow should now have these actions in order:</p>
+
+                <h3>Updated Flow Structure (with Debug and Reset)</h3>
+                <div class="flow-diagram">┌─────────────────────────────────────────────────────────────────┐
+│                    MANUAL TRIGGER (Instant)                     │
+│  Inputs: SiteURL, LibraryName, BaseLibraryPath, MinimumLevel   │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 1: Initialize Variables                       │
+│  • varBaseDepth = length(split(BaseLibraryPath, '/'))          │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│           STEP 2: HTTP - Fetch Folders with Broken Perms        │
+│  Query: _api/web/lists/getbytitle('{lib}')/items               │
+│  Filter: HasUniqueRoleAssignments eq true                      │
+│          AND FileSystemObjectType eq 1                         │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 3: Parse JSON Response                        │
+│  Schema: SharePoint list item schema                           │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│         STEP 4: DEBUG_ParsedFolders [NEW]                       │
+│  Shows: TotalCount, All folders found with broken permissions  │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│         STEP 5: Apply_to_each_Folder [NEW]                      │
+│  Loop through each folder in results                           │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │  5a. DEBUG_ProcessingFolder                              │   │
+│  │      Shows: FolderName, FolderPath, Level                │   │
+│  ├─────────────────────────────────────────────────────────┤   │
+│  │  5b. Reset_Folder_Inheritance                            │   │
+│  │      POST ResetRoleInheritance()                         │   │
+│  │      Clears custom permissions, restores inheritance     │   │
+│  ├─────────────────────────────────────────────────────────┤   │
+│  │  5c. DEBUG_ResetResult (Optional)                        │   │
+│  │      Shows: Confirmation of reset                        │   │
+│  └─────────────────────────────────────────────────────────┘   │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│         STEP 6: DEBUG_Summary [NEW]                             │
+│  Shows: TotalFoldersProcessed, CompletedAt                     │
+└─────────────────────────────────────────────────────────────────┘</div>
+
+                <h3>Actions List</h3>
+                <pre><code>1. Manually trigger a flow
+   ├── SiteURL (Text)
+   ├── LibraryName (Text)
+   ├── BaseLibraryPath (Text)
+   └── MaxLevel (Number)
+
+2. Initialize variable - varBaseDepth
+   └── Value: length(split(triggerBody()['text_1'], '/'))
+
+3. HTTP_Get_Folders_With_Broken_Permissions
+   └── GET _api/web/lists/getbytitle('{lib}')/items?$filter=...
+
+4. Parse_JSON_Folders
+   └── Parse SharePoint response
+
+5. DEBUG_ParsedFolders [NEW]
+   └── Display parsed results count and data
+
+6. Apply_to_each_Folder [NEW]
+   ├── DEBUG_ProcessingFolder
+   │   └── Show folder name, path, level
+   ├── Reset_Folder_Inheritance
+   │   └── POST ResetRoleInheritance()
+   └── DEBUG_ResetResult (optional)
+       └── Show confirmation
+
+7. DEBUG_Summary [NEW]
+   └── Show total processed and completion time</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+            </section>
+
+            <hr>
+
+            <!-- Testing Section -->
+            <section id="testing">
+                <h2>🧪 Testing the Flow</h2>
+
+                <h3>Test 1: Fetch All Folders (No Level Filter)</h3>
+                <p><strong>Click "Test"</strong> → <strong>Manually</strong> → <strong>Test</strong></p>
+
+                <p><strong>Input Values:</strong></p>
+                <ul>
+                    <li><strong>SiteURL:</strong> <code>https://yourtenant.sharepoint.com/sites/hr</code></li>
+                    <li><strong>LibraryName:</strong> <code>Shared Documents</code></li>
+                    <li><strong>BaseLibraryPath:</strong> <code>/sites/hr/Shared Documents</code></li>
+                    <li><strong>MaxLevel:</strong> <code>-1</code> (all levels)</li>
+                </ul>
+
+                <p><strong>Click "Run flow"</strong></p>
+
+                <p><strong>Expected Result:</strong></p>
+                <pre><code>{
+  "success": true,
+  "message": "Folders with broken permissions retrieved successfully",
+  "totalFolders": 15,
+  "filteredFolders": 15,
+  "maxLevelApplied": -1,
+  "baseLibraryPath": "/sites/hr/Shared Documents",
+  "baseDepth": 4,
+  "timestamp": "2024-02-20T14:30:00Z",
+  "folders": [
+    {
+      "Id": 15,
+      "Title": "Confidential",
+      "FileLeafRef": "Confidential",
+      "FileRef": "/sites/hr/Shared Documents/Confidential",
+      "FileDirRef": "/sites/hr/Shared Documents",
+      "Level": 0,
+      "HasUniqueRoleAssignments": true
+    }
+  ]
+}</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                <h3>Test 2: Filter to Level 2 or Below</h3>
+                <p><strong>Input Values:</strong></p>
+                <ul>
+                    <li><strong>MaxLevel:</strong> <code>2</code></li>
+                </ul>
+
+                <div class="callout callout-success">
+                    <strong>✅ Expected Result:</strong>
+                    <ul>
+                        <li><code>totalFolders</code>: 15 (all found folders)</li>
+                        <li><code>filteredFolders</code>: 8 (only levels 0, 1, 2)</li>
+                        <li><code>maxLevelApplied</code>: 2</li>
+                    </ul>
+                    <p>Only folders with <code>Level <= 2</code> are returned.</p>
+                </div>
+            </section>
+
+            <hr>
+
+            <!-- Understanding Results -->
+            <section id="understanding-results">
+                <h2>📊 Understanding the Results</h2>
+
+                <h3>Level Interpretation</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            <th>Example Path</th>
+                            <th>Meaning</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>0</strong></td>
+                            <td><code>/sites/hr/Shared Documents</code></td>
+                            <td>Library root</td>
+                        </tr>
+                        <tr>
+                            <td><strong>0</strong></td>
+                            <td><code>/sites/hr/Shared Documents/HR</code></td>
+                            <td>Direct child of library</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td><code>/sites/hr/Shared Documents/HR/Policies</code></td>
+                            <td>One level nested</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td><code>/sites/hr/Shared Documents/HR/Policies/2024</code></td>
+                            <td>Two levels nested</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td><code>/sites/hr/Shared Documents/HR/Policies/2024/Q1</code></td>
+                            <td>Three levels nested</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <hr>
+
+            <!-- Customization -->
+            <section id="customization">
+                <h2>🔧 Customization Guide</h2>
+
+                <h3>Customize 1: Change Fields Returned</h3>
+                <p>In the <strong>Select_Add_Level</strong> action, modify the JSON to add/remove fields:</p>
+                <pre><code>{
+  ...existing fields...,
+  "FileSystemObjectType": @{item()['FileSystemObjectType']},
+  "Url": "@{concat(triggerBody()['text'], '/', item()['FileRef'])}"
+}</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                <h3>Customize 2: Save to Dataverse</h3>
+                <p>Replace the <strong>Response</strong> action with <strong>Add a new row</strong> (Dataverse):</p>
+                <ul>
+                    <li><strong>Table name:</strong> SharePoint Folder Scans</li>
+                    <li><strong>Map fields:</strong>
+                        <ul>
+                            <li>Folder Name → <code>@{item()['Title']}</code></li>
+                            <li>Folder Path → <code>@{item()['FileRef']}</code></li>
+                            <li>Level → <code>@{item()['Level']}</code></li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>Wrap this in an <strong>Apply to each</strong> loop over <code>body('Filter_By_Level')</code>.</p>
+            </section>
+
+            <hr>
+
+            <!-- Troubleshooting -->
+            <section id="troubleshooting">
+                <h2>❌ Troubleshooting</h2>
+
+                <h3>Issue 1: "Invalid template" error in Uri</h3>
+                <div class="callout callout-danger">
+                    <strong>❌ Error Message:</strong>
+                    <p><code>InvalidTemplate. Unable to process template language expressions...</code></p>
+                </div>
+                <div class="callout callout-success">
+                    <strong>✅ Solution:</strong>
+                    <p>Make sure single quotes in the expression are doubled:</p>
+                    <pre><code>// ❌ Wrong
+'lists/getbytitle('Documents')'
+
+// ✅ Correct
+'lists/getbytitle(''Documents'')'</code></pre>
+                </div>
+
+                <h3>Issue 2: No folders returned (empty results)</h3>
+                <p><strong>Possible Causes:</strong></p>
+                <ol>
+                    <li><strong>No folders with broken permissions exist</strong>
+                        <ul><li>Verify manually in SharePoint: Right-click folder → Manage Access → Check for "Unique permissions"</li></ul>
+                    </li>
+                    <li><strong>Wrong library name</strong>
+                        <ul><li>Check exact library title in SharePoint (case-sensitive)</li></ul>
+                    </li>
+                    <li><strong>Permissions issue</strong>
+                        <ul><li>Ensure flow has read access to the library</li></ul>
+                    </li>
+                </ol>
+
+                <h3>Issue 3: Level calculation is wrong</h3>
+                <div class="callout callout-warning">
+                    <strong>⚠️ Check:</strong>
+                    <pre><code>❌ Wrong: /sites/hr/Shared Documents/
+✅ Correct: /sites/hr/Shared Documents</code></pre>
+                </div>
+            </section>
+
+            <hr>
+
+            <!-- Expressions Reference -->
+            <section id="expressions">
+                <h2>📚 Reference: Complete Expressions</h2>
+
+                <h3>Expression 1: Calculate Base Depth</h3>
+                <pre><code>length(split(triggerBody()['text_1'], '/'))</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                <h3>Expression 2: Build OData Query URI (with Path Filter)</h3>
+                <pre><code>concat(
+  '_api/web/lists/getbytitle(''',
+  triggerBody()['text_1'],
+  ''')/items?$select=Id,Title,FileLeafRef,FileRef,FileDirRef,Created,Modified,HasUniqueRoleAssignments,FileSystemObjectType&$filter=HasUniqueRoleAssignments eq true and FileSystemObjectType eq 1 and startswith(FileRef,''',
+  triggerBody()['text_2'],
+  ''')'
+)</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                <h3>Expression 3: Calculate Folder Level</h3>
+                <pre><code>sub(length(split(item()['FileDirRef'], '/')), variables('varBaseDepth'))</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                <h3>Expression 4: Filter by Max Level</h3>
+                <pre><code>@or(
+  equals(triggerBody()['number'], -1),
+  lessOrEquals(item()['Level'], triggerBody()['number'])
+)</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+            </section>
+
+            <hr>
+
+            <!-- Integration Options -->
+            <section id="integration">
+                <h2>🔗 Integration Options</h2>
+
+                <h3>Option 1: Call from Power Apps</h3>
+                <p>In your Power Apps app:</p>
+                <pre><code>// Button OnSelect
+Set(
+  varFolders,
+  'FetchFoldersWithBrokenPermissionsByLevel'.Run(
+    "https://contoso.sharepoint.com/sites/hr",
+    "Shared Documents",
+    "/sites/hr/Shared Documents",
+    2  // Max level
+  )
+);
+
+// Display in Gallery
+Gallery1.Items = varFolders.folders</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+                <h3>Option 2: Schedule Daily Scan</h3>
+                <p><strong>Replace trigger:</strong></p>
+                <ul>
+                    <li>Remove "Manually trigger a flow"</li>
+                    <li>Add "Recurrence" trigger
+                        <ul>
+                            <li>Interval: 1</li>
+                            <li>Frequency: Day</li>
+                            <li>At these hours: 3 (3 AM)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <hr>
+
+            <!-- Next Steps -->
+            <section id="next-steps">
+                <h2>🎯 Next Steps</h2>
+                <p>After successfully creating and testing this flow:</p>
+                <ol>
+                    <li><strong>Integrate with Dataverse</strong>
+                        <ul><li>Modify to store results in SharePoint Folder Scans table</li></ul>
+                    </li>
+                    <li><strong>Create Power Apps UI</strong>
+                        <ul><li>Build canvas app to trigger flow and display results</li></ul>
+                    </li>
+                    <li><strong>Schedule Automated Scans</strong>
+                        <ul><li>Convert to scheduled flow</li><li>Add email notifications</li></ul>
+                    </li>
+                    <li><strong>Generate Reports</strong>
+                        <ul><li>Export to Excel</li><li>Create Power BI dashboard</li></ul>
+                    </li>
+                </ol>
+            </section>
+
+            <hr>
+
+            <!-- Summary -->
+            <section>
+                <h2>📝 Summary</h2>
+                <p>You've created a powerful, reusable Power Automate flow that:</p>
+                <ul>
+                    <li>✅ Fetches all folders with broken permissions in a single API call</li>
+                    <li>✅ Calculates folder depth level dynamically</li>
+                    <li>✅ Allows flexible filtering by maximum level</li>
+                    <li>✅ Returns structured JSON results</li>
+                    <li>✅ Can be called from Power Apps, other flows, or external systems</li>
+                    <li>✅ Provides comprehensive metadata for each folder</li>
+                </ul>
+
+                <h3>Performance:</h3>
+                <ul>
+                    <li>⚡ Single OData query (not 100+ calls)</li>
+                    <li>⚡ Server-side filtering (HasUniqueRoleAssignments)</li>
+                    <li>⚡ Efficient level calculation</li>
+                    <li>⚡ Optimized for large libraries</li>
+                </ul>
+            </section>
+
+            <hr>
+
+            <footer style="margin-top: 60px; padding-top: 30px; border-top: 2px solid var(--border-color); color: #666; text-align: center;">
+                <p><strong>Document Version:</strong> 2.0 | <strong>Last Updated:</strong> 2026-01-12</p>
+                <p><strong>Project:</strong> SharePoint Scanner | <strong>Flow Name:</strong> Fetch Folders with Broken Permissions by Level</p>
+                <p><em>Updated: Added Parts H, I, J for debug output and reset inheritance functionality</em></p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" onclick="scrollToTop()" title="Scroll to top">↑</button>
+
+    <script>
+        // Copy code functionality
+        function copyCode(button) {
+            const pre = button.parentElement;
+            const code = pre.querySelector('code');
+            const text = code.innerText;
+
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.sidebar a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll to top button
+        const scrollTopBtn = document.querySelector('.scroll-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Highlight current section in sidebar
+        const sections = document.querySelectorAll('section[id], div[id]');
+        const navLinks = document.querySelectorAll('.sidebar a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.style.fontWeight = 'normal';
+                link.style.color = 'var(--text-color)';
+                if (link.getAttribute('href') === '#' + current) {
+                    link.style.fontWeight = '600';
+                    link.style.color = 'var(--primary-color)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

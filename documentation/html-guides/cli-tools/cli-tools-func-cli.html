@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions CLI - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html" class="active">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: cli-tools/func-cli.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Azure Functions Core Tools</h1>
+<p>
+CLI for developing and testing Azure Functions locally.
+</p>
+<hr>
+<h2>Installation</h2>
+<h3>Using npm</h3>
+<pre><code class="language-bash">npm install -g azure-functions-core-tools@4
+</code></pre>
+<h3>Using winget</h3>
+<pre><code class="language-powershell">winget install Microsoft.AzureFunctionsCoreTools
+</code></pre>
+<h3>Verify Installation</h3>
+<pre><code class="language-bash">func --version
+</code></pre>
+<hr>
+<h2>Authentication</h2>
+<p>
+Azure Functions CLI uses Azure CLI for authentication:
+<pre><code class="language-bash">az login
+</code></pre>
+<hr>
+<h2>Create New Function Project</h2>
+<h3>Initialize Project</h3>
+<pre><code class="language-bash"># Create new project
+func init MyFunctionApp --worker-runtime dotnet
+</p>
+<h1>Available runtimes: dotnet, node, python, powershell, java, custom</h1>
+</code></pre>
+<h3>Create Function</h3>
+<pre><code class="language-bash">cd MyFunctionApp
+</p>
+<h1>HTTP trigger</h1>
+func new --name MyHttpFunction --template "HTTP trigger"
+</p>
+<h1>Timer trigger</h1>
+func new --name MyTimerFunction --template "Timer trigger"
+</p>
+<h1>Queue trigger</h1>
+func new --name MyQueueFunction --template "Azure Queue Storage trigger"
+</code></pre>
+<h3>List Templates</h3>
+<pre><code class="language-bash">func templates list
+</code></pre>
+<hr>
+<h2>Local Development</h2>
+<h3>Start Local Server</h3>
+<pre><code class="language-bash">func start
+</code></pre>
+<h3>Start with Debugging</h3>
+<pre><code class="language-bash">func start --verbose
+</code></pre>
+<h3>Test HTTP Function</h3>
+<pre><code class="language-bash">curl http://localhost:7071/api/MyHttpFunction
+</code></pre>
+<hr>
+<h2>Deployment</h2>
+<h3>Deploy to Azure</h3>
+<pre><code class="language-bash"># Using Azure CLI
+func azure functionapp publish FUNCTION_APP_NAME
+</code></pre>
+<h3>Fetch App Settings</h3>
+<pre><code class="language-bash">func azure functionapp fetch-app-settings FUNCTION_APP_NAME
+</code></pre>
+<h3>Publish Settings</h3>
+<pre><code class="language-bash">func azure functionapp publish FUNCTION_APP_NAME --publish-local-settings
+</code></pre>
+<hr>
+<h2>Settings Management</h2>
+<h3>local.settings.json Structure</h3>
+<pre><code class="language-json">{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+  },
+  "Host": {
+    "CORS": "*"
+  }
+}
+</code></pre>
+<h3>Encrypt Settings</h3>
+<pre><code class="language-bash">func settings encrypt
+</code></pre>
+<h3>Decrypt Settings</h3>
+<pre><code class="language-bash">func settings decrypt
+</code></pre>
+<hr>
+<h2>Durable Functions</h2>
+<h3>Create Orchestration</h3>
+<pre><code class="language-bash">func new --name MyOrchestrator --template "Durable Functions orchestrator"
+func new --name MyActivity --template "Durable Functions activity"
+func new --name MyHttpStart --template "Durable Functions HTTP starter"
+</code></pre>
+<hr>
+<h2>Extensions</h2>
+<h3>Install Extension Bundle</h3>
+Add to <code>host.json</code>:
+<pre><code class="language-json">{
+  "version": "2.0",
+  "extensionBundle": {
+    "id": "Microsoft.Azure.Functions.ExtensionBundle",
+    "version": "<a href="https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local" target="_blank">4.*, 5.0.0)"
+  }
+}
+</code></pre>
+<h3>Install Specific Extension</h3>
+<pre><code class="language-bash">func extensions install --package Microsoft.Azure.WebJobs.Extensions.Storage --version 5.0.0
+</code></pre>
+<hr>
+<h2>Useful Commands</h2>
+<table>
+<thead><tr><th>Command</th><th>Description</th></tr></thead>
+<tbody><tr><td><code>func init</code></td><td>Create new project</td></tr>
+<tr><td><code>func new</code></td><td>Create new function</td></tr>
+<tr><td><code>func start</code></td><td>Run locally</td></tr>
+<tr><td><code>func host start</code></td><td>Start host (alternative)</td></tr>
+<tr><td><code>func azure functionapp publish</code></td><td>Deploy to Azure</td></tr>
+<tr><td><code>func settings add</code></td><td>Add local setting</td></tr>
+<tr><td><code>func extensions install</code></td><td>Install extension</td></tr>
+</tbody></table>
+<hr>
+<h2>Troubleshooting</h2>
+<table>
+<thead><tr><th>Error</th><th>Solution</th></tr></thead>
+<tbody><tr><td>"No functions found"</td><td>Check function.json exists</td></tr>
+<tr><td>"Port 7071 in use"</td><td>Use <code>--port 7072</code></td></tr>
+<tr><td>"Storage connection"</td><td>Set AzureWebJobsStorage in local.settings.json</td></tr>
+<tr><td>"Extension not found"</td><td>Run <code>func extensions install</code></td></tr>
+</tbody></table>
+<hr>
+<h2>Related Documentation</h2>
+<ul><li>[Azure Functions Core Tools</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/azure-functions/functions-develop-local" target="_blank">Create Functions</a></li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-08</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

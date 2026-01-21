@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAC CLI - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html" class="active">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: cli-tools/pac-cli.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>PAC CLI (Power Platform CLI)</h1>
+<p>
+Power Platform CLI for solution management, environment operations, and deployment.
+</p>
+<hr>
+<h2>Installation</h2>
+<h3>Option 1: Using winget (Recommended)</h3>
+<pre><code class="language-powershell">winget install Microsoft.PowerPlatformCLI
+</code></pre>
+<h3>Option 2: Using dotnet</h3>
+<pre><code class="language-bash">dotnet tool install --global Microsoft.PowerApps.CLI.Tool
+</code></pre>
+<h3>Option 3: Direct Download</h3>
+Download from: https://aka.ms/PowerAppsCLI
+</p>
+<h3>Verify Installation</h3>
+<pre><code class="language-bash">pac help
+pac --version
+</code></pre>
+<hr>
+<h2>Authentication</h2>
+<h3>Create Auth Profile</h3>
+<pre><code class="language-bash"># Interactive login (opens browser)
+pac auth create
+</p>
+<h1>With specific environment URL</h1>
+pac auth create --url https://org.crm.dynamics.com
+</code></pre>
+<h3>List Auth Profiles</h3>
+<pre><code class="language-bash">pac auth list
+</code></pre>
+<p>
+Output:
+<pre><code class="language-text">Index Active Kind      Name                    User                      Cloud   Type   Url
+[1]   *      DATAVERSE Power Platform Default  user@tenant.onmicrosoft.com PROD  ADMIN  https://org.crm.dynamics.com/
+</code></pre>
+<h3>Select Auth Profile</h3>
+<pre><code class="language-bash">pac auth select --index 1
+</code></pre>
+<h3>Check Current Connection</h3>
+<pre><code class="language-bash">pac env who
+</code></pre>
+<h3>Clear Auth</h3>
+<pre><code class="language-bash">pac auth clear
+</code></pre>
+<hr>
+<h2>Environment Commands</h2>
+<h3>List Environments</h3>
+<pre><code class="language-bash">pac env list
+</code></pre>
+<h3>Select Environment</h3>
+<pre><code class="language-bash"># By name
+pac env select --environment "Development"
+</p>
+<h1>By ID</h1>
+pac env select --environment 1a81be40-03fb-e3fe-8964-ac88c74859cc
+</code></pre>
+<h3>Get Environment Details</h3>
+<pre><code class="language-bash">pac env who
+</code></pre>
+<hr>
+<h2>Solution Commands</h2>
+<h3>List Solutions</h3>
+<pre><code class="language-bash">pac solution list
+</code></pre>
+<h3>Export Solution</h3>
+<pre><code class="language-bash"># Unmanaged (development)
+pac solution export --name SharePointPermissionScanner --path solution.zip --overwrite
+</p>
+<h1>Managed (production)</h1>
+pac solution export --name SharePointPermissionScanner --path solution_managed.zip --managed --overwrite
+</code></pre>
+<h3>Import Solution</h3>
+<pre><code class="language-bash"># Standard import
+pac solution import --path solution.zip
+</p>
+<h1>With async (for large solutions)</h1>
+pac solution import --path solution.zip --async
+</p>
+<h1>Force overwrite</h1>
+pac solution import --path solution.zip --force-overwrite
+</code></pre>
+<h3>Clone Solution (for source control)</h3>
+<pre><code class="language-bash">pac solution clone --name SharePointPermissionScanner --outputDirectory ./src
+</code></pre>
+<h3>Pack Solution (from source)</h3>
+<pre><code class="language-bash">pac solution pack --zipfile solution.zip --folder ./src --packagetype Unmanaged
+</code></pre>
+<hr>
+<h2>Application/Component Commands</h2>
+<h3>List Canvas Apps</h3>
+<pre><code class="language-bash">pac canvas list
+</code></pre>
+<h3>Download Canvas App</h3>
+<pre><code class="language-bash">pac canvas download --canvas-name "AppName" --file app.msapp
+</code></pre>
+<h3>Upload Canvas App</h3>
+<pre><code class="language-bash">pac canvas upload --file app.msapp --canvas-name "AppName"
+</code></pre>
+<hr>
+<h2>Common Workflows</h2>
+<h3>Export -> Modify -> Import Cycle</h3>
+<pre><code class="language-bash"># 1. Export solution
+pac solution export --name MySolution --path MySolution.zip --overwrite
+</p>
+<h1>2. Extract for editing</h1>
+Expand-Archive MySolution.zip -DestinationPath MySolution_extracted -Force
+</p>
+<h1>3. Make modifications to extracted files</h1>
+<h1>... edit files ...</h1>
+<h1>4. Repack solution</h1>
+pac solution pack --zipfile MySolution_modified.zip --folder MySolution_extracted
+</p>
+<h1>5. Import modified solution</h1>
+pac solution import --path MySolution_modified.zip --force-overwrite
+</code></pre>
+<h3>Source Control Workflow</h3>
+<pre><code class="language-bash"># Clone solution to folder
+pac solution clone --name MySolution --outputDirectory ./src
+</p>
+<h1>After changes, pack for deployment</h1>
+pac solution pack --zipfile deploy.zip --folder ./src --packagetype Unmanaged
+</p>
+<h1>Import to target environment</h1>
+pac solution import --path deploy.zip
+</code></pre>
+<hr>
+<h2>Project-Specific Commands</h2>
+<h3>SharePoint Permission Scanner</h3>
+<pre><code class="language-bash"># Export
+pac solution export --name SharePointPermissionScanner --path SharePointPermissionScanner.zip --overwrite
+</p>
+<h1>Import</h1>
+pac solution import --path SharePointPermissionScanner.zip --force-overwrite
+</p>
+<h1>List flows in solution</h1>
+pac solution list
+</code></pre>
+<h3>Environment Details</h3>
+<pre><code class="language-text">Environment ID: 1a81be40-03fb-e3fe-8964-ac88c74859cc
+Solution Name:  SharePointPermissionScanner
+</code></pre>
+<hr>
+<h2>Troubleshooting</h2>
+<table>
+<thead><tr><th>Error</th><th>Solution</th></tr></thead>
+<tbody><tr><td>"Not authenticated"</td><td>Run <code>pac auth create</code></td></tr>
+<tr><td>"Solution not found"</td><td>Use exact name from <code>pac solution list</code></td></tr>
+<tr><td>"Access denied"</td><td>Check permissions in Power Platform admin</td></tr>
+<tr><td>"Import failed"</td><td>Check solution dependencies</td></tr>
+<tr><td>"Version conflict"</td><td>Use <code>--force-overwrite</code> flag</td></tr>
+</tbody></table>
+<h3>Check Solution Import Status</h3>
+<pre><code class="language-bash"># If async import, check status
+pac solution import-status --import-job-id &lt;job-id&gt;
+</code></pre>
+<h3>Debug Export Issues</h3>
+<pre><code class="language-bash"># Export with verbose logging
+pac solution export --name MySolution --path MySolution.zip --include all
+</code></pre>
+<hr>
+<h2>Useful Flags</h2>
+<table>
+<thead><tr><th>Flag</th><th>Description</th></tr></thead>
+<tbody><tr><td><code>--overwrite</code></td><td>Overwrite existing file</td></tr>
+<tr><td><code>--force-overwrite</code></td><td>Force import even with conflicts</td></tr>
+<tr><td><code>--async</code></td><td>Run operation asynchronously</td></tr>
+<tr><td><code>--managed</code></td><td>Export as managed solution</td></tr>
+<tr><td><code>--include all</code></td><td>Include all solution components</td></tr>
+</tbody></table>
+<hr>
+<h2>Related Documentation</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-platform/developer/cli/reference/" target="_blank">PAC CLI Reference</a></li>
+<li><a href="https://learn.microsoft.com/en-us/power-platform/alm/solution-concepts-alm" target="_blank">Solution Concepts</a></li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-08</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Apps - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html" class="active">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: 02-power-apps/setup-guide.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Power Apps Setup Guide</h1>
+<p>
+Complete guide for developing Canvas and Model-driven apps.
+</p>
+<hr>
+<h2>Access Power Apps</h2>
+<h3>Web Interface</h3>
+<pre><code class="language-text">https://make.powerapps.com
+</code></pre>
+<h3>Through Microsoft 365</h3>
+1. Go to <code>https://office.com</code>
+2. Click App Launcher (9 dots)
+3. Select <strong>Power Apps</strong>
+</p>
+<hr>
+<h2>App Types</h2>
+<table>
+<thead><tr><th>Type</th><th>Best For</th><th>Data Source</th></tr></thead>
+<tbody><tr><td><strong>Canvas</strong></td><td>Custom UI, mobile-first</td><td>Any connector</td></tr>
+<tr><td><strong>Model-driven</strong></td><td>Data-centric, business apps</td><td>Dataverse only</td></tr>
+<tr><td><strong>Portal</strong></td><td>External-facing websites</td><td>Dataverse</td></tr>
+</tbody></table>
+<hr>
+<h2>Canvas Apps</h2>
+<h3>Create Canvas App</h3>
+1. Click <strong>+ Create</strong> > <strong>Blank app</strong>
+2. Select <strong>Blank canvas app</strong>
+3. Choose format (Tablet/Phone)
+4. Name your app
+5. Click <strong>Create</strong>
+</p>
+<h3>App Structure</h3>
+<pre><code class="language-text">App
+├── Screens
+│   ├── Screen1
+│   │   ├── Controls (buttons, labels, galleries)
+│   │   └── Components
+│   └── Screen2
+├── Data Sources
+├── Media
+└── Components
+</code></pre>
+<h3>Common Controls</h3>
+<table>
+<thead><tr><th>Control</th><th>Purpose</th></tr></thead>
+<tbody><tr><td>Label</td><td>Display text</td></tr>
+<tr><td>Button</td><td>Trigger actions</td></tr>
+<tr><td>TextInput</td><td>User input</td></tr>
+<tr><td>Gallery</td><td>Display list of items</td></tr>
+<tr><td>Form</td><td>Edit/view records</td></tr>
+<tr><td>DataTable</td><td>Tabular data display</td></tr>
+</tbody></table>
+<h3>Key Formulas</h3>
+<pre><code class="language-text">// Navigate between screens
+Navigate(Screen2, ScreenTransition.Fade)
+</p>
+<p>
+// Filter data
+Filter(DataSource, Status = "Active")
+</p>
+<p>
+// Lookup single record
+LookUp(Users, ID = Gallery1.Selected.UserID)
+</p>
+<p>
+// Collect data
+Collect(LocalCollection, {Name: "Item1", Value: 100})
+</p>
+<p>
+// Update record
+Patch(DataSource, LookUp(DataSource, ID = 1), {Status: "Complete"})
+</p>
+<p>
+// Refresh data
+Refresh(DataSource)
+</code></pre>
+<h3>Connect to Dataverse</h3>
+1. Click <strong>Data</strong> in left panel
+2. Click <strong>+ Add data</strong>
+3. Search for your table
+4. Select and connect
+</p>
+<h3>Connect to SharePoint</h3>
+1. Click <strong>Data</strong> > <strong>+ Add data</strong>
+2. Search "SharePoint"
+3. Enter site URL
+4. Select list/library
+</p>
+<hr>
+<h2>Model-driven Apps</h2>
+<h3>Create Model-driven App</h3>
+1. Click <strong>+ Create</strong> > <strong>Blank app</strong>
+2. Select <strong>Blank app based on Dataverse</strong>
+3. Name your app
+4. Click <strong>Create</strong>
+</p>
+<h3>App Designer</h3>
+<pre><code class="language-text">App
+├── Navigation (Site Map)
+│   ├── Area 1
+│   │   ├── Group 1
+│   │   │   ├── Page (Table View)
+│   │   │   └── Page (Dashboard)
+│   │   └── Group 2
+│   └── Area 2
+├── Pages
+│   ├── Table Views
+│   ├── Dashboards
+│   └── Custom Pages
+└── Components
+</code></pre>
+<h3>Add Table to App</h3>
+1. Open App Designer
+2. Click <strong>+ Add page</strong>
+3. Select <strong>Dataverse table</strong>
+4. Choose table
+5. Select views and forms
+6. Click <strong>Add</strong>
+</p>
+<h3>Customize Forms</h3>
+1. Go to table in Power Apps
+2. Click <strong>Forms</strong>
+3. Select form to edit
+4. Drag/drop columns
+5. Add sections/tabs
+6. Save and Publish
+</p>
+<h3>Customize Views</h3>
+1. Go to table
+2. Click <strong>Views</strong>
+3. Select or create view
+4. Add/remove columns
+5. Set filters and sorting
+6. Save and Publish
+</p>
+<hr>
+<h2>Solutions</h2>
+<h3>Create Solution</h3>
+1. Click <strong>Solutions</strong> in left nav
+2. Click <strong>+ New solution</strong>
+3. Enter:
+   - Display name
+   - Name (no spaces)
+   - Publisher
+   - Version
+4. Click <strong>Create</strong>
+</p>
+<h3>Add Components to Solution</h3>
+1. Open solution
+2. Click <strong>+ Add existing</strong>
+3. Select component type (App, Table, Flow)
+4. Choose components
+5. Click <strong>Add</strong>
+</p>
+<h3>Export Solution</h3>
+1. Open solution
+2. Click <strong>Export</strong>
+3. Choose:
+   - <strong>Unmanaged</strong>: For development
+   - <strong>Managed</strong>: For production
+4. Click <strong>Export</strong>
+5. Download zip file
+</p>
+<h3>Import Solution</h3>
+1. Click <strong>Import solution</strong>
+2. Browse to zip file
+3. Click <strong>Next</strong>
+4. Review and click <strong>Import</strong>
+</p>
+<hr>
+<h2>CLI Commands (PAC)</h2>
+<h3>List Canvas Apps</h3>
+<pre><code class="language-bash">pac canvas list
+</code></pre>
+<h3>Download Canvas App</h3>
+<pre><code class="language-bash">pac canvas download --canvas-name "AppName" --file app.msapp
+</code></pre>
+<h3>Upload Canvas App</h3>
+<pre><code class="language-bash">pac canvas upload --file app.msapp --canvas-name "AppName"
+</code></pre>
+<h3>Solution Commands</h3>
+<pre><code class="language-bash"># Export solution with apps
+pac solution export --name SolutionName --path solution.zip
+</p>
+<h1>Import solution</h1>
+pac solution import --path solution.zip
+</code></pre>
+<hr>
+<h2>Project Integration</h2>
+<h3>SharePoint Permission Scanner App</h3>
+<pre><code class="language-text">Solution:    SharePointPermissionScanner
+Environment: 1a81be40-03fb-e3fe-8964-ac88c74859cc
+</code></pre>
+<h3>Dataverse Tables Used</h3>
+<ul><li>Scan Sessions</li>
+<li>Folder Records</li>
+<li>Permission Entries</li>
+</ul>
+<h3>Connect App to Flow</h3>
+1. Add Power Automate data source
+2. Reference flow in button: <code>FlowName.Run(param1, param2)</code>
+</p>
+<hr>
+<h2>Best Practices</h2>
+<h3>Canvas Apps</h3>
+<ul><li>Use components for reusable UI</li>
+<li>Minimize data calls (use collections)</li>
+<li>Delegate filtering to data source</li>
+<li>Test on target devices</li>
+</ul>
+<h3>Model-driven Apps</h3>
+<ul><li>Use business rules for validation</li>
+<li>Configure security roles</li>
+<li>Use views for different scenarios</li>
+<li>Leverage business process flows</li>
+</ul>
+<h3>General</h3>
+<ul><li>Use solutions for ALM</li>
+<li>Version your apps</li>
+<li>Test in development first</li>
+<li>Document customizations</li>
+</ul>
+<hr>
+<h2>Troubleshooting</h2>
+<table>
+<thead><tr><th>Issue</th><th>Solution</th></tr></thead>
+<tbody><tr><td>Data not loading</td><td>Check connection, refresh</td></tr>
+<tr><td>Formula errors</td><td>Check syntax, data types</td></tr>
+<tr><td>Slow performance</td><td>Reduce data calls, use delegation</td></tr>
+<tr><td>Can't publish</td><td>Check for errors in app checker</td></tr>
+</tbody></table>
+<h3>App Checker</h3>
+1. Click <strong>App checker</strong> icon
+2. Review errors and warnings
+3. Fix issues before publishing
+</p>
+<hr>
+<h2>Related Documentation</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-apps/" target="_blank">Power Apps Documentation</a></li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/formula-reference" target="_blank">Canvas App Formulas</a></li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/" target="_blank">Model-driven Apps</a></li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-09</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

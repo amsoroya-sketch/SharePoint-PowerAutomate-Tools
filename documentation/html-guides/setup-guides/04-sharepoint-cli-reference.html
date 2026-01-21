@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SharePoint CLI - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html" class="active">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: 04-sharepoint/cli-reference.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>SharePoint CLI Reference</h1>
+<p>
+Commands for managing SharePoint via CLI tools.
+</p>
+<hr>
+<h2>m365 CLI Commands</h2>
+<h3>Authentication</h3>
+<pre><code class="language-bash">m365 login --authType deviceCode --appId YOUR_APP_ID
+m365 status
+m365 logout
+</code></pre>
+<h3>Sites</h3>
+<pre><code class="language-bash"># List all sites
+m365 spo site list
+</p>
+<h1>Get specific site</h1>
+m365 spo site get --url https://tenant.sharepoint.com/sites/sitename
+</p>
+<h1>Create team site</h1>
+m365 spo site add --type TeamSite --title "Site Title" --alias sitealias
+</p>
+<h1>Delete site</h1>
+m365 spo site remove --url https://tenant.sharepoint.com/sites/sitename
+</code></pre>
+<h3>Lists & Libraries</h3>
+<pre><code class="language-bash"># List all lists
+m365 spo list list --webUrl https://tenant.sharepoint.com/sites/sitename
+</p>
+<h1>Get specific list</h1>
+m365 spo list get --webUrl https://tenant.sharepoint.com/sites/sitename --title "Documents"
+</p>
+<h1>Create library</h1>
+m365 spo list add --webUrl https://tenant.sharepoint.com/sites/sitename --title "MyLibrary" --baseTemplate DocumentLibrary
+</code></pre>
+<h3>Folders</h3>
+<pre><code class="language-bash"># List folders
+m365 spo folder list --webUrl https://tenant.sharepoint.com/sites/sitename --folderUrl "/Shared Documents"
+</p>
+<h1>Create folder</h1>
+m365 spo folder add --webUrl https://tenant.sharepoint.com/sites/sitename --folderUrl "/Shared Documents/NewFolder"
+</p>
+<h1>Delete folder</h1>
+m365 spo folder remove --webUrl https://tenant.sharepoint.com/sites/sitename --folderUrl "/Shared Documents/OldFolder"
+</code></pre>
+<h3>Files</h3>
+<pre><code class="language-bash"># List files
+m365 spo file list --webUrl https://tenant.sharepoint.com/sites/sitename --folderUrl "/Shared Documents"
+</p>
+<h1>Download file</h1>
+m365 spo file get --webUrl https://tenant.sharepoint.com/sites/sitename --url "/Shared Documents/file.docx" --asFile --path ./file.docx
+</p>
+<h1>Upload file</h1>
+m365 spo file add --webUrl https://tenant.sharepoint.com/sites/sitename --folder "/Shared Documents" --path ./localfile.docx
+</code></pre>
+<h3>Permissions</h3>
+<pre><code class="language-bash"># Get site permissions
+m365 spo site group list --url https://tenant.sharepoint.com/sites/sitename
+</p>
+<h1>Get list permissions</h1>
+m365 spo list roleassignment list --webUrl https://tenant.sharepoint.com/sites/sitename --listId LIST_ID
+</code></pre>
+<hr>
+<h2>PnP PowerShell Commands</h2>
+<h3>Authentication</h3>
+<pre><code class="language-powershell"># Interactive login
+Connect-PnPOnline -Url "https://tenant.sharepoint.com/sites/sitename" -Interactive
+</p>
+<h1>Device login</h1>
+Connect-PnPOnline -Url "https://tenant.sharepoint.com/sites/sitename" -DeviceLogin
+</p>
+<h1>Check connection</h1>
+Get-PnPConnection
+</p>
+<h1>Disconnect</h1>
+Disconnect-PnPOnline
+</code></pre>
+<h3>Sites</h3>
+<pre><code class="language-powershell">Get-PnPSite
+Get-PnPWeb
+Get-PnPSite -Includes StorageUsageCurrent
+</code></pre>
+<h3>Lists & Libraries</h3>
+<pre><code class="language-powershell"># Get lists
+Get-PnPList
+</p>
+<h1>Get specific list</h1>
+Get-PnPList -Identity "Documents"
+</p>
+<h1>Create library</h1>
+New-PnPList -Title "MyLibrary" -Template DocumentLibrary
+</code></pre>
+<h3>Folders</h3>
+<pre><code class="language-powershell"># List folder contents
+Get-PnPFolderItem -FolderSiteRelativeUrl "Shared Documents"
+</p>
+<h1>Recursive listing</h1>
+Get-PnPFolderItem -FolderSiteRelativeUrl "Shared Documents" -Recursive
+</p>
+<h1>Create folder</h1>
+Add-PnPFolder -Name "NewFolder" -Folder "Shared Documents"
+</p>
+<h1>Delete folder</h1>
+Remove-PnPFolder -Name "OldFolder" -Folder "Shared Documents" -Force
+</code></pre>
+<h3>Permissions</h3>
+<pre><code class="language-powershell"># Get site groups
+Get-PnPSiteGroup
+</p>
+<h1>Get list permissions</h1>
+Get-PnPListPermissions -Identity "Documents"
+</p>
+<h1>Check unique permissions on folder</h1>
+$folder = Get-PnPFolder -Url "Shared Documents/MyFolder"
+$item = Get-PnPProperty -ClientObject $folder -Property ListItemAllFields
+$hasUnique = Get-PnPProperty -ClientObject $item -Property HasUniqueRoleAssignments
+Write-Host "Has unique permissions: $hasUnique"
+</p>
+<h1>Break inheritance</h1>
+Set-PnPListItemPermission -List "Documents" -Identity 1 -InheritPermissions:$false
+</p>
+<h1>Grant permission</h1>
+Set-PnPListItemPermission -List "Documents" -Identity 1 -User "user@tenant.com" -AddRole "Edit"
+</p>
+<h1>Remove permission</h1>
+Set-PnPListItemPermission -List "Documents" -Identity 1 -User "user@tenant.com" -RemoveRole "Edit"
+</code></pre>
+<hr>
+<h2>Project Commands</h2>
+<h3>Site Details</h3>
+<pre><code class="language-text">Site URL:    https://abctest179.sharepoint.com/sites/Permission-Scanner-Test
+Library:     TestLibrary_Basic
+</code></pre>
+<h3>Common Operations</h3>
+<pre><code class="language-bash"># m365: Get site info
+m365 spo site get --url https://abctest179.sharepoint.com/sites/Permission-Scanner-Test
+</p>
+<h1>m365: List library folders</h1>
+m365 spo folder list --webUrl https://abctest179.sharepoint.com/sites/Permission-Scanner-Test --folderUrl "/TestLibrary_Basic"
+</code></pre>
+<pre><code class="language-powershell"># PnP: Connect to site
+Connect-PnPOnline -Url "https://abctest179.sharepoint.com/sites/Permission-Scanner-Test" -Interactive
+</p>
+<h1>PnP: List all folders recursively</h1>
+Get-PnPFolderItem -FolderSiteRelativeUrl "TestLibrary_Basic" -Recursive -ItemType Folder |
+    Select-Object Name, ServerRelativeUrl
+</code></pre>
+<hr>
+<h2>Scripting Examples</h2>
+<h3>PowerShell: Check All Folder Permissions</h3>
+<pre><code class="language-powershell">Connect-PnPOnline -Url "https://abctest179.sharepoint.com/sites/Permission-Scanner-Test" -Interactive
+</p>
+<p>
+$folders = Get-PnPFolderItem -FolderSiteRelativeUrl "TestLibrary_Basic" -Recursive -ItemType Folder
+</p>
+<p>
+foreach ($folder in $folders) {
+    $item = Get-PnPProperty -ClientObject $folder -Property ListItemAllFields
+    $hasUnique = Get-PnPProperty -ClientObject $item -Property HasUniqueRoleAssignments
+</p>
+<p>
+    $status = if ($hasUnique) { "UNIQUE" } else { "Inherited" }
+    Write-Host "$($folder.Name): $status"
+}
+</code></pre>
+<h3>Bash: Export Site Structure</h3>
+<pre><code class="language-bash">SITE_URL="https://abctest179.sharepoint.com/sites/Permission-Scanner-Test"
+</p>
+<p>
+m365 spo folder list --webUrl $SITE_URL --folderUrl "/TestLibrary_Basic" --output json &gt; folders.json
+</code></pre>
+<hr>
+<h2>Output Formats</h2>
+<h3>m365 CLI</h3>
+<pre><code class="language-bash">--output json    # JSON (scripting)
+--output text    # Plain text
+--output csv     # CSV (Excel)
+--output md      # Markdown
+</code></pre>
+<h3>PnP PowerShell</h3>
+<pre><code class="language-powershell">| Format-Table    # Table view
+| Format-List     # Detailed list
+| ConvertTo-Json  # JSON output
+| Export-Csv      # CSV file
+</code></pre>
+<hr>
+<p>
+<em>Last Updated: 2026-01-09</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

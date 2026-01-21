@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Functions - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html" class="active">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: 09-azure-functions/setup-guide.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Azure Functions Setup Guide</h1>
+<p>
+Complete guide for serverless compute with Azure Functions.
+</p>
+<hr>
+<h2>Overview</h2>
+<p>
+Azure Functions provides serverless compute for:
+<ul><li>Custom APIs for Power Platform</li>
+<li>Background processing</li>
+<li>Event-driven automation</li>
+<li>Integration with Azure services</li>
+</ul>
+<hr>
+<h2>Create Function App</h2>
+<h3>Azure Portal</h3>
+1. Go to <strong>Azure Portal</strong> > <strong>Create a resource</strong>
+2. Search <strong>Function App</strong>
+3. Configure:
+   - Subscription
+   - Resource Group
+   - Function App name
+   - Runtime stack (.NET, Node.js, Python, PowerShell)
+   - Region
+   - Plan (Consumption, Premium, App Service)
+4. Click <strong>Create</strong>
+</p>
+<h3>Azure CLI</h3>
+<pre><code class="language-bash"># Create resource group
+az group create --name MyResourceGroup --location eastus
+</p>
+<h1>Create storage account (required)</h1>
+az storage account create --name mystorageaccount --resource-group MyResourceGroup --location eastus --sku Standard_LRS
+</p>
+<h1>Create function app</h1>
+az functionapp create --name MyFunctionApp --resource-group MyResourceGroup --consumption-plan-location eastus --runtime dotnet --storage-account mystorageaccount
+</code></pre>
+<hr>
+<h2>Local Development</h2>
+<h3>Prerequisites</h3>
+<pre><code class="language-bash"># Install Azure Functions Core Tools
+npm install -g azure-functions-core-tools@4
+</p>
+<h1>Verify installation</h1>
+func --version
+</code></pre>
+<h3>Create Project</h3>
+<pre><code class="language-bash"># Initialize project
+func init MyFunctionProject --worker-runtime dotnet
+</p>
+<h1>Navigate to project</h1>
+cd MyFunctionProject
+</p>
+<h1>Create function</h1>
+func new --name MyHttpTrigger --template "HTTP trigger"
+</code></pre>
+<h3>Run Locally</h3>
+<pre><code class="language-bash">func start
+</code></pre>
+<p>
+Test at: <code>http://localhost:7071/api/MyHttpTrigger</code>
+</p>
+<hr>
+<h2>Function Types</h2>
+<h3>HTTP Trigger</h3>
+<pre><code class="language-csharp">[FunctionName("ScanPermissions")]
+public static async Task&lt;IActionResult&gt; Run(
+    [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+    ILogger log)
+{
+    log.LogInformation("Processing scan request");
+</p>
+<p>
+    string siteUrl = req.Query["siteUrl"];
+    string libraryName = req.Query["libraryName"];
+</p>
+<p>
+    // Process scan logic
+    var result = await ScanSharePointAsync(siteUrl, libraryName);
+</p>
+<p>
+    return new OkObjectResult(result);
+}
+</code></pre>
+<h3>Timer Trigger</h3>
+<pre><code class="language-csharp">[FunctionName("ScheduledScan")]
+public static void Run(
+    [TimerTrigger("0 0 8 <em> </em> *")] TimerInfo timer,  // Daily at 8 AM
+    ILogger log)
+{
+    log.LogInformation($"Scheduled scan started at: {DateTime.Now}");
+    // Run daily permission scan
+}
+</code></pre>
+<h3>Queue Trigger</h3>
+<pre><code class="language-csharp">[FunctionName("ProcessScanQueue")]
+public static void Run(
+    [QueueTrigger("scan-queue")] string message,
+    ILogger log)
+{
+    log.LogInformation($"Processing queue message: {message}");
+}
+</code></pre>
+<hr>
+<h2>Power Platform Integration</h2>
+<h3>Custom Connector</h3>
+1. Create HTTP-triggered function
+2. Deploy to Azure
+3. In Power Platform:
+   - Go to <strong>Custom connectors</strong>
+   - Create from <strong>Azure Function</strong>
+   - Select function app
+   - Configure operations
+</p>
+<h3>Example: Custom API for Permission Scan</h3>
+<pre><code class="language-csharp">[FunctionName("GetFolderPermissions")]
+public static async Task&lt;IActionResult&gt; Run(
+    [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)
+{
+    var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+    var data = JsonConvert.DeserializeObject&lt;ScanRequest&gt;(requestBody);
+</p>
+<p>
+    var permissions = await GetSharePointPermissions(data.SiteUrl, data.FolderPath);
+</p>
+<p>
+    return new OkObjectResult(new {
+        success = true,
+        folderPath = data.FolderPath,
+        permissions = permissions
+    });
+}
+</code></pre>
+<h3>Call from Power Automate</h3>
+<pre><code class="language-yaml">Action: HTTP
+Method: POST
+URI: https://myfunctionapp.azurewebsites.net/api/GetFolderPermissions?code=FUNCTION_KEY
+Headers:
+  Content-Type: application/json
+Body: {
+  "siteUrl": "@{triggerBody()['text']}",
+  "folderPath": "@{items('Apply_to_each')?['ServerRelativeUrl']}"
+}
+</code></pre>
+<hr>
+<h2>Configuration</h2>
+<h3>Application Settings</h3>
+<pre><code class="language-bash"># Set app setting
+az functionapp config appsettings set --name MyFunctionApp --resource-group MyResourceGroup --settings "SharePointSiteUrl=https://tenant.sharepoint.com"
+</p>
+<h1>List settings</h1>
+az functionapp config appsettings list --name MyFunctionApp --resource-group MyResourceGroup
+</code></pre>
+<h3>local.settings.json</h3>
+<pre><code class="language-json">{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "SharePointSiteUrl": "https://tenant.sharepoint.com/sites/test",
+    "SharePointClientId": "your-client-id",
+    "SharePointClientSecret": "your-client-secret"
+  }
+}
+</code></pre>
+<h3>Key Vault Integration</h3>
+<pre><code class="language-csharp">// Reference Key Vault secret in app settings
+@Microsoft.KeyVault(SecretUri=https://myvault.vault.azure.net/secrets/SharePointSecret/)
+</code></pre>
+<hr>
+<h2>Deployment</h2>
+<h3>Deploy from CLI</h3>
+<pre><code class="language-bash">func azure functionapp publish MyFunctionApp
+</code></pre>
+<h3>Deploy from VS Code</h3>
+1. Install Azure Functions extension
+2. Right-click function app
+3. Select <strong>Deploy to Function App</strong>
+</p>
+<h3>CI/CD Pipeline</h3>
+<pre><code class="language-yaml"># azure-pipelines.yml
+trigger:
+  - main
+</p>
+<p>
+pool:
+  vmImage: 'ubuntu-latest'
+</p>
+<p>
+steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '6.x'
+</p>
+<p>
+  - script: dotnet build --configuration Release
+    displayName: 'Build'
+</p>
+<p>
+  - task: AzureFunctionApp@1
+    inputs:
+      azureSubscription: 'Azure Subscription'
+      appType: 'functionApp'
+      appName: 'MyFunctionApp'
+      package: '$(System.DefaultWorkingDirectory)/<em>*/</em>.zip'
+</code></pre>
+<hr>
+<h2>Monitoring</h2>
+<h3>Application Insights</h3>
+<pre><code class="language-bash"># Enable Application Insights
+az functionapp config appsettings set --name MyFunctionApp --resource-group MyResourceGroup --settings "APPINSIGHTS_INSTRUMENTATIONKEY=your-key"
+</code></pre>
+<h3>View Logs</h3>
+<pre><code class="language-bash"># Stream logs
+func azure functionapp logstream MyFunctionApp
+</code></pre>
+<h3>In Portal</h3>
+1. Open Function App
+2. Click <strong>Monitor</strong>
+3. View invocations and logs
+</p>
+<hr>
+<h2>Best Practices</h2>
+<h3>Performance</h3>
+<ul><li>Use async/await</li>
+<li>Minimize cold starts (Premium plan)</li>
+<li>Cache connections</li>
+<li>Use Durable Functions for long-running tasks</li>
+</ul>
+<h3>Security</h3>
+<ul><li>Use managed identities</li>
+<li>Store secrets in Key Vault</li>
+<li>Use function-level keys</li>
+<li>Enable HTTPS only</li>
+</ul>
+<h3>Cost</h3>
+<ul><li>Use Consumption plan for sporadic workloads</li>
+<li>Monitor execution counts</li>
+<li>Optimize function duration</li>
+<li>Clean up unused functions</li>
+</ul>
+<hr>
+<h2>Related Documentation</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/azure/azure-functions/" target="_blank">Azure Functions Documentation</a></li>
+<li><a href="https://learn.microsoft.com/en-us/connectors/custom-connectors/" target="_blank">Custom Connectors</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/azure-functions/durable/" target="_blank">Durable Functions</a></li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-09</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

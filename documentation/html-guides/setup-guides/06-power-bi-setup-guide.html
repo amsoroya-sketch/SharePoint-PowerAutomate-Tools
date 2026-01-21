@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power BI - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html" class="active">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: 06-power-bi/setup-guide.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Power BI Setup Guide</h1>
+<p>
+Complete guide for creating reports and dashboards with Power BI.
+</p>
+<hr>
+<h2>Access Power BI</h2>
+<h3>Web Interface</h3>
+<pre><code class="language-text">https://app.powerbi.com
+</code></pre>
+<h3>Desktop App</h3>
+Download: https://powerbi.microsoft.com/desktop/
+</p>
+<h3>Through Microsoft 365</h3>
+1. Go to <code>https://office.com</code>
+2. Click App Launcher (9 dots)
+3. Select <strong>Power BI</strong>
+</p>
+<hr>
+<h2>Connect to Dataverse</h2>
+<h3>From Power BI Desktop</h3>
+<p>
+1. Click <strong>Get Data</strong> > <strong>Power Platform</strong> > <strong>Dataverse</strong>
+2. Enter environment URL: <code>https://[org].crm.dynamics.com</code>
+3. Sign in with credentials
+4. Select tables:
+   - <code>sp_scansession</code>
+   - <code>sp_folderrecord</code>
+   - <code>sp_permissionentry</code>
+5. Click <strong>Load</strong>
+</p>
+<h3>Connection String</h3>
+<pre><code class="language-text">Environment URL: https://[org].crm.dynamics.com
+Authentication: Organizational Account
+</code></pre>
+<hr>
+<h2>Connect to SharePoint</h2>
+<h3>From Power BI Desktop</h3>
+<p>
+1. Click <strong>Get Data</strong> > <strong>Online Services</strong> > <strong>SharePoint Online List</strong>
+2. Enter site URL: <code>https://tenant.sharepoint.com/sites/sitename</code>
+3. Select lists/libraries
+4. Choose <strong>Load</strong> or <strong>Transform Data</strong>
+</p>
+<hr>
+<h2>Project Reports</h2>
+<h3>Scan Summary Dashboard</h3>
+<pre><code class="language-text">Visuals:
+├── Card: Total Scans
+├── Card: Total Folders Scanned
+├── Card: Folders with Unique Permissions
+├── Line Chart: Scans Over Time
+├── Bar Chart: Folders per Scan
+└── Table: Recent Scan Details
+</code></pre>
+<h3>Permission Analysis Report</h3>
+<pre><code class="language-text">Visuals:
+├── Pie Chart: Permission Types
+├── Bar Chart: Folders by Depth
+├── Matrix: Permissions by User/Group
+└── Drill-through: Folder Details
+</code></pre>
+<hr>
+<h2>DAX Measures</h2>
+<h3>Common Measures</h3>
+<pre><code class="language-dax">// Total Scans
+Total Scans = COUNTROWS(sp_scansession)
+</p>
+<p>
+// Total Folders
+Total Folders = SUM(sp_scansession[sp_totalfolders])
+</p>
+<p>
+// Folders with Unique Permissions
+Unique Permission Folders = SUM(sp_scansession[sp_folderswithuniqueperms])
+</p>
+<p>
+// Percentage with Unique Permissions
+Unique Permission % =
+DIVIDE(
+    [Unique Permission Folders],
+    [Total Folders],
+    0
+) * 100
+</p>
+<p>
+// Average Folders per Scan
+Avg Folders per Scan = AVERAGE(sp_scansession[sp_totalfolders])
+</p>
+<p>
+// Success Rate
+Success Rate =
+DIVIDE(
+    COUNTROWS(FILTER(sp_scansession, sp_scansession[sp_status] = "Completed")),
+    [Total Scans],
+    0
+) * 100
+</code></pre>
+<hr>
+<h2>Publish to Service</h2>
+<h3>Publish from Desktop</h3>
+1. Click <strong>Publish</strong> in ribbon
+2. Select workspace
+3. Click <strong>Select</strong>
+4. Open in Power BI Service
+</p>
+<h3>Configure Refresh</h3>
+1. Open dataset settings
+2. Click <strong>Scheduled refresh</strong>
+3. Configure refresh schedule
+4. Set credentials for data sources
+</p>
+<hr>
+<h2>Embed in Power Apps</h2>
+<h3>Get Embed URL</h3>
+1. Open report in Power BI Service
+2. Click <strong>File</strong> > <strong>Embed report</strong> > <strong>Website or portal</strong>
+3. Copy embed URL
+</p>
+<h3>Add to Canvas App</h3>
+1. Insert <strong>Power BI tile</strong> control
+2. Set <code>TileUrl</code> property to embed URL
+</p>
+<h3>Add to Model-driven App</h3>
+1. Create custom page
+2. Add Power BI component
+3. Configure workspace and report
+</p>
+<hr>
+<h2>CLI Commands</h2>
+<h3>Power BI CLI (via Azure CLI)</h3>
+<pre><code class="language-bash"># Install extension
+az extension add --name powerbicli
+</p>
+<h1>Login</h1>
+az login
+</p>
+<h1>List workspaces</h1>
+az powerbi workspace list
+</p>
+<h1>List reports in workspace</h1>
+az powerbi report list --workspace-name "WorkspaceName"
+</code></pre>
+<hr>
+<h2>REST API</h2>
+<h3>Base URL</h3>
+<pre><code class="language-text">https://api.powerbi.com/v1.0/myorg/
+</code></pre>
+<h3>Common Endpoints</h3>
+<pre><code class="language-bash"># Get workspaces
+GET /groups
+</p>
+<h1>Get reports in workspace</h1>
+GET /groups/{workspaceId}/reports
+</p>
+<h1>Get datasets</h1>
+GET /groups/{workspaceId}/datasets
+</p>
+<h1>Refresh dataset</h1>
+POST /groups/{workspaceId}/datasets/{datasetId}/refreshes
+</code></pre>
+<h3>Using Azure CLI</h3>
+<pre><code class="language-bash">TOKEN=$(az account get-access-token --resource https://analysis.windows.net/powerbi/api --query accessToken -o tsv)
+</p>
+<p>
+curl -X GET "https://api.powerbi.com/v1.0/myorg/groups" \
+  -H "Authorization: Bearer $TOKEN"
+</code></pre>
+<hr>
+<h2>Best Practices</h2>
+<h3>Performance</h3>
+<ul><li>Use Import mode for small datasets</li>
+<li>Use DirectQuery for real-time data</li>
+<li>Create aggregations for large tables</li>
+<li>Optimize DAX measures</li>
+</ul>
+<h3>Security</h3>
+<ul><li>Use Row-Level Security (RLS)</li>
+<li>Configure workspace access</li>
+<li>Use sensitivity labels</li>
+<li>Audit report access</li>
+</ul>
+<h3>Design</h3>
+<ul><li>Use consistent colors/themes</li>
+<li>Add tooltips for context</li>
+<li>Include filters and slicers</li>
+<li>Design for mobile</li>
+</ul>
+<hr>
+<h2>Related Documentation</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-bi/" target="_blank">Power BI Documentation</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dax/" target="_blank">DAX Reference</a></li>
+<li><a href="https://learn.microsoft.com/en-us/rest/api/power-bi/" target="_blank">Power BI REST API</a></li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-09</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

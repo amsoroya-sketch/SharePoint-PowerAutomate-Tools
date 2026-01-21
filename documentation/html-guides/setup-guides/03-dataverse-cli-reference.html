@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dataverse CLI - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html" class="active">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: 03-dataverse/cli-reference.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Dataverse CLI Reference</h1>
+<p>
+Commands for managing Dataverse tables and data via CLI.
+</p>
+<hr>
+<h2>PAC CLI Commands</h2>
+<h3>Authentication</h3>
+<pre><code class="language-bash"># Create auth profile
+pac auth create
+</p>
+<h1>List profiles</h1>
+pac auth list
+</p>
+<h1>Select profile</h1>
+pac auth select --index 1
+</p>
+<h1>Check connection</h1>
+pac env who
+</code></pre>
+<h3>Environment</h3>
+<pre><code class="language-bash"># List environments
+pac env list
+</p>
+<h1>Select environment</h1>
+pac env select --environment "Environment Name"
+</p>
+<h1>Get environment details</h1>
+pac env who
+</code></pre>
+<hr>
+<h2>Table Operations</h2>
+<h3>List Tables</h3>
+<pre><code class="language-bash">pac table list
+</code></pre>
+<h3>Get Table Schema</h3>
+<pre><code class="language-bash">pac table get --table LOGICAL_NAME
+</code></pre>
+<hr>
+<h2>Data Operations</h2>
+<h3>Export Data</h3>
+<pre><code class="language-bash"># Export with schema
+pac data export --schemaFile schema.xml --dataFile data.zip
+</p>
+<h1>Export specific table</h1>
+pac data export --table sp_scansession --dataFile sessions.zip
+</code></pre>
+<h3>Import Data</h3>
+<pre><code class="language-bash">pac data import --data data.zip
+</code></pre>
+<hr>
+<h2>Solution Operations</h2>
+<h3>Export Solution (includes tables)</h3>
+<pre><code class="language-bash">pac solution export --name SolutionName --path solution.zip --overwrite
+</code></pre>
+<h3>Import Solution</h3>
+<pre><code class="language-bash">pac solution import --path solution.zip
+</code></pre>
+<h3>Clone for Source Control</h3>
+<pre><code class="language-bash">pac solution clone --name SolutionName --outputDirectory ./src
+</code></pre>
+<hr>
+<h2>Project Tables</h2>
+<h3>Schema Names</h3>
+<pre><code class="language-text">Scan Sessions:      sp_scansession
+Folder Records:     sp_folderrecord
+Permission Entries: sp_permissionentry
+</code></pre>
+<h3>Common Commands</h3>
+<pre><code class="language-bash"># Export project solution
+pac solution export --name SharePointPermissionScanner --path solution.zip --overwrite
+</p>
+<h1>List tables in environment</h1>
+pac table list
+</code></pre>
+<hr>
+<h2>Power Platform CLI (Alternative)</h2>
+<h3>Using Power Platform Admin API</h3>
+<pre><code class="language-bash"># Via Azure CLI
+az rest --method GET \
+  --uri "https://api.powerplatform.com/environments/{envId}/tables" \
+  --headers "Authorization=Bearer $(az account get-access-token --resource https://api.powerplatform.com --query accessToken -o tsv)"
+</code></pre>
+<hr>
+<h2>Scripting Examples</h2>
+<h3>PowerShell: Export Table Data</h3>
+<pre><code class="language-powershell"># Set environment
+pac env select --environment "Development"
+</p>
+<h1>Export data</h1>
+pac data export --table sp_scansession --dataFile scansessions.zip
+</p>
+<p>
+Write-Host "Data exported to scansessions.zip"
+</code></pre>
+<h3>Bash: List Tables</h3>
+<pre><code class="language-bash">pac table list --output json | jq '.[] | {name: .logicalName, displayName: .displayName}'
+</code></pre>
+<hr>
+<h2>OData Queries (REST API)</h2>
+<h3>Base URL</h3>
+<pre><code class="language-text">https://[org].crm.dynamics.com/api/data/v9.2/
+</code></pre>
+<h3>Query Tables</h3>
+<pre><code class="language-bash"># Get all scan sessions
+GET /api/data/v9.2/sp_scansessions
+</p>
+<h1>Filter by status</h1>
+GET /api/data/v9.2/sp_scansessions?$filter=sp_status eq 'Completed'
+</p>
+<h1>Select specific columns</h1>
+GET /api/data/v9.2/sp_scansessions?$select=sp_name,sp_status,sp_totalfolders
+</code></pre>
+<h3>Using Azure CLI</h3>
+<pre><code class="language-bash">TOKEN=$(az account get-access-token --resource https://[org].crm.dynamics.com --query accessToken -o tsv)
+</p>
+<p>
+curl -X GET "https://[org].crm.dynamics.com/api/data/v9.2/sp_scansessions" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Accept: application/json"
+</code></pre>
+<hr>
+<p>
+<em>Last Updated: 2026-01-09</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,293 @@
+═══════════════════════════════════════════════════════════════════════════════
+    SHAREPOINT & POWER AUTOMATE TOOLS - QUICK REFERENCE CARD
+═══════════════════════════════════════════════════════════════════════════════
+
+📍 LOCATION
+   /home/dev/Development/SharePoint-PowerAutomate-Tools/
+
+📊 PACKAGE SIZE
+   2.5 MB | 188 files | 14 scripts | 34 HTML guides
+
+───────────────────────────────────────────────────────────────────────────────
+🚀 QUICK START (5 STEPS)
+───────────────────────────────────────────────────────────────────────────────
+
+1. Read Quick Start
+   cat QUICK_START.md
+
+2. Create .env file at Z:\.env with:
+   SHAREPOINT_TENANT_ID=...
+   SHAREPOINT_CLIENT_ID=...
+   SHAREPOINT_CLIENT_SECRET=...
+
+3. Create Test Data
+   cd scripts/test-data
+   .\Create-TestFolders.ps1
+
+4. Deploy Flow
+   cd ../deployment
+   .\Deploy-LinearScannerV02.ps1
+
+5. Test & Verify
+   cd ../testing
+   .\Test-RecursiveScanner.ps1
+
+───────────────────────────────────────────────────────────────────────────────
+📖 DOCUMENTATION ACCESS
+───────────────────────────────────────────────────────────────────────────────
+
+Main Docs        README.md
+Quick Setup      QUICK_START.md
+Asset List       INVENTORY.md
+Package Info     COMPLETE_PACKAGE_SUMMARY.md
+
+HTML Docs Index  documentation/html-guides/index.html
+Open HTML        xdg-open documentation/html-guides/index.html
+Web Server       cd documentation/html-guides && python3 -m http.server 8000
+
+───────────────────────────────────────────────────────────────────────────────
+🔧 COMMON COMMANDS
+───────────────────────────────────────────────────────────────────────────────
+
+QUERY SHAREPOINT
+  cd scripts/sharepoint-queries
+  .\Get-SharePointFolders.ps1 -ListOnly
+  .\Get-SharePointFolders-Graph.ps1
+
+CREATE TEST DATA
+  cd scripts/test-data
+  .\Create-TestFolders.ps1
+  .\Create-TestFolders.ps1 -CleanUp
+
+DEPLOY FLOW
+  cd scripts/deployment
+  .\Deploy-LinearScannerV02.ps1
+  .\Deploy-RecursiveScanner.ps1
+
+TEST FLOW
+  cd scripts/testing
+  .\Test-RecursiveScanner.ps1
+  .\Test-BrokenPermissionsFlow.ps1 -Scenario List
+
+CHECK RESULTS
+  cd scripts/dataverse
+  .\Get-ScanResults.ps1 -Latest
+  .\Get-ScanResults.ps1 -Latest -ShowFolders
+
+───────────────────────────────────────────────────────────────────────────────
+📁 DIRECTORY STRUCTURE
+───────────────────────────────────────────────────────────────────────────────
+
+deployed-flows/
+  └── LinearPermissionScannerV02_1_1/     Production flow
+
+scripts/
+  ├── sharepoint-queries/                 Query SharePoint (2 scripts)
+  ├── test-data/                         Create test folders (1 script)
+  ├── deployment/                        Deploy flows (5 scripts)
+  ├── testing/                           Test flows (4 scripts)
+  └── dataverse/                         Query results (2 scripts)
+
+solutions/
+  └── sharepoint-scanner-solution/        Solution packages
+
+documentation/
+  ├── html-guides/                       34 HTML guides
+  │   ├── index.html
+  │   ├── setup-guides/                  17 setup guides
+  │   ├── cli-tools/                     6 CLI references
+  │   ├── mcp-servers/                   4 server docs
+  │   ├── skills/                        3 skill guides
+  │   └── phases/                        2 phase guides
+  ├── POWERSHELL_SCRIPTS_REFERENCE.md
+  └── HTML_DOCUMENTATION_INDEX.md
+
+───────────────────────────────────────────────────────────────────────────────
+🎯 KEY SCRIPTS BY USE CASE
+───────────────────────────────────────────────────────────────────────────────
+
+EXPLORE SHAREPOINT
+  scripts/sharepoint-queries/Get-SharePointFolders.ps1
+  scripts/sharepoint-queries/Get-SharePointFolders-Graph.ps1
+
+SETUP TESTING
+  scripts/test-data/Create-TestFolders.ps1
+
+DEPLOYMENT
+  scripts/deployment/Deploy-LinearScannerV02.ps1
+  scripts/deployment/Deploy-RecursiveScanner.ps1
+  scripts/deployment/Pack-Solution.ps1
+
+TESTING
+  scripts/testing/Test-RecursiveScanner.ps1
+  scripts/testing/Test-BrokenPermissionsFlow.ps1
+
+VALIDATION
+  scripts/dataverse/Get-ScanResults.ps1
+  scripts/testing/Add-FlowDebug.ps1
+
+───────────────────────────────────────────────────────────────────────────────
+📚 HTML DOCUMENTATION (34 GUIDES)
+───────────────────────────────────────────────────────────────────────────────
+
+Setup Guides (17)
+  • Power Automate (setup, CLI, troubleshooting)
+  • Power Apps
+  • Dataverse (setup, CLI)
+  • SharePoint (setup, CLI)
+  • Azure Portal (app registration)
+  • Power BI, Teams, Functions, Key Vault, Graph API
+  • Azure DevOps
+  • CLI Tools Setup
+
+CLI Tools (6)
+  • PAC CLI
+  • Azure CLI
+  • M365 CLI
+  • PnP PowerShell
+  • Functions Core Tools
+  • Installation automation
+
+MCP Servers (4)
+  • SharePoint MCP
+  • Dataverse MCP
+  • Azure DevOps MCP
+  • Overview
+
+Skills (3)
+  • Overview
+  • Usage guide
+  • Knowledge base
+
+Phases (2)
+  • Phase 2: Broken Permissions Scanner
+  • Phase 2B: Recursive Scanner
+
+───────────────────────────────────────────────────────────────────────────────
+🔐 SECURITY SETUP REQUIRED
+───────────────────────────────────────────────────────────────────────────────
+
+1. Azure AD App Registration
+   Required Permissions:
+   • SharePoint: Sites.Read.All (Application)
+   • Microsoft Graph: Sites.Read.All (Application)
+   • Dataverse: user_impersonation (Delegated)
+   • Admin consent: Required
+
+2. Environment Variables (Z:\.env)
+   SHAREPOINT_TENANT_ID=...
+   SHAREPOINT_CLIENT_ID=...
+   SHAREPOINT_CLIENT_SECRET=...
+
+3. PAC CLI Authentication
+   pac auth create --environment https://org.crm.dynamics.com
+
+See: documentation/html-guides/setup-guides/05-azure-portal-app-registration.html
+
+───────────────────────────────────────────────────────────────────────────────
+🎓 LEARNING PATH
+───────────────────────────────────────────────────────────────────────────────
+
+Day 1: Setup (2-4 hours)
+  1. Read QUICK_START.md
+  2. Follow CLI-TOOLS-SETUP.html
+  3. Configure .env
+  4. Test with Get-SharePointFolders.ps1
+
+Day 2: Understanding (2-3 hours)
+  1. Read PROJECT_CREATION_GUIDE.html
+  2. Read phase-2b-recursive-permission-scan.html
+  3. Create test data
+  4. Run queries
+
+Day 3: Deploy (3-4 hours)
+  1. Read power-automate-setup-guide.html
+  2. Deploy flow
+  3. Test flow
+  4. Check results
+
+Day 4: Advanced (2-3 hours)
+  1. Explore other scripts
+  2. Review solution packages
+  3. Practice troubleshooting
+
+───────────────────────────────────────────────────────────────────────────────
+📦 TRANSFER TO ANOTHER MACHINE
+───────────────────────────────────────────────────────────────────────────────
+
+Compress:
+  cd /home/dev/Development
+  tar -czf SharePoint-PowerAutomate-Tools.tar.gz SharePoint-PowerAutomate-Tools/
+
+Transfer:
+  scp SharePoint-PowerAutomate-Tools.tar.gz user@target:/home/user/
+
+Extract:
+  tar -xzf SharePoint-PowerAutomate-Tools.tar.gz
+
+Verify:
+  find SharePoint-PowerAutomate-Tools -type f | wc -l
+  # Should show: 188 files
+
+───────────────────────────────────────────────────────────────────────────────
+✅ PACKAGE CHECKLIST
+───────────────────────────────────────────────────────────────────────────────
+
+□ 188 total files
+□ 14 PowerShell scripts
+□ 34 HTML documentation files
+□ 1 production flow (LinearPermissionScannerV02_1_1)
+□ README.md, QUICK_START.md, INVENTORY.md
+□ documentation/html-guides/index.html opens
+□ All scripts have .ps1 extension
+□ CSS folder exists in html-guides/
+□ deployed-flows/ has production flow
+□ scripts/ has 5 subdirectories
+□ solutions/ has source files
+
+───────────────────────────────────────────────────────────────────────────────
+🆘 TROUBLESHOOTING
+───────────────────────────────────────────────────────────────────────────────
+
+Authentication Failed
+  • Check .env file exists at Z:\.env
+  • Verify credentials are correct
+  • Ensure app has proper permissions
+  • Check admin consent granted
+
+No Folders Found
+  • Run with -ListOnly flag
+  • Verify SharePoint URL is correct
+  • Check library name
+  • Ensure you have read permissions
+
+Deployment Failed
+  • Check PAC CLI authenticated: pac auth list
+  • Verify correct environment
+  • Review solution XML for conflicts
+  • Check connection references exist
+
+Flow Not Running
+  • Verify SharePoint connection configured
+  • Check trigger parameters
+  • Review flow run history
+  • Test REST API query manually
+
+See: documentation/html-guides/setup-guides/01-power-automate-troubleshooting.html
+
+───────────────────────────────────────────────────────────────────────────────
+📞 SUPPORT RESOURCES
+───────────────────────────────────────────────────────────────────────────────
+
+Documentation        README.md, QUICK_START.md
+HTML Guides          34 comprehensive guides
+Script Help          Each script has detailed comments
+Troubleshooting      01-power-automate-troubleshooting.html
+
+───────────────────────────────────────────────────────────────────────────────
+
+✨ PACKAGE STATUS: COMPLETE AND READY FOR USE ✅
+
+═══════════════════════════════════════════════════════════════════════════════
+            Created: 2026-01-21 | Version: 1.0 | Size: 2.5 MB
+═══════════════════════════════════════════════════════════════════════════════

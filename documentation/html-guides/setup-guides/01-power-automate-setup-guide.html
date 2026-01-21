@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Automate - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html" class="active">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: 01-power-automate/setup-guide.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Power Automate Setup Guide</h1>
+<p>
+Complete guide for developing and deploying Power Automate cloud flows.
+</p>
+<hr>
+<h2>Access Power Automate</h2>
+<h3>Web Interface</h3>
+<pre><code class="language-text">https://make.powerautomate.com
+</code></pre>
+<h3>Through Microsoft 365</h3>
+1. Go to <code>https://office.com</code>
+2. Click App Launcher (9 dots)
+3. Select <strong>Power Automate</strong>
+</p>
+<h3>Through Power Apps</h3>
+1. Go to <code>https://make.powerapps.com</code>
+2. Click <strong>Flows</strong> in left navigation
+</p>
+<hr>
+<h2>Environment Setup</h2>
+<h3>Select Environment</h3>
+1. Click environment selector (top-right)
+2. Choose your target environment
+3. Verify with environment name displayed
+</p>
+<h3>Project Environment</h3>
+<pre><code class="language-text">Environment: Default-ABCTest179
+Environment ID: 1a81be40-03fb-e3fe-8964-ac88c74859cc
+</code></pre>
+<hr>
+<h2>Create Cloud Flow</h2>
+<h3>From Blank</h3>
+1. Click <strong>+ Create</strong> > <strong>Instant cloud flow</strong>
+2. Name your flow
+3. Select trigger type
+4. Click <strong>Create</strong>
+</p>
+<h3>From Template</h3>
+1. Click <strong>Templates</strong>
+2. Search for template
+3. Click template to use
+4. Customize as needed
+</p>
+<h3>Trigger Types</h3>
+<table>
+<thead><tr><th>Type</th><th>Use Case</th></tr></thead>
+<tbody><tr><td>Manual trigger</td><td>Button/on-demand flows</td></tr>
+<tr><td>Automated</td><td>Event-driven (SharePoint, Dataverse)</td></tr>
+<tr><td>Scheduled</td><td>Timer-based execution</td></tr>
+<tr><td>Instant</td><td>Triggered from apps/buttons</td></tr>
+</tbody></table>
+<hr>
+<h2>Flow Structure</h2>
+<h3>Actions</h3>
+<ul><li><strong>Standard actions</strong>: Compose, Condition, Apply to each, etc.</li>
+<li><strong>Connectors</strong>: SharePoint, Dataverse, HTTP, etc.</li>
+<li><strong>Custom connectors</strong>: External APIs</li>
+</ul>
+<h3>Control Flow</h3>
+<pre><code class="language-text">┌─────────────────────────────────────┐
+│           Trigger                    │
+├─────────────────────────────────────┤
+│         Initialize Variables         │
+├─────────────────────────────────────┤
+│         Try Scope                    │
+│   ├── Main Logic                    │
+│   └── Business Operations            │
+├─────────────────────────────────────┤
+│         Catch Scope                  │
+│   └── Error Handling                 │
+├─────────────────────────────────────┤
+│         Finally Scope                │
+│   └── Cleanup / Update Status        │
+└─────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2>Expression Reference</h2>
+<h3>Trigger Functions</h3>
+<table>
+<thead><tr><th>Function</th><th>Returns</th></tr></thead>
+<tbody><tr><td><code>trigger()</code></td><td>Trigger metadata (status, timing)</td></tr>
+<tr><td><code>triggerBody()</code></td><td>Input values from trigger</td></tr>
+<tr><td><code>triggerOutputs()</code></td><td>Headers + body</td></tr>
+</tbody></table>
+<h3>Example</h3>
+<pre><code class="language-text">// Get user input
+triggerBody()['text']
+</p>
+<p>
+// Get trigger status
+trigger()['status']
+</code></pre>
+<h3>Common Expressions</h3>
+<pre><code class="language-text">// Current timestamp
+utcNow()
+</p>
+<p>
+// Format date
+formatDateTime(utcNow(), 'yyyy-MM-dd')
+</p>
+<p>
+// String manipulation
+concat('Hello ', variables('Name'))
+split(variables('Path'), '/')
+replace(variables('Text'), 'old', 'new')
+</p>
+<p>
+// Null check
+coalesce(variables('Value'), 'default')
+</p>
+<p>
+// Conditional
+if(equals(variables('Status'), 'Active'), 'Yes', 'No')
+</code></pre>
+<hr>
+<h2>Variables</h2>
+<h3>Initialize Variable</h3>
+1. Add action: <strong>Initialize variable</strong>
+2. Set name, type, and initial value
+</p>
+<h3>Variable Types</h3>
+<table>
+<thead><tr><th>Type</th><th>Example</th></tr></thead>
+<tbody><tr><td>String</td><td><code>"Hello"</code></td></tr>
+<tr><td>Integer</td><td><code>42</code></td></tr>
+<tr><td>Float</td><td><code>3.14</code></td></tr>
+<tr><td>Boolean</td><td><code>true</code></td></tr>
+<tr><td>Array</td><td><code>[]</code></td></tr>
+<tr><td>Object</td><td><code>{}</code></td></tr>
+</tbody></table>
+<h3>Set/Append Variable</h3>
+<pre><code class="language-text">// Set string
+Set variable: MyVar = "New Value"
+</p>
+<p>
+// Append to array
+Append to array variable: MyArray = item
+</code></pre>
+<hr>
+<h2>Error Handling</h2>
+<h3>Try-Catch-Finally Pattern</h3>
+<p>
+1. <strong>Try Scope</strong>: Main business logic
+2. <strong>Catch Scope</strong>: Error handling (Configure Run After = "has failed", "has timed out")
+3. <strong>Finally Scope</strong>: Always runs (Configure Run After = all conditions)
+</p>
+<h3>Configure Run After</h3>
+1. Click <strong>...</strong> on action
+2. Select <strong>Configure run after</strong>
+3. Check desired conditions:
+   - is successful
+   - has failed
+   - is skipped
+   - has timed out
+</p>
+<hr>
+<h2>SharePoint Connector</h2>
+<h3>Common Actions</h3>
+<table>
+<thead><tr><th>Action</th><th>Purpose</th></tr></thead>
+<tbody><tr><td>Get items</td><td>Query list items</td></tr>
+<tr><td>Create item</td><td>Add new item</td></tr>
+<tr><td>Update item</td><td>Modify item</td></tr>
+<tr><td>Delete item</td><td>Remove item</td></tr>
+<tr><td>Send HTTP request to SharePoint</td><td>REST API calls</td></tr>
+</tbody></table>
+<h3>REST API Example</h3>
+<pre><code class="language-text">Site Address: https://tenant.sharepoint.com/sites/sitename
+Method: GET
+Uri: _api/web/GetFolderByServerRelativeUrl('/sites/sitename/Shared Documents')/Folders
+Headers:
+  Accept: application/json;odata=nometadata
+</code></pre>
+<hr>
+<h2>Dataverse Connector</h2>
+<h3>Common Actions</h3>
+<table>
+<thead><tr><th>Action</th><th>Purpose</th></tr></thead>
+<tbody><tr><td>List rows</td><td>Query table</td></tr>
+<tr><td>Add a new row</td><td>Create record</td></tr>
+<tr><td>Update a row</td><td>Modify record</td></tr>
+<tr><td>Delete a row</td><td>Remove record</td></tr>
+</tbody></table>
+<h3>Filter Query (OData)</h3>
+<pre><code class="language-text">// Equals
+sp_status eq 'Active'
+</p>
+<p>
+// Contains
+contains(sp_name, 'Test')
+</p>
+<p>
+// Date filter
+sp_createdon gt 2026-01-01
+</code></pre>
+<hr>
+<h2>Deployment</h2>
+<h3>Export Flow (via Solution)</h3>
+1. Go to <strong>Solutions</strong>
+2. Open your solution
+3. Click <strong>Export</strong>
+4. Choose Unmanaged/Managed
+5. Download zip file
+</p>
+<h3>Import Flow</h3>
+1. Go to <strong>Solutions</strong>
+2. Click <strong>Import</strong>
+3. Browse to solution zip
+4. Follow import wizard
+</p>
+<h3>CLI Deployment</h3>
+<pre><code class="language-bash"># Export
+pac solution export --name SolutionName --path solution.zip
+</p>
+<h1>Import</h1>
+pac solution import --path solution.zip
+</code></pre>
+<hr>
+<h2>Testing</h2>
+<h3>Test Flow</h3>
+1. Click <strong>Test</strong> (top-right)
+2. Select <strong>Manually</strong>
+3. Click <strong>Test</strong>
+4. Provide input values
+5. Click <strong>Run flow</strong>
+</p>
+<h3>View Run History</h3>
+1. Open flow
+2. Scroll to <strong>28-day run history</strong>
+3. Click on a run to see details
+</p>
+<h3>Check Action Outputs</h3>
+1. Click on completed action
+2. Expand <strong>Inputs</strong> and <strong>Outputs</strong>
+3. Review data
+</p>
+<hr>
+<h2>Best Practices</h2>
+<h3>Naming Conventions</h3>
+<ul><li>Use PascalCase for actions: <code>Get_Folder_Items</code></li>
+<li>Use descriptive names</li>
+<li>Include scope purpose: <code>Try_Scope</code>, <code>Catch_Scope</code></li>
+</ul>
+<h3>Performance</h3>
+<ul><li>Use <code>Select</code> action to reduce data</li>
+<li>Filter early in the flow</li>
+<li>Use pagination for large datasets</li>
+</ul>
+<h3>Maintenance</h3>
+<ul><li>Add comments in Compose actions</li>
+<li>Use Try-Catch-Finally pattern</li>
+<li>Log important events to Dataverse</li>
+</ul>
+<hr>
+<h2>Project Configuration</h2>
+<h3>SharePoint Permission Scanner</h3>
+<pre><code class="language-text">Flow Name:      SharePoint Permission Scanner
+Flow ID:        17c3f8fe-0fec-f011-8407-000d3ae1ff22
+Solution:       SharePointPermissionScanner
+Environment:    1a81be40-03fb-e3fe-8964-ac88c74859cc
+</code></pre>
+<h3>Flow Inputs</h3>
+<table>
+<thead><tr><th>Input</th><th>Type</th><th>Example</th></tr></thead>
+<tbody><tr><td>SiteUrl</td><td>Text</td><td><code>https://tenant.sharepoint.com/sites/sitename</code></td></tr>
+<tr><td>LibraryName</td><td>Text</td><td><code>TestLibrary_Basic</code></td></tr>
+</tbody></table>
+<hr>
+<h2>Related Documentation</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-automate/" target="_blank">Power Automate Documentation</a></li>
+<li><a href="https://learn.microsoft.com/en-us/power-automate/use-expressions-in-conditions" target="_blank">Expression Reference</a></li>
+<li><a href="https://learn.microsoft.com/en-us/connectors/sharepointonline/" target="_blank">SharePoint Connector</a></li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-08</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

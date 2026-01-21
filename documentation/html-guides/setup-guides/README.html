@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overview - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html" class="active">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: README.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Power Platform Setup & Documentation</h1>
+<p>
+Complete setup guide for SharePoint Permission Scanner project and Power Platform development.
+</p>
+<hr>
+<h2>Quick Start</h2>
+<h3>1. Install CLI Tools</h3>
+<pre><code class="language-powershell"># Run the installation script
+.\cli-tools\install-all.ps1
+</p>
+<h1>Verify installation</h1>
+.\cli-tools\verify-installation.ps1
+</code></pre>
+<h3>2. Authenticate</h3>
+<pre><code class="language-bash"># Power Platform CLI
+pac auth create
+</p>
+<h1>Microsoft 365 CLI (requires Azure AD app - see cli-tools/m365-cli.md)</h1>
+m365 login
+</p>
+<h1>Azure CLI</h1>
+az login
+</code></pre>
+<h3>3. Select Environment</h3>
+<pre><code class="language-bash"># List environments
+pac env list
+</p>
+<h1>Select environment</h1>
+pac env select --environment "Default-..."
+</code></pre>
+<hr>
+<h2>Directory Structure</h2>
+<table>
+<thead><tr><th>Folder</th><th>Purpose</th></tr></thead>
+<tbody><tr><td><code>01-power-automate/</code></td><td>Cloud flows, expressions, troubleshooting</td></tr>
+<tr><td><code>02-power-apps/</code></td><td>Canvas apps, model-driven apps, PCF</td></tr>
+<tr><td><code>03-dataverse/</code></td><td>Tables, columns, relationships, plugins</td></tr>
+<tr><td><code>04-sharepoint/</code></td><td>Sites, libraries, permissions API</td></tr>
+<tr><td><code>05-azure-portal/</code></td><td>App registrations, Entra ID, permissions</td></tr>
+<tr><td><code>06-power-bi/</code></td><td>Reports, datasets, embedding</td></tr>
+<tr><td><code>07-azure-devops/</code></td><td>Pipelines, repos, ALM</td></tr>
+<tr><td><code>08-teams/</code></td><td>Teams integration, bots</td></tr>
+<tr><td><code>09-azure-functions/</code></td><td>Serverless compute, triggers</td></tr>
+<tr><td><code>10-azure-keyvault/</code></td><td>Secrets, certificates</td></tr>
+<tr><td><code>11-microsoft-graph/</code></td><td>Graph API reference</td></tr>
+<tr><td><code>cli-tools/</code></td><td>Installation scripts, CLI references</td></tr>
+<tr><td><code>mcp-servers/</code></td><td>MCP server configurations</td></tr>
+<tr><td><code>skills/</code></td><td>Claude skill definitions</td></tr>
+</tbody></table>
+<hr>
+<h2>CLI Tools Overview</h2>
+<table>
+<thead><tr><th>Tool</th><th>Install</th><th>Auth</th><th>Purpose</th></tr></thead>
+<tbody><tr><td><strong>PAC CLI</strong></td><td><code>winget install Microsoft.PowerPlatformCLI</code></td><td><code>pac auth create</code></td><td>Solutions, environments</td></tr>
+<tr><td><strong>m365 CLI</strong></td><td><code>npm i -g @pnp/cli-microsoft365</code></td><td><code>m365 login</code></td><td>Flows, SharePoint</td></tr>
+<tr><td><strong>Azure CLI</strong></td><td><code>winget install Microsoft.AzureCLI</code></td><td><code>az login</code></td><td>Azure resources</td></tr>
+<tr><td><strong>Func CLI</strong></td><td><code>npm i -g azure-functions-core-tools@4</code></td><td>via Azure CLI</td><td>Functions</td></tr>
+<tr><td><strong>PnP PowerShell</strong></td><td><code>Install-Module PnP.PowerShell</code></td><td><code>Connect-PnPOnline</code></td><td>SharePoint admin</td></tr>
+</tbody></table>
+<p>
+See <code>cli-tools/</code> folder for detailed setup guides.
+</p>
+<hr>
+<h2>Project-Specific Values</h2>
+<pre><code class="language-text">Tenant:           ABCTest179
+Domain:           ABCTest179.onmicrosoft.com
+SharePoint URL:   https://abctest179.sharepoint.com
+Test Site:        https://abctest179.sharepoint.com/sites/Permission-Scanner-Test
+Environment ID:   1a81be40-03fb-e3fe-8964-ac88c74859cc
+Flow ID:          17c3f8fe-0fec-f011-8407-000d3ae1ff22
+Solution Name:    SharePointPermissionScanner
+</code></pre>
+<hr>
+<h2>MCP Servers</h2>
+<table>
+<thead><tr><th>Server</th><th>Status</th><th>Purpose</th></tr></thead>
+<tbody><tr><td>SharePoint MCP</td><td>Configured</td><td>File/folder access</td></tr>
+<tr><td>Dataverse MCP</td><td>Planned</td><td>Table queries</td></tr>
+<tr><td>Graph MCP</td><td>Planned</td><td>M365 data access</td></tr>
+</tbody></table>
+<hr>
+<h2>Application Tiers</h2>
+<h3>Tier 1: Essential (Core Project)</h3>
+1. Power Automate - Cloud flow development
+2. Power Apps - UI development
+3. Dataverse - Data platform
+4. SharePoint Online - Document management
+5. Azure Portal (Entra ID) - Authentication
+</p>
+<h3>Tier 2: Recommended (Extended Capabilities)</h3>
+6. Power BI - Reporting
+7. Azure DevOps - CI/CD pipelines
+8. Microsoft Teams - Collaboration
+</p>
+<h3>Tier 3: Advanced (Enterprise Features)</h3>
+9. Azure Functions - Custom APIs
+10. Azure Key Vault - Secrets management
+11. Microsoft Graph API - Unified API access
+</p>
+<hr>
+<h2>Common Tasks</h2>
+<h3>Export Solution</h3>
+<pre><code class="language-bash">pac solution export --name SharePointPermissionScanner --path solution.zip --overwrite
+</code></pre>
+<h3>Import Solution</h3>
+<pre><code class="language-bash">pac solution import --path solution.zip
+</code></pre>
+<h3>List Flows</h3>
+<pre><code class="language-bash">m365 flow list --environmentName 1a81be40-03fb-e3fe-8964-ac88c74859cc
+</code></pre>
+<h3>Check Flow Run Status</h3>
+<pre><code class="language-bash">m365 flow run get --environmentName ENV_ID --flowName FLOW_ID --name RUN_ID
+</code></pre>
+<hr>
+<h2>Troubleshooting</h2>
+<h3>"Not authenticated" errors</h3>
+<pre><code class="language-bash"># Re-authenticate
+pac auth create
+m365 login
+az login
+</code></pre>
+<h3>"Solution not found"</h3>
+<pre><code class="language-bash"># List all solutions
+pac solution list
+</code></pre>
+<h3>Flow deployment errors</h3>
+See <code>01-power-automate/troubleshooting.md</code>
+</p>
+<hr>
+<h2>Version Information</h2>
+<p>
+Run verification script to check versions:
+<pre><code class="language-powershell">.\cli-tools\verify-installation.ps1
+</code></pre>
+<hr>
+<p>
+<em>Last Updated: 2026-01-08</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

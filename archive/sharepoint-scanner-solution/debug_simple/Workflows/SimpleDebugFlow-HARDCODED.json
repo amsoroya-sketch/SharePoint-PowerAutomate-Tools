@@ -1,0 +1,187 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sharepointonline": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "sp_sharedsharepointonline_e7162"
+        },
+        "api": {
+          "name": "shared_sharepointonline"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "simple-debug-trigger"
+          },
+          "type": "Request",
+          "kind": "Button",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {},
+              "required": []
+            }
+          }
+        }
+      },
+      "actions": {
+        "TEST_1_Simple_Web_Info": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "test-1-simple"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "HttpRequest",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "https://abctest179.sharepoint.com/sites/Permission-Scanner-Test",
+              "parameters/method": "GET",
+              "parameters/uri": "_api/web?$select=Title,Url"
+            },
+            "authentication": {
+              "type": "Raw",
+              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+            }
+          }
+        },
+        "DEBUG_1_Result": {
+          "runAfter": {
+            "TEST_1_Simple_Web_Info": [
+              "Succeeded",
+              "Failed"
+            ]
+          },
+          "type": "Compose",
+          "inputs": {
+            "Step": "1. Web Info Test",
+            "Status": "@{if(equals(outputs('TEST_1_Simple_Web_Info')['statusCode'], 200), 'SUCCESS', 'FAILED')}",
+            "Response": "@body('TEST_1_Simple_Web_Info')"
+          }
+        },
+        "TEST_2_Get_Root_Folders_Hardcoded": {
+          "runAfter": {
+            "DEBUG_1_Result": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "test-2-hardcoded"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "HttpRequest",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "https://abctest179.sharepoint.com/sites/Permission-Scanner-Test",
+              "parameters/method": "GET",
+              "parameters/uri": "_api/web/GetFolderByServerRelativeUrl('/sites/Permission-Scanner-Test/Shared Documents')/Folders"
+            },
+            "authentication": {
+              "type": "Raw",
+              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+            }
+          }
+        },
+        "DEBUG_2_Folders_Result": {
+          "runAfter": {
+            "TEST_2_Get_Root_Folders_Hardcoded": [
+              "Succeeded",
+              "Failed"
+            ]
+          },
+          "type": "Compose",
+          "inputs": {
+            "Step": "2. Root Folders Test (HARDCODED)",
+            "URI_Used": "_api/web/GetFolderByServerRelativeUrl('/sites/Permission-Scanner-Test/Shared Documents')/Folders",
+            "Status": "@{if(equals(outputs('TEST_2_Get_Root_Folders_Hardcoded')['statusCode'], 200), 'SUCCESS', 'FAILED')}",
+            "Response": "@body('TEST_2_Get_Root_Folders_Hardcoded')"
+          }
+        },
+        "TEST_3_Check_Permissions_Hardcoded": {
+          "runAfter": {
+            "DEBUG_2_Folders_Result": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "test-3-permissions"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "HttpRequest",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "https://abctest179.sharepoint.com/sites/Permission-Scanner-Test",
+              "parameters/method": "GET",
+              "parameters/uri": "_api/web/GetFolderByServerRelativeUrl('/sites/Permission-Scanner-Test/Shared Documents')/ListItemAllFields/HasUniqueRoleAssignments",
+              "parameters/headers": {
+                "Accept": "application/json;odata=nometadata"
+              }
+            },
+            "authentication": {
+              "type": "Raw",
+              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+            }
+          }
+        },
+        "DEBUG_3_Permissions_Result": {
+          "runAfter": {
+            "TEST_3_Check_Permissions_Hardcoded": [
+              "Succeeded",
+              "Failed"
+            ]
+          },
+          "type": "Compose",
+          "inputs": {
+            "Step": "3. Permission Check Test (HARDCODED)",
+            "URI_Used": "_api/web/GetFolderByServerRelativeUrl('/sites/Permission-Scanner-Test/Shared Documents')/ListItemAllFields/HasUniqueRoleAssignments",
+            "Status": "@{if(equals(outputs('TEST_3_Check_Permissions_Hardcoded')['statusCode'], 200), 'SUCCESS', 'FAILED')}",
+            "Response": "@body('TEST_3_Check_Permissions_Hardcoded')"
+          }
+        },
+        "FINAL_Summary": {
+          "runAfter": {
+            "DEBUG_3_Permissions_Result": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": {
+            "Summary": "All 3 hardcoded tests completed",
+            "Test1_WebInfo": "@outputs('DEBUG_1_Result')",
+            "Test2_Folders": "@outputs('DEBUG_2_Folders_Result')",
+            "Test3_Permissions": "@outputs('DEBUG_3_Permissions_Result')"
+          }
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

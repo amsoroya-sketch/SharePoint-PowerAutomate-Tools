@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html" class="active">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: 01-power-automate/troubleshooting.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Power Automate Troubleshooting Guide</h1>
+<p>
+Common errors and solutions for Power Automate cloud flows.
+</p>
+<hr>
+<h2>Expression Errors</h2>
+<h3>InvalidTemplate Error</h3>
+<p>
+<strong>Error:</strong>
+<pre><code class="language-text">InvalidTemplate. Unable to process template language expressions in action 'ActionName' inputs at line '0' and column '0': The template language expression 'expression' cannot be evaluated because property 'propertyName' doesn't exist
+</code></pre>
+<p>
+<strong>Common Causes:</strong>
+<table>
+<thead><tr><th>Wrong</th><th>Correct</th><th>Reason</th></tr></thead>
+<tbody><tr><td><code>trigger()['text']</code></td><td><code>triggerBody()['text']</code></td><td><code>trigger()</code> returns metadata, not inputs</td></tr>
+<tr><td><code>body('Action')['field']</code></td><td><code>body('Action')?['field']</code></td><td>Missing null-safe operator</td></tr>
+<tr><td><code>outputs('Action')['body']</code></td><td><code>outputs('Action')?['body']</code></td><td>Action might not have body</td></tr>
+</tbody></table>
+<p>
+<strong>Solution:</strong>
+<ul><li>Use <code>triggerBody()</code> for trigger inputs</li>
+<li>Use <code>?</code> operator for null-safe access</li>
+<li>Check available properties in action outputs</li>
+</ul>
+<hr>
+<h3>trigger() vs triggerBody()</h3>
+<pre><code class="language-text">trigger()      → Metadata (status, timing, trackingId)
+triggerBody()  → Input values from trigger
+</p>
+<p>
+✗ trigger()['text']           - FAILS
+✓ triggerBody()['text']       - WORKS
+✓ trigger()['outputs']['body']['text'] - Also works (verbose)
+</code></pre>
+<hr>
+<h2>Dataverse Errors</h2>
+<h3>WorkflowOperationParametersExtraParameter</h3>
+<p>
+<strong>Error:</strong>
+<pre><code class="language-text">WorkflowOperationParametersExtraParameter: The following connector parameters are extra or invalid: 'columnName'
+</code></pre>
+<p>
+<strong>Cause:</strong> Column name doesn't exist or is misspelled
+</p>
+<p>
+<strong>Solution:</strong>
+1. Check exact column schema name in Dataverse
+2. Use lowercase with publisher prefix: <code>sp_columnname</code>
+3. Verify column exists in target environment
+</p>
+<h3>Column Name Reference</h3>
+<pre><code class="language-text">Display Name          Schema Name
+────────────────      ──────────────────────
+Folders with Unique   sp_folderswithuniqueperms
+Total Folders         sp_totalfolders
+Status                sp_status
+</code></pre>
+<hr>
+<h3>Record Not Found</h3>
+<p>
+<strong>Error:</strong>
+<pre><code class="language-text">The record with id 'guid' does not exist
+</code></pre>
+<p>
+<strong>Solution:</strong>
+<ul><li>Verify record ID is correct</li>
+<li>Check record wasn't deleted</li>
+<li>Ensure you have read permissions</li>
+</ul>
+<hr>
+<h2>SharePoint Errors</h2>
+<h3>Access Denied</h3>
+<p>
+<strong>Error:</strong>
+<pre><code class="language-text">Access denied. You do not have permission to perform this action or access this resource.
+</code></pre>
+<p>
+<strong>Solution:</strong>
+1. Check SharePoint permissions
+2. Verify site URL is correct
+3. Check connection credentials
+4. Re-authorize SharePoint connection
+</p>
+<h3>Site/List Not Found</h3>
+<p>
+<strong>Error:</strong>
+<pre><code class="language-text">The site 'url' does not exist
+</code></pre>
+<p>
+<strong>Solution:</strong>
+<ul><li>Verify exact URL (case-sensitive paths)</li>
+<li>Check site hasn't been renamed/deleted</li>
+<li>Ensure connection has site access</li>
+</ul>
+<hr>
+<h2>HTTP Request Errors</h2>
+<h3>401 Unauthorized</h3>
+<p>
+<strong>Cause:</strong> Authentication failed
+</p>
+<p>
+<strong>Solution:</strong>
+1. Re-authorize the connection
+2. Check API permissions
+3. Verify token hasn't expired
+</p>
+<h3>403 Forbidden</h3>
+<p>
+<strong>Cause:</strong> Insufficient permissions
+</p>
+<p>
+<strong>Solution:</strong>
+1. Check API permissions in Azure AD
+2. Grant admin consent if required
+3. Verify user has required access
+</p>
+<h3>404 Not Found</h3>
+<p>
+<strong>Cause:</strong> Resource doesn't exist
+</p>
+<p>
+<strong>Solution:</strong>
+1. Verify URL/endpoint
+2. Check resource exists
+3. Ensure correct API version
+</p>
+<h3>429 Too Many Requests</h3>
+<p>
+<strong>Cause:</strong> Rate limiting
+</p>
+<p>
+<strong>Solution:</strong>
+1. Add delays between requests
+2. Implement retry logic
+3. Reduce concurrent calls
+</p>
+<hr>
+<h2>Loop Errors</h2>
+<h3>Apply to Each Timeout</h3>
+<p>
+<strong>Error:</strong>
+<pre><code class="language-text">ActionExecutionTimeout. The action 'Apply_to_each' exceeded the maximum execution time
+</code></pre>
+<p>
+<strong>Solution:</strong>
+1. Reduce items per batch
+2. Use pagination
+3. Implement chunking pattern
+4. Consider async pattern with child flows
+</p>
+<h3>Nested Loop Limits</h3>
+<p>
+<strong>Limit:</strong> 2 levels of nesting max
+</p>
+<p>
+<strong>Solution:</strong>
+<ul><li>Flatten data structure</li>
+<li>Use child flows for additional processing</li>
+<li>Restructure logic</li>
+</ul>
+<hr>
+<h2>Variable Errors</h2>
+<h3>Variable Not Initialized</h3>
+<p>
+<strong>Error:</strong>
+<pre><code class="language-text">The variable 'variableName' was not found
+</code></pre>
+<p>
+<strong>Solution:</strong>
+1. Add "Initialize variable" action before use
+2. Check variable name spelling
+3. Ensure initialization is in execution path
+</p>
+<h3>Type Mismatch</h3>
+<p>
+<strong>Error:</strong>
+<pre><code class="language-text">Cannot convert value to type 'String'
+</code></pre>
+<p>
+<strong>Solution:</strong>
+<ul><li>Use conversion functions: <code>string()</code>, <code>int()</code>, <code>float()</code></li>
+<li>Check variable type matches value</li>
+<li>Handle null values with <code>coalesce()</code></li>
+</ul>
+<hr>
+<h2>Solution Import Errors</h2>
+<h3>Missing Dependencies</h3>
+<p>
+<strong>Error:</strong>
+<pre><code class="language-text">Solution import failed: missing dependency
+</code></pre>
+<p>
+<strong>Solution:</strong>
+1. Import dependent solutions first
+2. Check required tables exist
+3. Verify connection references
+</p>
+<h3>Version Conflict</h3>
+<p>
+<strong>Error:</strong>
+<pre><code class="language-text">Solution version conflict
+</code></pre>
+<p>
+<strong>Solution:</strong>
+1. Increment solution version
+2. Use <code>--force-overwrite</code> flag
+3. Delete and reimport (dev only)
+</p>
+<hr>
+<h2>Debugging Techniques</h2>
+<h3>View Action Outputs</h3>
+1. Click on completed action in run history
+2. Expand <strong>Show raw outputs</strong>
+3. Copy JSON for analysis
+</p>
+<h3>Add Compose for Debugging</h3>
+<pre><code class="language-yaml">Action: Compose
+Inputs: @{variables('MyVariable')}
+</code></pre>
+<h3>Check Expression Results</h3>
+<pre><code class="language-yaml">Action: Compose
+Inputs: @{length(body('Get_items')?['value'])}
+</code></pre>
+<h3>Log to Dataverse</h3>
+Create a "Debug Log" table and insert records at key points.
+</p>
+<hr>
+<h2>Run After Configuration</h2>
+<h3>Configure Run After</h3>
+1. Click <code>...</code> on action
+2. Select <strong>Configure run after</strong>
+3. Check conditions:
+   - ✓ is successful
+   - ✓ has failed (for error handling)
+   - ✓ is skipped
+   - ✓ has timed out
+</p>
+<h3>Error Handling Pattern</h3>
+<pre><code class="language-text">Try Scope
+├── Main logic (run after: previous successful)
+│
+Catch Scope (run after: Try has failed/timed out)
+├── Error handling
+│
+Finally Scope (run after: all conditions)
+├── Cleanup/status update
+</code></pre>
+<hr>
+<h2>Performance Issues</h2>
+<h3>Slow Flow Execution</h3>
+<p>
+<strong>Causes & Solutions:</strong>
+<table>
+<thead><tr><th>Issue</th><th>Solution</th></tr></thead>
+<tbody><tr><td>Too many HTTP calls</td><td>Batch requests</td></tr>
+<tr><td>Large data sets</td><td>Use pagination, $top</td></tr>
+<tr><td>Sequential processing</td><td>Use parallel branches</td></tr>
+<tr><td>Nested loops</td><td>Flatten or use child flows</td></tr>
+</tbody></table>
+<h3>Reduce API Calls</h3>
+<pre><code class="language-yaml"># Instead of getting items one by one
+Get_items with $filter
+</p>
+<h1>Use $select to limit columns</h1>
+$select=Id,Title,Status
+</p>
+<h1>Use $top to limit rows</h1>
+$top=100
+</code></pre>
+<hr>
+<h2>Quick Reference</h2>
+<h3>Common Fixes</h3>
+<table>
+<thead><tr><th>Symptom</th><th>Check</th></tr></thead>
+<tbody><tr><td>Expression error</td><td>Use <code>triggerBody()</code> not <code>trigger()</code></td></tr>
+<tr><td>Column not found</td><td>Verify schema name in Dataverse</td></tr>
+<tr><td>Access denied</td><td>Re-authorize connections</td></tr>
+<tr><td>Timeout</td><td>Reduce data, add pagination</td></tr>
+<tr><td>Variable error</td><td>Initialize before use</td></tr>
+</tbody></table>
+<h3>Useful Expressions</h3>
+<pre><code class="language-text">// Null-safe access
+outputs('Action')?['body']?['value']
+</p>
+<p>
+// Default value
+coalesce(variables('Value'), 'default')
+</p>
+<p>
+// Error message in catch
+actions('FailedAction')?['error']?['message']
+</p>
+<p>
+// Check if empty
+empty(body('Get_items')?['value'])
+</code></pre>
+<hr>
+<h2>Related Documentation</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-automate/limits-and-config" target="_blank">Power Automate Limits</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/logic-apps/workflow-definition-language-functions-reference" target="_blank">Expression Reference</a></li>
+<li><a href="https://learn.microsoft.com/en-us/power-automate/error-handling" target="_blank">Error Handling</a></li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-09</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Overview - Power Platform Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Power Platform Setup Documentation</h1>
+            <p class="subtitle">SharePoint Permission Scanner Project</p>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <div class="nav-section">
+<h3>Getting Started</h3>
+<ul>
+<li><a href="README.html">Overview</a></li>
+<li><a href="CLI-TOOLS-SETUP.html">CLI Tools Setup</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>CLI Tools</h3>
+<ul>
+<li><a href="cli-tools-install-all-ps1.html">Installation Script</a></li>
+<li><a href="cli-tools-pac-cli.html">PAC CLI</a></li>
+<li><a href="cli-tools-m365-cli.html">m365 CLI</a></li>
+<li><a href="cli-tools-az-cli.html">Azure CLI</a></li>
+<li><a href="cli-tools-func-cli.html">Functions CLI</a></li>
+<li><a href="cli-tools-pnp-powershell.html">PnP PowerShell</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Power Platform</h3>
+<ul>
+<li><a href="01-power-automate-setup-guide.html">Power Automate</a></li>
+<li><a href="01-power-automate-troubleshooting.html">Troubleshooting</a></li>
+<li><a href="01-power-automate-cli-reference.html">CLI Reference</a></li>
+<li><a href="02-power-apps-setup-guide.html">Power Apps</a></li>
+<li><a href="03-dataverse-setup-guide.html">Dataverse</a></li>
+<li><a href="03-dataverse-cli-reference.html">Dataverse CLI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Microsoft 365</h3>
+<ul>
+<li><a href="04-sharepoint-setup-guide.html">SharePoint</a></li>
+<li><a href="04-sharepoint-cli-reference.html">SharePoint CLI</a></li>
+<li><a href="08-teams-setup-guide.html">Microsoft Teams</a></li>
+<li><a href="11-microsoft-graph-setup-guide.html">Microsoft Graph</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Azure</h3>
+<ul>
+<li><a href="05-azure-portal-app-registration.html">App Registration</a></li>
+<li><a href="09-azure-functions-setup-guide.html">Azure Functions</a></li>
+<li><a href="10-azure-keyvault-setup-guide.html">Key Vault</a></li>
+<li><a href="07-azure-devops-setup-guide.html">Azure DevOps</a></li>
+<li><a href="06-power-bi-setup-guide.html">Power BI</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>MCP Servers</h3>
+<ul>
+<li><a href="mcp-servers-README.html">Overview</a></li>
+<li><a href="mcp-servers-sharepoint-mcp.html">SharePoint MCP</a></li>
+<li><a href="mcp-servers-azure-devops-mcp.html">DevOps MCP</a></li>
+<li><a href="mcp-servers-dataverse-mcp.html">Dataverse MCP</a></li>
+</ul>
+</div>
+<div class="nav-section">
+<h3>Skills</h3>
+<ul>
+<li><a href="skills-README.html" class="active">Skills Overview</a></li>
+<li><a href="skills-skill-usage-guide.html">Usage Guide</a></li>
+<li><a href="skills-knowledge-base-index.html">Knowledge Base</a></li>
+</ul>
+</div>
+
+            </nav>
+
+            <main class="content">
+                <div class="source-info">
+                    <span>Source: skills/README.md</span>
+                    <span>Generated: 2026-01-09 19:55</span>
+                </div>
+                <h1>Claude Skills Documentation</h1>
+<p>
+Overview of Claude Code skills configured for Power Platform development.
+</p>
+<hr>
+<h2>Skill Location</h2>
+<p>
+Skills are defined in: <code>Z:/.claude/skills/</code>
+</p>
+<hr>
+<h2>Available Skills</h2>
+<h3>Orchestration Skills</h3>
+<table>
+<thead><tr><th>Skill</th><th>Purpose</th><th>Auto-Invoked</th></tr></thead>
+<tbody><tr><td><strong>orchestration</strong></td><td>Level 0 coordinator for all Power Platform tasks</td><td>Complex multi-domain projects</td></tr>
+<tr><td><strong>software-architect</strong></td><td>Enterprise architecture, diagrams, strategic planning</td><td>Architecture design requests</td></tr>
+</tbody></table>
+<h3>Domain Skills (Level 1)</h3>
+<table>
+<thead><tr><th>Skill</th><th>Domain</th><th>Auto-Invoked When</th></tr></thead>
+<tbody><tr><td><strong>powerapps</strong></td><td>Canvas apps, Model-driven, PCF</td><td>App building, UI development</td></tr>
+<tr><td><strong>power-automate</strong></td><td>Cloud flows, desktop flows</td><td>Flow automation, workflows</td></tr>
+<tr><td><strong>dataverse</strong></td><td>Plugins, APIs, table design</td><td>Data platform tasks</td></tr>
+<tr><td><strong>azure-integration</strong></td><td>Functions, Service Bus, APIM</td><td>Azure-Power Platform hybrid</td></tr>
+<tr><td><strong>alm-devops</strong></td><td>CI/CD, solution management</td><td>ALM, deployment tasks</td></tr>
+<tr><td><strong>architecture</strong></td><td>Solution design, Well-Architected</td><td>Architecture reviews</td></tr>
+</tbody></table>
+<h3>Specialized Skills (Level 2)</h3>
+<table>
+<thead><tr><th>Parent</th><th>Child Skill</th><th>Focus</th></tr></thead>
+<tbody><tr><td>powerapps</td><td>canvas</td><td>Canvas app development</td></tr>
+<tr><td>powerapps</td><td>model-driven</td><td>Model-driven apps</td></tr>
+<tr><td>powerapps</td><td>pcf</td><td>PCF components</td></tr>
+<tr><td>power-automate</td><td>sharepoint</td><td>SharePoint integration</td></tr>
+<tr><td>power-automate</td><td>http-connector</td><td>HTTP/REST calls</td></tr>
+<tr><td>power-automate</td><td>expressions</td><td>Expression language</td></tr>
+<tr><td>power-automate</td><td>error-handling</td><td>Try-Catch patterns</td></tr>
+<tr><td>dataverse</td><td>plugins</td><td>Plugin development</td></tr>
+<tr><td>dataverse</td><td>custom-apis</td><td>Custom API creation</td></tr>
+<tr><td>dataverse</td><td>table-design</td><td>Table/column design</td></tr>
+<tr><td>azure-integration</td><td>functions</td><td>Azure Functions</td></tr>
+<tr><td>azure-integration</td><td>service-bus</td><td>Service Bus</td></tr>
+<tr><td>azure-integration</td><td>apim</td><td>API Management</td></tr>
+<tr><td>alm-devops</td><td>pipelines</td><td>CI/CD pipelines</td></tr>
+<tr><td>alm-devops</td><td>solutions</td><td>Solution management</td></tr>
+</tbody></table>
+<hr>
+<h2>Skill Hierarchy</h2>
+<pre><code class="language-text">Level 0: Orchestration
+    └── orchestration (coordinates all domains)
+</p>
+<p>
+Level 1: Domain Masters
+    ├── powerapps
+    ├── power-automate
+    ├── dataverse
+    ├── azure-integration
+    ├── alm-devops
+    ├── architecture
+    └── software-architect
+</p>
+<p>
+Level 2: Specialists
+    ├── powerapps/canvas
+    ├── powerapps/model-driven
+    ├── power-automate/sharepoint
+    ├── dataverse/plugins
+    └── ... (see full list above)
+</code></pre>
+<hr>
+<h2>Invoking Skills</h2>
+<h3>Automatic Invocation</h3>
+Skills auto-invoke based on task context:
+<ul><li>"Create a canvas app" → powerapps skill</li>
+<li>"Build a flow for SharePoint" → power-automate skill</li>
+<li>"Design the architecture" → software-architect skill</li>
+</ul>
+<h3>Manual Invocation</h3>
+Use slash commands:
+<pre><code class="language-text">/orchestration - Coordinate multi-domain task
+/powerapps - Power Apps development
+/power-automate - Flow development
+/dataverse - Dataverse development
+/architecture - Architecture design
+/software-architect - Enterprise architecture
+/alm-devops - ALM and DevOps
+/azure-integration - Azure integration
+</code></pre>
+<hr>
+<h2>Skill File Structure</h2>
+<p>
+Each skill has a <code>SKILL.md</code> file:
+</p>
+<pre><code class="language-text">skills/
+├── AGENT_HIERARCHY.md          # Overall hierarchy
+├── orchestration/
+│   └── SKILL.md
+├── powerapps/
+│   ├── SKILL.md                # Main skill
+│   ├── canvas/
+│   │   └── SKILL.md            # Sub-skill
+│   ├── model-driven/
+│   │   └── SKILL.md
+│   └── pcf/
+│       └── SKILL.md
+├── power-automate/
+│   ├── SKILL.md
+│   ├── sharepoint/
+│   ├── http-connector/
+│   ├── expressions/
+│   └── error-handling/
+├── dataverse/
+│   ├── SKILL.md
+│   ├── plugins/
+│   │   ├── SKILL.md
+│   │   ├── templates/
+│   │   └── scripts/
+│   ├── custom-apis/
+│   └── table-design/
+├── azure-integration/
+│   ├── SKILL.md
+│   ├── functions/
+│   ├── service-bus/
+│   └── apim/
+├── alm-devops/
+│   ├── SKILL.md
+│   ├── pipelines/
+│   └── solutions/
+├── architecture/
+│   ├── SKILL.md
+│   ├── solution-design/
+│   └── patterns/
+└── software-architect/
+    ├── SKILL.md
+    ├── templates/
+    └── diagrams/
+</code></pre>
+<hr>
+<h2>SKILL.md Format</h2>
+<pre><code class="language-markdown"># Skill Name
+</p>
+<p>
+Brief description of what this skill does.
+</p>
+<h2>Capabilities</h2>
+<ul><li>Capability 1</li>
+<li>Capability 2</li>
+</ul>
+<h2>When to Use</h2>
+Describe when this skill should be invoked.
+</p>
+<h2>Commands</h2>
+Available slash commands or actions.
+</p>
+<h2>Knowledge Base</h2>
+Reference documentation this skill uses.
+</p>
+<h2>Examples</h2>
+Example usage scenarios.
+</code></pre>
+<hr>
+<h2>Project-Specific Usage</h2>
+<h3>SharePoint Permission Scanner</h3>
+<table>
+<thead><tr><th>Task</th><th>Skill</th></tr></thead>
+<tbody><tr><td>Design solution architecture</td><td>/software-architect</td></tr>
+<tr><td>Create Dataverse tables</td><td>/dataverse</td></tr>
+<tr><td>Build scanning flow</td><td>/power-automate</td></tr>
+<tr><td>Set up CI/CD pipeline</td><td>/alm-devops</td></tr>
+<tr><td>Create reporting app</td><td>/powerapps</td></tr>
+<tr><td>Azure Function for API</td><td>/azure-integration</td></tr>
+</tbody></table>
+<hr>
+<h2>Adding New Skills</h2>
+<h3>1. Create Skill Directory</h3>
+<pre><code class="language-bash">mkdir -p Z:/.claude/skills/new-skill
+</code></pre>
+<h3>2. Create SKILL.md</h3>
+<pre><code class="language-markdown"># New Skill Name
+</p>
+<p>
+Description of the skill.
+</p>
+<h2>Capabilities</h2>
+<ul><li>What it can do</li>
+</ul>
+<h2>When to Use</h2>
+When to invoke this skill.
+</code></pre>
+<h3>3. Add Templates (Optional)</h3>
+<pre><code class="language-text">new-skill/
+├── SKILL.md
+├── templates/
+│   └── template-file.md
+└── scripts/
+    └── helper-script.ps1
+</code></pre>
+<hr>
+<h2>Knowledge Base</h2>
+<p>
+Skills reference documentation in:
+<ul><li><code>setup/</code> folder (this documentation)</li>
+<li><code>phases/</code> folder (project phases)</li>
+<li>External Microsoft Learn docs</li>
+</ul>
+<hr>
+<p>
+<em>Last Updated: 2026-01-09</em>
+
+</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generated from Markdown documentation | Power Platform Setup Guide</p>
+        </footer>
+    </div>
+</body>
+</html>
